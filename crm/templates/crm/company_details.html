@@ -1,0 +1,34 @@
+{% extends 'base.html'%}
+
+{% block title %}{{company.short_name}}{% endblock %}
+
+{% block content %}
+<h3 class="text-center">Карточка компании</h3>
+<div class="container mt-5 fs-5">
+  <p><b>Краткое наименование: </b>{{company.short_name}}</p>
+  <p><b>Полное наименование: </b>{{company.full_name}}</p>
+  <p><b>ИНН: </b>{{company.inn_number}}</p>
+  <p><b>ОГРН: </b>{{company.ogrn_number}}</p>
+  <p><b>Адрес: </b>{{company.address}}</p>
+  <p><b>Список проектов: </b></p>
+  {% for project in company.projects.all %}
+  <p><a href="{% url 'project_details' project.id %}">{{project.name}}</a></p>
+  {% empty %}
+    <p>Список пуст</p>
+  {% endfor %}
+  <p><b>Список контактов: </b></p>
+{% for contact in company.contacts.all %}
+  <p><a href="{% url 'contact_details' contact.id %}">{{contact}}</a></p>
+{% empty %}
+  <p>Список пуст</p>
+{% endfor %}
+</div>
+<div class="d-flex flex-row col-sm-12 col-lg-7 p-2 fs-5">
+    <a class="btn btn-outline-primary" href="{% url 'company_contacts_update' company.id %}">Обновить контакты</a>
+    <form method="post">
+      {% csrf_token %}
+      <input type="hidden" name="ogrn_number" value={{company.ogrn_number}}>
+      <input class="btn btn-outline-secondary ms-2" type="submit" value="Обновить данные">
+    </form>
+</div>
+{% endblock %}

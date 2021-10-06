@@ -1,0 +1,43 @@
+{% extends 'base.html'%}
+
+{% block title %}События{% endblock %}
+
+{% block content %}
+<div class="container mt-3">
+  <h2 class="text-center mt-3">Список мероприятий</h2>
+  <div class="d-flex justify-content-between">
+    <div class="container">
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <th scope="col">Категория</th>
+            <th scope="col">Проект</th>
+            <th scope="col">Дата</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for event in event_list %}
+            <tr>
+              <td><a href="{% url 'event_details' event.id %}">{{ event.get_type_display }}</a></td>
+              {% if event.projects.all.count == 1 %}
+              <td><a href="{% url 'project_details' event.projects.all.0.id %}">{{ event.projects.all.0.name }}</a></td>
+              {% else %}
+              <td><a>Несколько проектов</a></td>
+              {% endif %}
+              <td><a href="{{ event.get_absolute_url }}">{{event.date}}</a></td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    <div class="container ms-5 col-2 col-lg-3">
+      <div class="d-flex mt-3 justify-content-center-start">
+        <a class="btn btn-primary" href="{% url 'event_add' %}">Добавить событие</a>
+      </div>
+      {% include 'crm/side_calendar.html' %}
+    </div>
+  </div>
+</div>
+  </div>
+</div>
+{% endblock %}

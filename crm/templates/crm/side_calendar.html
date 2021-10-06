@@ -1,0 +1,15 @@
+<div class="d-flex flex-column justify-content-start">
+<!--    <p class="mt-3 d-flex flex-column">-->
+<!--      <a href="{% url 'events_on_date' yesterday today.month today.year %}">Вчера</a>-->
+<!--      <a href="{% url 'events_on_date' today.day today.month today.year %}">Сегодня</a>-->
+<!--      <a href="{% url 'events_on_date' tomorrow today.month today.year %}">Завтра</a>-->
+<!--    </p>-->
+    <form method="post" class="mt-3" >
+      {% csrf_token %}
+      <input type="date" name="date">
+      <div class="d-flex justify-content-start mt-2">
+        <input class="btn btn-outline-primary" type="submit" value="Перейти">
+        <a class="btn btn-outline-dark ms-2" href="{% url 'events' %}">Сбросить</a>
+      </div>
+    </form>
+</div>

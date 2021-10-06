@@ -1,0 +1,66 @@
+{% extends 'base.html'%}
+{% load my_thousand_separator %}
+
+{% block title %}Описание проекта{% endblock %}
+
+{% block content %}
+<h3 class="text-center">Карточка проекта</h3>
+<div class="container mt-5 fs-5">
+  <p><b>Текущий статус: </b>{{project.statuses.last.get_status_display}} (<a href="{% url 'status_change' project.id%}">сменить</a>)</p>
+  <p><b>Рабочее наименование: </b>{{project.name}}</p>
+  <p><b>Полное наименование: </b>{{project.full_name}}</p>
+  <p><b>Сумма гранта: </b>{{project.grant|my_thousand_separator}}</p>
+  <p><b>Бюджет проекта: </b>{{project.full_cost|my_thousand_separator}}</p>
+  <p><b>Срок реализации: </b>{{project.start_date}} - {{project.end_date}}</p>
+  <p><b>Заявитель: </b><a href="{% url 'company_details' project.company.id %}">{{project.company.short_name}}</a></p>
+  <div class="accordion" id="project_description_accordion">
+    <div class="accordion-item">
+      <h3 class="accordion-header" id="description_headline">
+        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#project_description" aria-expanded="false" aria-controls="project_description">
+          <b class="fs-5">Краткое описание: </b>
+        </button>
+      </h3>
+      <div id="project_description" class="accordion-collapse collapse show" aria-labelledby="description_headline" data-bs-parent="#project_description_accordion">
+        <div class="accordion-body">
+          <p>{{project.description}}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="container my-4">
+  <div class="d-flex justify-content-between">
+    <div class="accordion col-8 col-xl-10" id="event_list_accordion">
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="event_list_headline">
+          <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#event_list" aria-expanded="true" aria-controls="event_list">
+            <strong>Список событий</strong>
+          </button>
+        </h2>
+        <div id="event_list" class="accordion-collapse collapse show" aria-labelledby="event_list_headline" data-bs-parent="#event_list_accordion">
+          <div class="accordion-body">
+              {% for event in project.events.all|dictsortreversed:'date' %}
+                <p><a href="{% url 'event_details' event.id %}">{{ event.get_type_display }}</a> - {{ event.date }}</p>
+              {% empty %}
+                <p>Список пуст</p>
+              {% endfor %}
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="d-flex flex-column ms-4 sticky">
+      <a class="btn btn-primary fs-5" href="{% url 'event_small_add' project.id %}">Новое событие</a>
+      <a class="btn btn-outline-success mt-3 mx-3 fs-5" href="{% url 'project_event_history' project.id %}">Отчет</a>
+  </div>
+  </div>
+</div>
+<!--<div class="container my-5 pb-5 fs-5">-->
+<!--  <p class="mb-3"><b>Список событий</b></p>-->
+<!--  {% for event in project.events.all %}-->
+<!--    <p><a href="{% url 'event_details' event.id %}">{{event.get_type_display}}</a> - {{event.date}} ({{event.author}})</p>-->
+<!--  {% empty %}-->
+<!--    <p>Список событий пуст</p>-->
+<!--  {% endfor %}-->
+<!--  </div>-->
+<!--</div>-->
+{% endblock %}

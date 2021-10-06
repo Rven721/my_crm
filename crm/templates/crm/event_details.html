@@ -1,0 +1,25 @@
+{% extends 'base.html'%}
+
+{% block title %}Описание мероприятия{% endblock %}
+
+{% block content %}
+<div class="fs-5">
+  <p>Тип: {{event.get_type_display}}</p>
+  <p>Повестка: {{event.description}}</p>
+  <p>Рассматриваемые проекты:</p>
+  <div class="d-flex flex-column pb-4">
+    {% for project in event.projects.all %}
+    <a href="{% url 'project_details' project.id %}">{{project.name}}</a>
+    {% empty %}
+    Список пуст
+    {% endfor %}
+  </div>
+  <p>Результат:</p>
+  {% if event.result is None %}
+  <a href="{% url 'event_result_add' event.id %}">Добавить результат</a>
+  {% else %}
+  <p>{{ event.result }}</p>
+  {% endif %}
+  </div>
+  <a class="btn btn-primary" href="{% url 'event_update' event.id %}">Обновить</a>
+{% endblock %}

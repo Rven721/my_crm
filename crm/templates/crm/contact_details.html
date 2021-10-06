@@ -1,0 +1,29 @@
+{% extends 'base.html'%}
+
+{% block title %}{{contact}}{% endblock %}
+
+{% block content %}
+<h3 class="text-center">Карточка контакта</h3>
+<div class="container mt-5 fs-5">
+<p>
+    <b>ФИО:</b> {% if contact.first_name %}{{contact.first_name}} {% endif %}
+    {% if contact.second_name %}{{contact.second_name}} {% endif %}
+    {% if contact.last_name %}{{contact.last_name}} {% endif %}
+</p>
+    <p><b>Телефон:</b> {% if contact.phone %} {{contact.phone}} {% endif %}</p>
+    <p><b>Email:</b> {% if contact.email %}{{contact.email}}{% endif %}</p>
+    <p><b>Дополнительная информация:</b></p>
+   {% if contact.additional_info %}{{contact.additional_info}}{% endif %}
+<div class="fs-5 mt-3">
+    <h4 class="fs-4">Связанные копании</h4>
+    <div class="d-flex flex-column">
+    {% for company in contact.companies.all %}
+    <a href="{% url 'company_details' company.id %}">{{ company.short_name }}</a>
+    {% empty %}
+    <p>Отсутствуют</p>
+    {% endfor %}
+    </div>
+</div>
+<a class="btn btn-dark mt-4 fs-5" href="{% url 'contact_update' contact.id%}">Обновить данные</a>
+</div>
+{% endblock %}

@@ -1,0 +1,32 @@
+{% extends 'base.html'%}
+{% load crispy_forms_tags %}
+
+{% block title %}Контакты{% endblock %}
+
+{% block content %}
+<div class="container mt-3">
+    <h2 class="my-3">Список контактов</h2>
+    <div class="d-flex justify-content-between">
+      <div class="col-7 mt-5">
+        {% for contact in contact_list %}
+          <p class="fs-5"><a href="{% url 'contact_details' contact.id %}">{{contact}}</a></p>
+        {% empty %}
+          <h4>Список контактов пуст</h4>
+        {% endfor %}
+      </div>
+      <div class="position-sticky">
+        <div class="d-flex flex-column mt-3 ms-5">
+          <a class="btn btn-primary mt-5 fs-5" href="{% url 'contact_add' %}">Добавить контакт</a>
+          <form class="mt-4" method="post">
+            {% csrf_token %}
+            {{ form|crispy }}
+            <div class="d-flex justify-content-start">
+              <input class="btn btn-primary mt-3" type="submit" value="Подобрать">
+              <a class="btn btn-dark mt-3 ms-3" href="{% url 'contacts' %}">Сбросить</a>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+</div>
+{% endblock %}

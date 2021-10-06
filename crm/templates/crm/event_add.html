@@ -1,0 +1,23 @@
+{% extends 'base.html'%}
+{% load crispy_forms_tags %}
+
+{% block title %}
+  {% if not update %}
+    Новое событие
+  {% else %}
+    Обновить событие
+  {% endif %}
+{% endblock %}
+
+{% block content %}
+<h3 class="text-center">Заполните форму</h3>
+<div class="container mt-4">
+  <div class="d-flex justify-content-center">
+    <form method="post">
+      {% csrf_token %}
+      {{form|crispy}}
+      <input class="btn btn-primary fs-5 mt-3"  type="submit" value="Сохранить">
+    </form>
+  </div>
+</div>
+{% endblock %}
