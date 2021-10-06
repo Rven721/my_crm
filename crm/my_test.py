@@ -13,8 +13,3 @@
 # companies = Company.objects.all()
 # my_list = [(company.short_name, company.short_name) for company in companies]
 # print(my_list)
-
-class House:
-
-    def __init__(self):
-        self.name = 'Ivan'
