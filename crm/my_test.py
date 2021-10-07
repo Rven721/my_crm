@@ -8,8 +8,10 @@
 #
 # os.environ['DJANGO_SETTINGS_MODULE'] = 'conf.settings'
 # django.setup()
-# from crm.models import Company
+# from crm.models import Company, Project
 #
 # companies = Company.objects.all()
-# my_list = [(company.short_name, company.short_name) for company in companies]
-# print(my_list)
+# for company in companies:
+#     print(company.short_name)
+# projects = Project.objects.all()
+# print(projects.filter(company=companies[4]))

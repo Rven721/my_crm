@@ -40,10 +40,11 @@ def project_event_history_report(project_id):
     return wb
 
 
-def project_status_report():
+def project_status_report(company=None):
     """Функция возвращает несохраненный excel файл содержащий список всех проектов и описание их текущего статуса"""
-
     project_list = Project.objects.all()
+    if company:
+        project_list = project_list.filter(company=company)
     header = ['Проект', 'Текущий статус']
     wb = Workbook()
     ws = wb.active

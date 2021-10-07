@@ -13,6 +13,7 @@ urlpatterns = [
     path('new_company/', views.company_add_view, name='company_add'),
     path('projects/', views.project_list_view, name='projects'),
     path('projects/status_report/', views.project_list_statuses_report_view, name='project_list_status_report'),
+    path('projects/status_report/<int:company_id>', views.project_list_statuses_report_view, name='company_project_list_status_report'),
     path('projects/<project_id>/', views.project_details_view, name='project_details'),
     path('project/<project_id>/status_change/', views.status_change_view, name='status_change'),
     path('project/<project_id>/event_add/', views.event_small_add_view, name='event_small_add'),

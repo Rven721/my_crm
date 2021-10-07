@@ -127,13 +127,16 @@ def company_contacts_update_view(request, company_id):
 def project_list_view(request):
     project_list = Project.objects.all().order_by('name')
     form = FilterByCompanyForm()
+    company = None
     if request.method == "POST":
         form = FilterByCompanyForm(request.POST)
         if form.is_valid():
-            project_list = Project.objects.filter(company=form.cleaned_data['company']).order_by('name')
+            company = form.cleaned_data['company']
+            project_list = Project.objects.filter(company=company).order_by('name')
     ctx = {
         'project_list': project_list,
-        'form': form
+        'form': form,
+        'company': company,
     }
     return render(request, 'crm/project_list.html', ctx)
 
@@ -291,9 +294,10 @@ def project_event_history_report_view(request, project_id):
     return FileResponse(buffer, as_attachment=True, filename='my_report.xlsx')
 
 
-def project_list_statuses_report_view(request):
+def project_list_statuses_report_view(request, company_id=None):
+    company = Company.objects.get(id=company_id) if company_id else None
     buffer = io.BytesIO()
-    wb = report_generator.project_status_report()
+    wb = report_generator.project_status_report(company)
     wb.save(buffer)
     buffer.seek(0)
     return FileResponse(buffer, as_attachment=True, filename='status_report.xlsx')

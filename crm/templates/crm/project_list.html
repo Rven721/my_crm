@@ -17,7 +17,11 @@
     <div class="position-sticky">
       <div class="d-flex flex-column mt-3 ms-5">
         <a class="btn btn-primary mt-5 fs-5" href="{% url 'project_add' %}">Добавить проект</a>
+        {% if company.id is not None %}
+        <a class="btn btn-outline-success mt-3 fs-5" href="{% url 'company_project_list_status_report' company.id %}">Скачать отчет</a>
+        {% else %}
         <a class="btn btn-outline-success mt-3 fs-5" href="{% url 'project_list_status_report' %}">Скачать отчет</a>
+        {% endif %}
         <form class="mt-4" method="post">
           {% csrf_token %}
           {{form|crispy}}
@@ -29,5 +33,6 @@
       </div>
     </div>
   </div>
+  Test:{% if company.id is not None%} Yes {% else %} No {% endif %}
 </div>
 {% endblock %}
