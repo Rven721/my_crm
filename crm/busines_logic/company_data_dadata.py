@@ -1,10 +1,10 @@
+import os
 from dadata import Dadata
-from conf.passes import dadata_token
 
 
 def get_company_data(ogrn):
     profile = {}
-    dadata = Dadata('f609de19b73d432e43f69471386103708a90b903')
+    dadata = Dadata(os.environ['DADATA_TOKEN'])
     result = dadata.find_by_id('party', ogrn)
     try:
         result = result[0]['data']
