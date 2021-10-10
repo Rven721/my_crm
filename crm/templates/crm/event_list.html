@@ -3,10 +3,10 @@
 {% block title %}События{% endblock %}
 
 {% block content %}
-<div class="container mt-3 border">
+<div class="container mt-3">
   <h2 class="text-center mt-3">Список мероприятий</h2>
   <div class="d-flex justify-content-between">
-    <div class="container border">
+    <div class="container">
       <table class="table table-hover">
         <thead>
           <tr>
@@ -30,8 +30,8 @@
         </tbody>
       </table>
     </div>
-    <div class="container ms-5 col-2 col-lg-3 border">
-      <div class="d-flex mt-3 justify-content-center-start border">
+    <div class="container ms-5 col-2 col-lg-3">
+      <div class="d-flex mt-3 justify-content-center-start">
         <a class="btn btn-primary" href="{% url 'event_add' %}">Добавить событие</a>
       </div>
       {% include 'crm/side_calendar.html' %}

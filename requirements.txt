@@ -10,10 +10,12 @@ charset-normalizer==2.0.4
 cognitive-complexity==1.2.0
 company==0.0.4
 dadata==20.7.0
+dj-database-url==0.5.0
 Django==3.0.4
 django-bootstrap-datepicker-plus==3.0.5
 django-bootstrap4==3.0.1
 django-crispy-forms==1.11.2
+django-environ==0.7.0
 django-jquery==3.1.0
 django-phone-field==1.8.1
 django-phonenumber-field==5.0.0
@@ -37,6 +39,7 @@ flake8-print==4.0.0
 flake8-variables-names==0.0.4
 gunicorn==20.0.4
 h11==0.12.0
+heroku==0.1.4
 httpcore==0.13.6
 httpx==0.19.0
 idna==2.10
@@ -58,6 +61,8 @@ pycodestyle==2.6.0
 pyflakes==2.2.0
 pyparsing==2.4.7
 pytest==6.2.2
+python-dateutil==1.5
+python-dotenv==0.19.0
 python-slugify==5.0.2
 pytz==2019.3
 requests==2.25.1
