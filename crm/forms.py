@@ -90,7 +90,3 @@ class EventUpdateForm(forms.ModelForm):
 
 class FilterByCompanyForm(forms.Form):
     company = forms.ModelChoiceField(queryset=Company.objects.all().order_by('short_name'), label='Выберете компанию')
-
-
-class NameSearchForm(forms.Form):
-    last_name = forms.TypedChoiceField(choices=[(contact.pk, f'{contact.first_name} {contact.second_name} {contact.last_name}') for contact in Contact.objects.all()], label='Поиск по имени')
