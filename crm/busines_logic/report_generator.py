@@ -2,7 +2,7 @@ import os
 import django
 from openpyxl import Workbook
 
-os.environ['DJANGO_SETTINGS_MODULE'] = 'conf.settings'
+os.environ['DJANGO_SETTINGS_MODULE'] = 'conf.settings.base'
 django.setup()
 from crm.models import Project
 

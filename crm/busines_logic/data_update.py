@@ -1,7 +1,7 @@
 import os
 import django
 
-os.environ['DJANGO_SETTINGS_MODULE'] = 'conf.settings'
+os.environ['DJANGO_SETTINGS_MODULE'] = 'conf.settings.base'
 django.setup()
 
 from crm.models import Contact, Company, Project, Event
