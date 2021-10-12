@@ -7,7 +7,7 @@
 <div class="container mt-3">
   <h2 class="my-3">Список проектов</h2>
   <div class="d-flex justify-content-between">
-    <div class="col-7 mt-5">
+    <div class="col-7 mt-5 fs-5">
       {% for project in project_list %}
       <p><a href="{% url 'project_details' project.id %}">{{project.name}}</a></p>
       {% empty %}
