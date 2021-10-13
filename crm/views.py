@@ -182,7 +182,7 @@ def event_list_view(request):
             'month': request_date['month'],
             'year': request_date['year'],
         }))
-    event_list = Event.objects.filter(small=False).order_by('date')
+    event_list = Event.objects.filter(small=False).order_by('date').reverse()
     today = timezone.now().date()
     yesterday = today.day - 1
     tomorrow = today.day + 1
