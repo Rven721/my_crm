@@ -182,7 +182,7 @@ def event_list_view(request):
             'month': request_date['month'],
             'year': request_date['year'],
         }))
-    event_list = Event.objects.filter(small=False)
+    event_list = Event.objects.filter(small=False).order_by('date')
     today = timezone.now().date()
     yesterday = today.day - 1
     tomorrow = today.day + 1
@@ -285,7 +285,7 @@ def event_update_view(request, event_id):
         return render(request, 'crm/event_add.html', ctx)
     return render(request, 'crm/event_add.html', ctx)
 
-
+@login_required
 def project_event_history_report_view(request, project_id):
     buffer = io.BytesIO()
     wb = report_generator.project_event_history_report(project_id)
@@ -293,7 +293,7 @@ def project_event_history_report_view(request, project_id):
     buffer.seek(0)
     return FileResponse(buffer, as_attachment=True, filename='my_report.xlsx')
 
-
+@login_required
 def project_list_statuses_report_view(request, company_id=None):
     company = Company.objects.get(id=company_id) if company_id else None
     buffer = io.BytesIO()

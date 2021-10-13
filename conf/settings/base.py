@@ -129,7 +129,7 @@ DATE_INPUT_FORMATS = '%d/%m/%Y'
 
 LOGIN_URL = 'login'
 LOGIN_REDIRECT_URL = 'main'
-LOGOUT_URL = 'logout'
+LOGOUT_REDIRECT_URL = 'main'
 
 db_from_env = dj_database_url.config(conn_max_age=500)
 DATABASES['default'].update(db_from_env)
