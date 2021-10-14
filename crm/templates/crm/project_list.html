@@ -6,16 +6,16 @@
 {% block content %}
 <div class="container mt-3">
   <h2 class="my-3">Список проектов</h2>
-  <div class="d-flex justify-content-between">
-    <div class="col-7 mt-5 fs-5">
+  <div class="d-flex flex-column flex-md-row justify-content-between">
+    <div class="mt-5 fs-5">
       {% for project in project_list %}
       <p><a href="{% url 'project_details' project.id %}">{{project.name}}</a></p>
       {% empty %}
       <h4>Список проектов пуст</h4>
       {% endfor %}
     </div>
-    <div class="position-sticky">
-      <div class="d-flex flex-column mt-3 ms-5">
+    <div class="position-relative">
+      <div class="d-flex flex-column mt-3">
         <a class="btn btn-primary mt-5 fs-5" href="{% url 'project_add' %}">Добавить проект</a>
         {% if company.id is not None %}
         <a class="btn btn-outline-success mt-3 fs-5" href="{% url 'company_project_list_status_report' company.id %}">Скачать отчет</a>

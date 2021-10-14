@@ -5,16 +5,16 @@
 {% block content %}
 <div class="container mt-3">
   <h2 class="my-3">Список организаций</h2>
-  <div class="d-flex justify-content-between">
-    <div class="col-7 mt-5">
+  <div class="d-flex flex-column flex-md-row justify-content-between">
+    <div class="mt-5">
       {% for company in company_list %}
         <p class="fs-5"><a href="{% url 'company_details' company.id %}">{{company}}</a></p>
       {% empty %}
         <h4>Список компаний пуст</h4>
       {% endfor %}
     </div>
-    <div class="position-sticky">
-      <div class="d-flex mt-3 ms-5 fs-5">
+    <div class="position-relative">
+      <div class="d-flex flex-column mt-3 fs-5">
         <a class="btn btn-primary mt-5 fs-5" href="{% url 'company_add' %}">Добавить компанию</a>
       </div>
     </div>

@@ -1,4 +1,3 @@
-{% load static %}
 {% load crispy_forms_tags %}
 
 <!DOCTYPE html>
@@ -14,18 +13,34 @@
     <title>{% block title %}{%endblock%}</title>
 </head>
 <body class="d-flex flex-column h-100">
-<header>
-  <div class="container p-3 fs-4">
-    <div class="d-flex justify-content-center">
-      <a class="m-3" href="{% url 'events' %}">Календарь</a>
-      <a class="m-3" href="{% url 'projects' %}">Проекты</a>
-      <a class="m-3" href="{% url 'companies' %}">Компании</a>
-      <a class="m-3" href="{% url 'contacts' %}">Контакты</a>
+<header class="container my-3">
+  <nav class="navbar navbar-expand-md navbar-light">
+    <div class="container-fluid text-center">
+      <a class="navbar-brand fs-3" href="{% url 'main' %}"><b>Best-CRM</b></a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav fs-5">
+          <li class="navbar-item">
+            <a class="nav-link" href="{% url 'events'%}">Календарь</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'projects' %}">Проекты</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'companies' %}">Компании</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'contacts' %}">Контакты</a>
+          </li>
+        </ul>
+      </div>
     </div>
-  </div>
+  </nav>
 </header>
 <div class="container mt-3">
-  <p class="ms-2 text-start"><a href="{{request.META.HTTP_REFERER}}"><-назад</a></p>
+  <p class="ms-2 pb-3 text-start"><a href="{{request.META.HTTP_REFERER}}"><-назад</a></p>
   {% block content %}
   {% endblock %}
 </div>
