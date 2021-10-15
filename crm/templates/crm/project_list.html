@@ -7,12 +7,13 @@
 <div class="container mt-3">
   <h2 class="my-3">Список проектов</h2>
   <div class="d-flex flex-column flex-md-row justify-content-between">
-    <div class="mt-5 fs-5">
-      {% for project in project_list %}
-      <p><a href="{% url 'project_details' project.id %}">{{project.name}}</a></p>
+    <div class="mt-5">
+      {% for project in page_object %}
+      <p class="fs-5"><a href="{% url 'project_details' project.id %}">{{project.name}}</a></p>
       {% empty %}
       <h4>Список проектов пуст</h4>
       {% endfor %}
+      {% include 'crm/pagination_block.html' %}
     </div>
     <div class="position-relative">
       <div class="d-flex flex-column mt-3">

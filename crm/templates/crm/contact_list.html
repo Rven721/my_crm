@@ -8,11 +8,12 @@
     <h2 class="my-3">Список контактов</h2>
     <div class="d-flex flex-column flex-md-row justify-content-between">
       <div class="mt-5">
-        {% for contact in contact_list %}
+        {% for contact in page_object.object_list %}
           <p class="fs-5"><a href="{% url 'contact_details' contact.id %}">{{contact}}</a></p>
         {% empty %}
           <h4>Список контактов пуст</h4>
         {% endfor %}
+        {% include 'crm/pagination_block.html' %}
       </div>
       <div class="position-relative">
         <div class="d-flex flex-column mt-3">

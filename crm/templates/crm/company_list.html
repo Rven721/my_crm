@@ -7,11 +7,12 @@
   <h2 class="my-3">Список организаций</h2>
   <div class="d-flex flex-column flex-md-row justify-content-between">
     <div class="mt-5">
-      {% for company in company_list %}
+      {% for company in page_object %}
         <p class="fs-5"><a href="{% url 'company_details' company.id %}">{{company}}</a></p>
       {% empty %}
         <h4>Список компаний пуст</h4>
       {% endfor %}
+      {% include 'crm/pagination_block.html' %}
     </div>
     <div class="position-relative">
       <div class="d-flex flex-column mt-3 fs-5">

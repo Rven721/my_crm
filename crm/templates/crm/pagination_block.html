@@ -1,0 +1,11 @@
+<div class="pagination">
+  <span class='step-links mt-2'>
+    {% if page_object.has_previous %}
+      <a href="?page={{page_object.previous_page_number}}">&laquo;</a>
+    {% endif %}
+    <span class="current">стр.{{page_object.number}} из {{page_object.paginator.num_pages}}</span>
+    {% if page_object.has_next %}
+      <a href="?page={{page_object.next_page_number}}">&raquo;</a>
+    {% endif %}
+  </span>
+</div>

@@ -2,6 +2,7 @@ from django.shortcuts import render, reverse
 from django.http import HttpResponseRedirect, FileResponse
 from django.utils import timezone
 from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator
 from crm.models import Contact, Company, Project, Status, Event
 from crm.forms import ContactAddForm, CompanyAddForm, ProjectAddForm, StatusAddForm, MeetingAddForm, EventResultAddForm, \
     CompanyContactAddForm, EventSmallAddForm, EventUpdateForm, FilterByCompanyForm
@@ -10,6 +11,7 @@ from crm.busines_logic.company_data_dadata import get_company_data
 from crm.busines_logic.my_calendar import get_request_date
 from crm.busines_logic import report_generator
 import io
+import os
 
 
 def main_page_view(request):
@@ -23,9 +25,12 @@ def contact_list_view(request):
         form = FilterByCompanyForm(request.POST)
         if form.is_valid():
             contact_list = Contact.objects.filter(companies=form.cleaned_data['company'])
+    paginator = Paginator(contact_list, os.environ.get('STRINGS_ON_PAGE', 5))
+    page_number = request.GET.get('page')
+    page_object = paginator.get_page(page_number)
     ctx = {
-        'contact_list': contact_list,
         'form': form,
+        'page_object': page_object,
     }
     return render(request, 'crm/contact_list.html', ctx)
 
@@ -73,8 +78,12 @@ def contact_update_view(request, contact_id):
 
 def company_list_view(request):
     company_list = Company.objects.all().order_by('short_name')
+    paginator = Paginator(company_list, os.environ.get('STRINGS_ON_PAGE', 5))
+    page_number = request.GET.get('page')
+    page_object = paginator.get_page(page_number)
     ctx = {
         'company_list': company_list,
+        'page_object': page_object,
     }
     return render(request, 'crm/company_list.html', ctx)
 
@@ -133,10 +142,13 @@ def project_list_view(request):
         if form.is_valid():
             company = form.cleaned_data['company']
             project_list = Project.objects.filter(company=company).order_by('name')
+    paginator = Paginator(project_list, os.environ.get('STRINGS_ON_PAGE', 5))
+    page_number = request.GET.get('page')
+    page_object = paginator.get_page(page_number)
     ctx = {
-        'project_list': project_list,
         'form': form,
         'company': company,
+        'page_object': page_object,
     }
     return render(request, 'crm/project_list.html', ctx)
 
