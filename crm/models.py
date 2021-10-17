@@ -62,7 +62,7 @@ class Project(models.Model):
     full_cost = models.FloatField(null=True, verbose_name='Бюджет проекта')
     company = models.ForeignKey(Company, on_delete=models.CASCADE, related_name='projects', verbose_name='Компания')
     contacts = models.ManyToManyField(Contact, related_name='projects', verbose_name='Контакты')
-    project_deliver = models.ForeignKey(ProjectDeliver, related_name='projects', on_delete=models.PROTECT, null=True, verbose_name='Источник проекта')
+    project_deliver = models.ForeignKey(ProjectDeliver, related_name='projects', on_delete=models.PROTECT, null=True, default=None, verbose_name='Источник проекта')
 
     def __str__(self):
         return self.name
