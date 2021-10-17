@@ -1,5 +1,5 @@
 from django.contrib import admin
-from crm.models import Contact, Company, Project, Status, Event
+from crm.models import Contact, Company, Project, Status, Event, ProjectDeliver
 
 
 @admin.register(Contact)
@@ -24,4 +24,9 @@ class StatusAdmin(admin.ModelAdmin):
 
 @admin.register(Event)
 class EventAdmin(admin.ModelAdmin):
+    pass
+
+
+@admin.register(ProjectDeliver)
+class ProjectDeliverAdmin(admin.ModelAdmin):
     pass

@@ -18,8 +18,12 @@
     <div class="position-relative">
       <div class="d-flex flex-column mt-3">
         <a class="btn btn-primary mt-5 fs-5" href="{% url 'project_add' %}">Добавить проект</a>
-        {% if company.id is not None %}
+        {% if company.id is not None and project_deliver.id is None %}
         <a class="btn btn-outline-success mt-3 fs-5" href="{% url 'company_project_list_status_report' company.id %}">Скачать отчет</a>
+        {% elif company.id is None and project_deliver.id is not None %}
+        <a class="btn btn-outline-success mt-3 fs-5" href="{% url 'deliver_project_list_status_report' project_deliver.id %}">Скачать отчет</a>
+        {% elif company.id is not None and project_deliver.id is not None %}
+        <a class="btn btn-outline-success mt-3 fs-5" href="{% url 'company_deliver_project_list_status_report' project_deliver.id company.id %}">Скачать отчет</a>
         {% else %}
         <a class="btn btn-outline-success mt-3 fs-5" href="{% url 'project_list_status_report' %}">Скачать отчет</a>
         {% endif %}

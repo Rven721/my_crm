@@ -1,6 +1,6 @@
 from django import forms
 from django.utils import timezone
-from .models import Contact, Company, Project, Status, Event
+from .models import Contact, Company, Project, Status, Event, ProjectDeliver
 
 
 class ContactAddForm(forms.ModelForm):
@@ -39,7 +39,7 @@ class ProjectAddForm(forms.ModelForm):
 
     class Meta:
         model = Project
-        fields = ('name', 'full_name', 'description', 'start_date', 'end_date', 'grant', 'full_cost', 'company', 'contacts')
+        fields = ('name', 'full_name', 'description', 'start_date', 'end_date', 'grant', 'full_cost', 'company', 'contacts', 'project_deliver')
         widgets = {'full_name': forms.Textarea, 'start_date': forms.SelectDateWidget, 'end_date': forms.SelectDateWidget}
 
 
@@ -90,3 +90,8 @@ class EventUpdateForm(forms.ModelForm):
 
 class FilterByCompanyForm(forms.Form):
     company = forms.ModelChoiceField(queryset=Company.objects.all().order_by('short_name'), label='Выберете компанию')
+
+
+class FilterByCompanyAndSource(forms.Form):
+    company = forms.ModelChoiceField(queryset=Company.objects.all().only('short_name').order_by('short_name'), label='Выберете компанию', required=False)
+    project_deliver = forms.ModelChoiceField(queryset=ProjectDeliver.objects.all().only('name').order_by('name'), label='Источник проекта', required=False)

@@ -4,6 +4,18 @@ from django.urls import reverse
 from django.contrib.auth.models import User
 
 
+class ProjectDeliver(models.Model):
+    name = models.CharField(max_length=55)
+    conditions_of_work = models.TextField()
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = 'Источник проекта'
+        verbose_name_plural = 'Источники проекта'
+
+
 class Contact(models.Model):
     first_name = models.CharField(max_length=50, verbose_name='Имя')
     second_name = models.CharField(max_length=50, verbose_name='Отчество', blank=True, null=True)
@@ -50,6 +62,7 @@ class Project(models.Model):
     full_cost = models.FloatField(null=True, verbose_name='Бюджет проекта')
     company = models.ForeignKey(Company, on_delete=models.CASCADE, related_name='projects', verbose_name='Компания')
     contacts = models.ManyToManyField(Contact, related_name='projects', verbose_name='Контакты')
+    project_deliver = models.ForeignKey(ProjectDeliver, related_name='projects', on_delete=models.PROTECT, null=True, verbose_name='Источник проекта')
 
     def __str__(self):
         return self.name

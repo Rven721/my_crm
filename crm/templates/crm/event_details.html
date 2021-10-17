@@ -4,9 +4,9 @@
 
 {% block content %}
 <div class="fs-5">
-  <p>Тип: {{event.get_type_display}}</p>
-  <p>Повестка: {{event.description}}</p>
-  <p>Рассматриваемые проекты:</p>
+  <p><b>Тип:</b> {{event.get_type_display}}</p>
+  <p><b>Повестка:</b> {{event.description}}</p>
+  <p><b>Рассматриваемые проекты:</b></p>
   <div class="d-flex flex-column pb-4">
     {% for project in event.projects.all %}
     <a href="{% url 'project_details' project.id %}">{{project.name}}</a>
@@ -14,7 +14,7 @@
     Список пуст
     {% endfor %}
   </div>
-  <p>Результат:</p>
+  <p><b>Результат:</b></p>
   {% if event.result is None %}
   <a href="{% url 'event_result_add' event.id %}">Добавить результат</a>
   {% else %}

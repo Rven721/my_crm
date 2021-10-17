@@ -3,13 +3,13 @@ from django.http import HttpResponseRedirect, FileResponse
 from django.utils import timezone
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
-from crm.models import Contact, Company, Project, Status, Event
+from crm.models import Contact, Company, Project, Status, Event, ProjectDeliver
 from crm.forms import ContactAddForm, CompanyAddForm, ProjectAddForm, StatusAddForm, MeetingAddForm, EventResultAddForm, \
-    CompanyContactAddForm, EventSmallAddForm, EventUpdateForm, FilterByCompanyForm
+    CompanyContactAddForm, EventSmallAddForm, EventUpdateForm, FilterByCompanyForm, FilterByCompanyAndSource
 from crm.busines_logic import data_update
 from crm.busines_logic.company_data_dadata import get_company_data
 from crm.busines_logic.my_calendar import get_request_date
-from crm.busines_logic import report_generator
+from crm.busines_logic import report_generator, fitrer_engine
 import io
 import os
 
@@ -135,19 +135,22 @@ def company_contacts_update_view(request, company_id):
 
 def project_list_view(request):
     project_list = Project.objects.all().order_by('name')
-    form = FilterByCompanyForm()
+    form = FilterByCompanyAndSource()
     company = None
+    project_deliver = None
     if request.method == "POST":
-        form = FilterByCompanyForm(request.POST)
+        form = FilterByCompanyAndSource(request.POST)
         if form.is_valid():
-            company = form.cleaned_data['company']
-            project_list = Project.objects.filter(company=company).order_by('name')
+            company=form.cleaned_data['company']
+            project_deliver=form.cleaned_data['project_deliver']
+            project_list = fitrer_engine.project_list_filter(company, project_deliver)
     paginator = Paginator(project_list, os.environ.get('STRINGS_ON_PAGE', 5))
     page_number = request.GET.get('page')
     page_object = paginator.get_page(page_number)
     ctx = {
         'form': form,
         'company': company,
+        'project_deliver': project_deliver,
         'page_object': page_object,
     }
     return render(request, 'crm/project_list.html', ctx)
@@ -206,6 +209,7 @@ def event_list_view(request):
     }
     return render(request, 'crm/event_list.html', ctx)
 
+
 @login_required
 def event_list_on_date_view(request, day, month, year):
     if request.method == 'POST':
@@ -232,6 +236,7 @@ def event_list_on_date_view(request, day, month, year):
     }
     return render(request, 'crm/event_list.html', ctx)
 
+
 @login_required
 def event_details_view(request, event_id):
     event = Event.objects.get(id=event_id)
@@ -253,6 +258,7 @@ def event_add_view(request):
     form = MeetingAddForm()
     return render(request, 'crm/event_add.html', {'form': form})
 
+
 @login_required
 def event_small_add_view(request, project_id):
     project = Project.objects.get(id=project_id)
@@ -268,6 +274,7 @@ def event_small_add_view(request, project_id):
     form = EventSmallAddForm()
     return render(request, 'crm/event_add.html', {'form': form})
 
+
 @login_required
 def event_result_add_view(request, event_id):
     event = Event.objects.get(id=event_id)
@@ -280,6 +287,7 @@ def event_result_add_view(request, event_id):
         return render(request, 'crm/event_result_add.html', {'form': form})
     form = EventResultAddForm()
     return render(request, 'crm/event_result_add.html', {'form': form})
+
 
 @login_required
 def event_update_view(request, event_id):
@@ -297,6 +305,7 @@ def event_update_view(request, event_id):
         return render(request, 'crm/event_add.html', ctx)
     return render(request, 'crm/event_add.html', ctx)
 
+
 @login_required
 def project_event_history_report_view(request, project_id):
     buffer = io.BytesIO()
@@ -305,11 +314,13 @@ def project_event_history_report_view(request, project_id):
     buffer.seek(0)
     return FileResponse(buffer, as_attachment=True, filename='my_report.xlsx')
 
+
 @login_required
-def project_list_statuses_report_view(request, company_id=None):
+def project_list_statuses_report_view(request, company_id=None, project_deliver_id=None):
     company = Company.objects.get(id=company_id) if company_id else None
+    project_deliver = ProjectDeliver.objects.get(id=project_deliver_id) if project_deliver_id else None
     buffer = io.BytesIO()
-    wb = report_generator.project_status_report(company)
+    wb = report_generator.project_status_report(company, project_deliver)
     wb.save(buffer)
     buffer.seek(0)
     return FileResponse(buffer, as_attachment=True, filename='status_report.xlsx')
