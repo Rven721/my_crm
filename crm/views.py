@@ -1,17 +1,20 @@
 from django.shortcuts import render, reverse
 from django.http import HttpResponseRedirect, FileResponse
 from django.utils import timezone
+from django.db.models import Q
+from django.utils.encoding import uri_to_iri
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from crm.models import Contact, Company, Project, Status, Event, ProjectDeliver
 from crm.forms import ContactAddForm, CompanyAddForm, ProjectAddForm, StatusAddForm, MeetingAddForm, EventResultAddForm, \
-    CompanyContactAddForm, EventSmallAddForm, EventUpdateForm, FilterByCompanyForm, FilterByCompanyAndSource
+    CompanyContactAddForm, EventSmallAddForm, EventUpdateForm, FilterByCompanyForm, FilterByCompanyAndSource, ContactSearchForm
 from crm.busines_logic import data_update
 from crm.busines_logic.company_data_dadata import get_company_data
 from crm.busines_logic.my_calendar import get_request_date
 from crm.busines_logic import report_generator, fitrer_engine
 import io
 import os
+
 
 
 def main_page_view(request):
@@ -21,18 +24,27 @@ def main_page_view(request):
 def contact_list_view(request):
     contact_list = Contact.objects.all().order_by('first_name')
     form = FilterByCompanyForm()
+    contact_search_form = ContactSearchForm()
     if request.method == 'POST':
         form = FilterByCompanyForm(request.POST)
         if form.is_valid():
             contact_list = Contact.objects.filter(companies=form.cleaned_data['company'])
+    if 'query' in request.GET:
+        search_name = uri_to_iri(request.GET['query']).capitalize()
+        contact_list = Contact.objects.filter(
+            Q(last_name__icontains=search_name) |
+            Q(first_name__icontains=search_name)
+        )
     paginator = Paginator(contact_list, os.environ.get('STRINGS_ON_PAGE', 5))
     page_number = request.GET.get('page')
     page_object = paginator.get_page(page_number)
     ctx = {
         'form': form,
+        'contact_search_form': contact_search_form,
         'page_object': page_object,
     }
     return render(request, 'crm/contact_list.html', ctx)
+
 
 @login_required
 def contact_details_view(request, contact_id):
@@ -77,13 +89,23 @@ def contact_update_view(request, contact_id):
 
 
 def company_list_view(request):
+    search_form = ContactSearchForm()
     company_list = Company.objects.all().order_by('short_name')
+    if 'query' in request.GET:
+        search_form = ContactSearchForm(request.GET)
+        if search_form.is_valid():
+            search_name = search_form.cleaned_data['query'].upper()
+            company_list = company_list.filter(
+                Q(short_name__icontains=search_name) |
+                Q(full_name__icontains=search_name)
+            )
     paginator = Paginator(company_list, os.environ.get('STRINGS_ON_PAGE', 5))
     page_number = request.GET.get('page')
     page_object = paginator.get_page(page_number)
     ctx = {
         'company_list': company_list,
         'page_object': page_object,
+        'search_form': search_form,
     }
     return render(request, 'crm/company_list.html', ctx)
 

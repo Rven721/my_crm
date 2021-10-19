@@ -10,6 +10,10 @@ class ContactAddForm(forms.ModelForm):
         fields = ('first_name', 'second_name', 'last_name', 'email', 'phone', 'additional_info')
 
 
+class ContactSearchForm(forms.Form):
+    query = forms.CharField(label='Поиск')
+
+
 class CompanyAddForm(forms.ModelForm):
 
     class Meta:

@@ -31,8 +31,8 @@
           {% csrf_token %}
           {{form|crispy}}
           <div class="d-flex justify-content-start">
-            <input class="btn btn-primary mt-3" type="submit" value="Подобрать">
-            <a class="btn btn-dark mt-3 ms-3 " href="{% url 'projects' %}">Сбросить</a>
+            <input class="btn btn-outline-success mt-3" type="submit" value="Подобрать">
+            <a class="btn btn-outline-dark mt-3 ms-3 " href="{% url 'projects' %}">Сбросить</a>
           </div>
         </form>
       </div>
