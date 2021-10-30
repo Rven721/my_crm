@@ -6,6 +6,7 @@ from django.contrib.auth.models import User
 
 class ProjectDeliver(models.Model):
     name = models.CharField(max_length=55)
+    slug = models.SlugField(max_length=55, default='user')
     conditions_of_work = models.TextField()
 
     def __str__(self):

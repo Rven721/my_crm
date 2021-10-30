@@ -99,3 +99,4 @@ class FilterByCompanyForm(forms.Form):
 class FilterByCompanyAndSource(forms.Form):
     company = forms.ModelChoiceField(queryset=Company.objects.all().only('short_name').order_by('short_name'), label='Выберете компанию', required=False)
     project_deliver = forms.ModelChoiceField(queryset=ProjectDeliver.objects.all().only('name').order_by('name'), label='Источник проекта', required=False)
+    project_status = forms.ChoiceField(choices=[("", '------')]+Status.status_list, label='Текущий статус', required=False)

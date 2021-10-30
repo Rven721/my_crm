@@ -7,14 +7,14 @@ from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from crm.models import Contact, Company, Project, Status, Event, ProjectDeliver
 from crm.forms import ContactAddForm, CompanyAddForm, ProjectAddForm, StatusAddForm, MeetingAddForm, EventResultAddForm, \
-    CompanyContactAddForm, EventSmallAddForm, EventUpdateForm, FilterByCompanyForm, FilterByCompanyAndSource, ContactSearchForm
+    CompanyContactAddForm, EventSmallAddForm, EventUpdateForm, FilterByCompanyForm, FilterByCompanyAndSource, \
+    ContactSearchForm
 from crm.busines_logic import data_update
 from crm.busines_logic.company_data_dadata import get_company_data
 from crm.busines_logic.my_calendar import get_request_date
 from crm.busines_logic import report_generator, fitrer_engine
 import io
 import os
-
 
 
 def main_page_view(request):
@@ -54,6 +54,7 @@ def contact_details_view(request, contact_id):
     }
     return render(request, 'crm/contact_details.html', ctx)
 
+
 @login_required
 def contact_add_view(request):
     if request.method == 'POST':
@@ -64,6 +65,7 @@ def contact_add_view(request):
         return render(request, 'crm/contact_add.html', {'form': form})
     form = ContactAddForm()
     return render(request, 'crm/contact_add.html', {'form': form})
+
 
 @login_required
 def contact_update_view(request, contact_id):
@@ -109,6 +111,7 @@ def company_list_view(request):
     }
     return render(request, 'crm/company_list.html', ctx)
 
+
 @login_required
 def company_details_view(request, company_id):
     company = Company.objects.get(id=company_id)
@@ -122,6 +125,7 @@ def company_details_view(request, company_id):
         'flag': flag
     }
     return render(request, 'crm/company_details.html', ctx)
+
 
 @login_required
 def company_add_view(request):
@@ -140,6 +144,7 @@ def company_add_view(request):
         return render(request, 'crm/company_add.html', {'form': form})
     form = CompanyAddForm()
     return render(request, 'crm/company_add.html', {'form': form})
+
 
 @login_required
 def company_contacts_update_view(request, company_id):
@@ -160,12 +165,14 @@ def project_list_view(request):
     form = FilterByCompanyAndSource()
     company = None
     project_deliver = None
+    project_status = ''
     if request.method == "POST":
         form = FilterByCompanyAndSource(request.POST)
         if form.is_valid():
-            company=form.cleaned_data['company']
-            project_deliver=form.cleaned_data['project_deliver']
-            project_list = fitrer_engine.project_list_filter(company, project_deliver)
+            company = form.cleaned_data['company']
+            project_deliver = form.cleaned_data['project_deliver']
+            project_status = form.cleaned_data['project_status']
+            project_list = fitrer_engine.project_list_filter(company, project_deliver, project_status)
     paginator = Paginator(project_list, os.environ.get('STRINGS_ON_PAGE', 5))
     page_number = request.GET.get('page')
     page_object = paginator.get_page(page_number)
@@ -173,9 +180,11 @@ def project_list_view(request):
         'form': form,
         'company': company,
         'project_deliver': project_deliver,
+        'project_status': project_status,
         'page_object': page_object,
     }
     return render(request, 'crm/project_list.html', ctx)
+
 
 @login_required
 def project_details_view(request, project_id):
@@ -184,6 +193,7 @@ def project_details_view(request, project_id):
         'project': project,
     }
     return render(request, 'crm/project_details.html', ctx)
+
 
 @login_required
 def project_add_view(request):
@@ -196,6 +206,7 @@ def project_add_view(request):
         return render(request, 'crm/project_add.html', {'form': form})
     form = ProjectAddForm()
     return render(request, 'crm/project_add.html', {'form': form})
+
 
 @login_required
 def status_change_view(request, project_id):
@@ -266,6 +277,7 @@ def event_details_view(request, event_id):
         'event': event
     }
     return render(request, 'crm/event_details.html', ctx)
+
 
 @login_required
 def event_add_view(request):
@@ -338,15 +350,31 @@ def project_event_history_report_view(request, project_id):
 
 
 @login_required
-def project_list_statuses_report_view(request, company_id=None, project_deliver_id=None):
+def project_list_statuses_report_view(request, company_id=None, project_deliver_slug=None, project_status=None):
     company = Company.objects.get(id=company_id) if company_id else None
-    project_deliver = ProjectDeliver.objects.get(id=project_deliver_id) if project_deliver_id else None
+    project_deliver = ProjectDeliver.objects.get(slug=project_deliver_slug) if project_deliver_slug else None
     buffer = io.BytesIO()
-    wb = report_generator.project_status_report(company, project_deliver)
+    wb = report_generator.project_status_report(company=company, project_deliver=project_deliver, project_status=project_status)
     wb.save(buffer)
     buffer.seek(0)
     return FileResponse(buffer, as_attachment=True, filename='status_report.xlsx')
 
 
 def test(request):
-    pass
+    projects = Project.objects.all()
+    report_data = projects.values()
+    if 'status_search' in request.GET:
+        projects = list(projects)
+        check_list = projects.copy()
+        for project in check_list:
+            try:
+                if project.statuses.last().status != request.GET['status_search']:
+                    projects.remove(project)
+            except AttributeError:
+                projects.remove(project)
+        report_data = [project.values() for project in projects]
+    ctx = {
+        'projects': projects,
+        'report_data': report_data,
+    }
+    return render(request, 'crm/test.html', ctx)

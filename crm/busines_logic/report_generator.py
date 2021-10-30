@@ -40,15 +40,24 @@ def project_event_history_report(project_id):
     return wb
 
 
-def project_status_report(company=None, project_deliver=None):
+def project_status_report(company=None, project_deliver=None, project_status=None):
     """Функция возвращает несохраненный excel файл содержащий список всех проектов и описание их текущего статуса для
     заданной компании от заданного источника"""
+    header = ['Проект', 'Текущий статус', 'Источник']
     project_list = Project.objects.all()
     if project_deliver:
         project_list = project_list.filter(project_deliver=project_deliver)
     if company:
         project_list = project_list.filter(company=company)
-    header = ['Проект', 'Текущий статус', 'Источник']
+    if project_status is not None:
+        project_list = list(project_list)
+        check_list = project_list.copy()
+        for project in check_list:
+            try:
+                if project.statuses.last().status != project_status:
+                    project_list.remove(project)
+            except AttributeError:
+                project_list.remove(project)
     wb = Workbook()
     ws = wb.active
     ws.append(header)
