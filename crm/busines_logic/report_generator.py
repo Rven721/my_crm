@@ -43,7 +43,7 @@ def project_event_history_report(project_id):
 def project_status_report(company=None, project_deliver=None, project_status=None):
     """Функция возвращает несохраненный excel файл содержащий список всех проектов и описание их текущего статуса для
     заданной компании от заданного источника"""
-    header = ['Проект', 'Текущий статус', 'Источник']
+    header = ['Компания', 'Проект', 'Текущий статус', 'Последнее событие', 'Источник']
     project_list = Project.objects.all()
     if project_deliver:
         project_list = project_list.filter(project_deliver=project_deliver)
@@ -62,6 +62,15 @@ def project_status_report(company=None, project_deliver=None, project_status=Non
     ws = wb.active
     ws.append(header)
     for project in project_list:
-        project_data = [project.name, project_status_decoder[project.statuses.all().last().status], project.project_deliver.name]
+        try:
+            last_event_result = project.events.last().result
+        except AttributeError:
+            last_event_result = 'Данные отсутствуют'
+        project_data = [
+            project.company.short_name,
+            project.full_name,
+            project_status_decoder[project.statuses.all().last().status],
+            last_event_result, project.project_deliver.name
+        ]
         ws.append(project_data)
     return wb
