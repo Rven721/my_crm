@@ -20,7 +20,7 @@ import os
 def main_page_view(request):
     return render(request, 'crm/index.html')
 
-
+@login_required
 def contact_list_view(request):
     contact_list = Contact.objects.all().order_by('first_name')
     form = FilterByCompanyForm()
@@ -90,6 +90,7 @@ def contact_update_view(request, contact_id):
     return render(request, 'crm/contact_add.html', ctx)
 
 
+@login_required
 def company_list_view(request):
     search_form = ContactSearchForm()
     company_list = Company.objects.all().order_by('short_name')
@@ -159,7 +160,7 @@ def company_contacts_update_view(request, company_id):
     form = CompanyContactAddForm(instance=company)
     return render(request, 'crm/company_contacts_add.html', {'form': form})
 
-
+@login_required
 def project_list_view(request):
     project_list = Project.objects.all().order_by('name')
     form = FilterByCompanyAndSource()
@@ -221,7 +222,7 @@ def status_change_view(request, project_id):
     form = StatusAddForm()
     return render(request, 'crm/status_change.html', {'form': form})
 
-
+@login_required
 def event_list_view(request):
     if request.method == 'POST':
         request_date = get_request_date(request.POST.get('date'))
