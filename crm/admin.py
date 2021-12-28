@@ -1,5 +1,5 @@
 from django.contrib import admin
-from crm.models import Contact, Company, Project, Status, Event, ProjectDeliver
+from crm.models import Contact, Company, Project, Status, Event, ProjectDeliver, Document
 
 
 @admin.register(Contact)
@@ -30,3 +30,9 @@ class EventAdmin(admin.ModelAdmin):
 @admin.register(ProjectDeliver)
 class ProjectDeliverAdmin(admin.ModelAdmin):
     pass
+
+
+@admin.register(Document)
+class DocumentAdmin(admin.ModelAdmin):
+    list_display = ['name', 'event']
+

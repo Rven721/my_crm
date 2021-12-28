@@ -58,7 +58,7 @@ class EventSmallAddForm(forms.ModelForm):
 
     class Meta:
         model = Event
-        fields = ('type', 'description', 'date', 'time', 'result', 'small',)
+        fields = ('type', 'description', 'date', 'time', 'took_time', 'result', 'small',)
         widgets = {'date': forms.SelectDateWidget}
         help_texts = {'time': 'чч:мм'}
 

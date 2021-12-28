@@ -95,19 +95,24 @@ class Status(models.Model):
 class Event(models.Model):
 
     type_list = [
-        ('consult', 'Консультация'),
+        ('text_consult', 'Письменная консультация'),
+        ('phone_consult', 'Телефонная консультация'),
+        ('call', 'ВКС'),
+        ('document_transfer', 'Обмен документами'),
+        ('paper_check', 'Работа с документами'),
+        ('data_request', 'Запрос информации'),
+        ('project_update', 'Изменение статуса'),
         ('discuss', 'Обсуждение'),
-        ('call', 'Созвон'),
         ('due_dil', 'Контрактация'),
-        ('formal', 'Формальная проверка')
-    ]
+        ]
 
     projects = models.ManyToManyField(Project, related_name='events', verbose_name='Проекты')
-    type = models.CharField(max_length=7, choices=type_list, verbose_name='Категория')
+    type = models.CharField(max_length=25, choices=type_list, verbose_name='Категория')
     description = models.TextField(verbose_name='Описание')
     date = models.DateField(blank=True, null=True, verbose_name='Дата')
     time = models.TimeField(blank=True, null=True, verbose_name='Время')
     invited_persons = models.ManyToManyField(User, blank=True, verbose_name='Приглашенные сотрудники')
+    took_time = models.IntegerField(blank=True, null=True, verbose_name='Затраченное время в секундах')
     result = models.TextField(blank=True, null=True, verbose_name='Результат')
     author = models.ForeignKey(
         User,
@@ -135,3 +140,12 @@ class Event(models.Model):
             'month': month,
             'year': year,
         })
+
+
+class Document(models.Model):
+    name = models.CharField(max_length=120, verbose_name='Название документа')
+    pages = models.IntegerField(default=1, verbose_name='Число страниц')
+    event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name='documents', verbose_name='Событие')
+
+    def __str__(self):
+        return self.name
