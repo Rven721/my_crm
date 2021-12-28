@@ -231,7 +231,7 @@ def event_list_view(request):
             'month': request_date['month'],
             'year': request_date['year'],
         }))
-    event_list = Event.objects.filter(small=False).order_by('date').reverse()
+    event_list = Event.objects.all().order_by('date').reverse()
     today = timezone.now().date()
     yesterday = today.day - 1
     tomorrow = today.day + 1
@@ -257,7 +257,6 @@ def event_list_on_date_view(request, day, month, year):
         date__day=day,
         date__month=month,
         date__year=year,
-        small=False,
     )
     today = timezone.now().date()
     yesterday = today.day - 1
@@ -286,7 +285,6 @@ def event_add_view(request):
         form = MeetingAddForm(request.POST)
         if form.is_valid():
             event = form.save()
-            event.small = False
             event.save()
             return HttpResponseRedirect(reverse('event_details', kwargs={'event_id': event.id}))
         return render(request, 'crm/event_add.html', {'form': form})

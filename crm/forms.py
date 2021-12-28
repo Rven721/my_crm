@@ -67,7 +67,7 @@ class MeetingAddForm(forms.ModelForm):
 
     class Meta:
         model = Event
-        fields = ('projects', 'type', 'description', 'date', 'time', 'invited_persons')
+        fields = ('projects', 'type', 'description', 'date', 'time', 'invited_persons', 'small',)
         widgets = {'date': forms.SelectDateWidget}
         help_texts = {'time': 'чч:мм'}
 
