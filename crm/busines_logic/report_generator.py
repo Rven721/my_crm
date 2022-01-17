@@ -7,11 +7,15 @@ django.setup()
 from crm.models import Project
 
 event_type_decoder = {
-    'consult': 'Консультация',
+    'text_consult': 'Письменная консультация',
+    'phone_consult': 'Телефонная консультация',
+    'call': 'ВКС',
+    'document_transfer': 'Обмен документами',
+    'paper_check': 'Работа с документами',
+    'data_request': 'Запрос информации',
+    'project_update': 'Изменение статуса',
     'discuss': 'Обсуждение',
-    'call': 'Созвон',
     'due_dil': 'Контрактация',
-    'formal': 'Формальная проверка'
 }
 
 project_status_decoder = {
