@@ -7,12 +7,16 @@
 <h3 class="text-center">Карточка проекта</h3>
 <div class="container mt-5 fs-5">
   <p><b>Текущий статус: </b>{{project.statuses.last.get_status_display}} (<a href="{% url 'status_change' project.id%}">сменить</a>)</p>
-  <p><b>Рабочее наименование: </b>{{project.name}}</p>
+  <p><b>Рабочее наименование: </b>{{project.name}} (<a href="{% url 'project_update' project.id %}">обновить данные</a>)</p>
   <p><b>Полное наименование: </b>{{project.full_name}}</p>
   <p><b>Сумма гранта: </b>{{project.grant|my_thousand_separator}}</p>
   <p><b>Бюджет проекта: </b>{{project.full_cost|my_thousand_separator}}</p>
   <p><b>Срок реализации: </b>{{project.start_date}} - {{project.end_date}}</p>
+  {% if project.company.id %}
   <p><b>Заявитель: </b><a href="{% url 'company_details' project.company.id %}">{{project.company.short_name}}</a></p>
+  {% else %}
+  <p><b>Заявитель: </b>Не определен</p>
+  {% endif %}
   <div class="accordion" id="project_description_accordion">
     <div class="accordion-item">
       <h3 class="accordion-header" id="description_headline">
@@ -39,8 +43,8 @@
         </h2>
         <div id="event_list" class="accordion-collapse collapse show" aria-labelledby="event_list_headline" data-bs-parent="#event_list_accordion">
           <div class="accordion-body">
-              {% for event in project.events.all|dictsortreversed:'date' %}
-                <p><a href="{% url 'event_details' event.id %}">{{ event.get_type_display }}</a> - {{ event.date }}</p>
+              {% for event in project.events.all|dictsortreversed:'time' %}
+                <p><a href="{% url 'event_details' event.id %}">{{ event.get_event_type_display }}</a> - {{ event.date }}</p>
               {% empty %}
                 <p>Список пуст</p>
               {% endfor %}

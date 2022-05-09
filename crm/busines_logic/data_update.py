@@ -1,3 +1,4 @@
+"""Block with logic for database update"""
 import os
 import django
 
@@ -32,6 +33,7 @@ def company_contacts_update(company_id, contacts_data):
 
 
 def company_profile_update(ogrn_number):
+    """Will receve OGRN number and return updated company profile"""
     company = Company.objects.get(ogrn_number=ogrn_number)
     data = get_company_data(ogrn_number)
     company.inn_number = data['inn_number']
@@ -43,9 +45,10 @@ def company_profile_update(ogrn_number):
 
 
 def event_details_update(event_id, new_data):
+    """Will retrun updated event instanse"""
     event = Event.objects.get(id=event_id)
     event.projects.set(new_data['projects'])
-    event.type = new_data['type']
+    event.event_type = new_data['event_type']
     event.description = new_data['description']
     event.date = new_data['date']
     event.time = new_data['time']
@@ -53,3 +56,18 @@ def event_details_update(event_id, new_data):
     event.result = new_data['result']
     event.save()
     return event
+
+
+def project_details_update(project_id, new_data):
+    """Will retrun updated projcet instance"""
+    project = Project.objects.get(id=project_id)
+    project.description = new_data['description']
+    project.start_date = new_data['start_date']
+    project.end_date = new_data['end_date']
+    project.grant = new_data['grant']
+    project.full_cost = new_data['full_cost']
+    project.company = new_data['company']
+    project.contacts.set(new_data['contacts'])
+    project.project_deliver = new_data['project_deliver']
+    project.save()
+    return project

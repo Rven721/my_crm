@@ -1,3 +1,4 @@
+from calendar import HTMLCalendar
 from django.shortcuts import render, reverse
 from django.http import HttpResponseRedirect, FileResponse
 from django.utils import timezone
@@ -6,8 +7,18 @@ from django.utils.encoding import uri_to_iri
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from crm.models import Contact, Company, Project, Status, Event, ProjectDeliver
-from crm.forms import ContactAddForm, CompanyAddForm, ProjectAddForm, StatusAddForm, MeetingAddForm, EventResultAddForm, \
-    CompanyContactAddForm, EventSmallAddForm, EventUpdateForm, FilterByCompanyForm, FilterByCompanyAndSource, \
+from crm.forms import ContactAddForm,\
+    CompanyAddForm,\
+    ProjectAddForm,\
+    ProjectUpdateForm,\
+    StatusAddForm,\
+    MeetingAddForm,\
+    EventResultAddForm, \
+    CompanyContactAddForm,\
+    EventSmallAddForm,\
+    EventUpdateForm,\
+    FilterByCompanyForm,\
+    FilterByCompanyAndSource, \
     ContactSearchForm
 from crm.busines_logic import data_update
 from crm.busines_logic.company_data_dadata import get_company_data
@@ -19,6 +30,7 @@ import os
 
 def main_page_view(request):
     return render(request, 'crm/index.html')
+
 
 @login_required
 def contact_list_view(request):
@@ -33,7 +45,7 @@ def contact_list_view(request):
         search_name = uri_to_iri(request.GET['query']).capitalize()
         contact_list = Contact.objects.filter(
             Q(last_name__icontains=search_name) |
-            Q(first_name__icontains=search_name)
+            Q(first_name__icontains=search_name),
         )
     paginator = Paginator(contact_list, os.environ.get('STRINGS_ON_PAGE', 5))
     page_number = request.GET.get('page')
@@ -50,7 +62,7 @@ def contact_list_view(request):
 def contact_details_view(request, contact_id):
     contact = Contact.objects.get(id=contact_id)
     ctx = {
-        'contact': contact
+        'contact': contact,
     }
     return render(request, 'crm/contact_details.html', ctx)
 
@@ -79,13 +91,13 @@ def contact_update_view(request, contact_id):
             return HttpResponseRedirect(reverse('contact_details', kwargs={'contact_id': contact.id}))
         ctx = {
             'form': form,
-            'update': update
+            'update': update,
         }
         return render(request, 'crm/contact_add.html', ctx)
     form = ContactAddForm(instance=contact)
     ctx = {
         'form': form,
-        'update': update
+        'update': update,
     }
     return render(request, 'crm/contact_add.html', ctx)
 
@@ -123,7 +135,7 @@ def company_details_view(request, company_id):
         flag = 'post'
     ctx = {
         'company': company,
-        'flag': flag
+        'flag': flag,
     }
     return render(request, 'crm/company_details.html', ctx)
 
@@ -160,14 +172,16 @@ def company_contacts_update_view(request, company_id):
     form = CompanyContactAddForm(instance=company)
     return render(request, 'crm/company_contacts_add.html', {'form': form})
 
+
 @login_required
 def project_list_view(request):
-    project_list = Project.objects.all().order_by('name')
+    project_list = fitrer_engine.project_list_filter(project_status="progress")
     form = FilterByCompanyAndSource()
     company = None
     project_deliver = None
     project_status = ''
     if request.method == "POST":
+        project_list = Project.objects.all().order_by('name')
         form = FilterByCompanyAndSource(request.POST)
         if form.is_valid():
             company = form.cleaned_data['company']
@@ -210,6 +224,20 @@ def project_add_view(request):
 
 
 @login_required
+def project_update_view(request, project_id):
+    project = Project.objects.get(id=project_id)
+    if request.method == 'POST':
+        form = ProjectUpdateForm(request.POST)
+        if form.is_valid():
+            new_data = form.cleaned_data
+            data_update.project_details_update(project_id, new_data)
+            return HttpResponseRedirect(reverse('project_details', kwargs={'project_id': project.id}))
+        return render(request, 'crm/company_contacts_add.html', {'form': form})
+    form = ProjectUpdateForm(instance=project)
+    return render(request, 'crm/project_add.html', {'form': form})
+
+
+@login_required
 def status_change_view(request, project_id):
     if request.method == 'POST':
         project = Project.objects.get(id=project_id)
@@ -221,6 +249,7 @@ def status_change_view(request, project_id):
             return HttpResponseRedirect(reverse('project_details', kwargs={'project_id': project.id}))
     form = StatusAddForm()
     return render(request, 'crm/status_change.html', {'form': form})
+
 
 @login_required
 def event_list_view(request):
@@ -274,7 +303,7 @@ def event_list_on_date_view(request, day, month, year):
 def event_details_view(request, event_id):
     event = Event.objects.get(id=event_id)
     ctx = {
-        'event': event
+        'event': event,
     }
     return render(request, 'crm/event_details.html', ctx)
 
@@ -328,7 +357,7 @@ def event_update_view(request, event_id):
     form = EventUpdateForm(instance=event)
     ctx = {
         'form': form,
-        'update': True
+        'update': True,
     }
     if request.method == 'POST':
         form = EventUpdateForm(request.POST)
@@ -360,20 +389,8 @@ def project_list_statuses_report_view(request, company_id=None, project_deliver_
 
 
 def test(request):
-    projects = Project.objects.all()
-    report_data = projects.values()
-    if 'status_search' in request.GET:
-        projects = list(projects)
-        check_list = projects.copy()
-        for project in check_list:
-            try:
-                if project.statuses.last().status != request.GET['status_search']:
-                    projects.remove(project)
-            except AttributeError:
-                projects.remove(project)
-        report_data = [project.values() for project in projects]
+    calendar = HTMLCalendar()
     ctx = {
-        'projects': projects,
-        'report_data': report_data,
+        "calendar": calendar.formatmonth(),
     }
     return render(request, 'crm/test.html', ctx)

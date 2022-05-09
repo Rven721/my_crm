@@ -1,3 +1,4 @@
+"""Here crm urls live"""
 from django.urls import path
 from . import views
 
@@ -12,6 +13,7 @@ urlpatterns = [
     path('companies/<company_id>/contact_update', views.company_contacts_update_view, name='company_contacts_update'),
     path('new_company/', views.company_add_view, name='company_add'),
     path('projects/', views.project_list_view, name='projects'),
+    path('projects/<project_id>/update/', views.project_update_view, name='project_update'),
     path('projects/status_report/', views.project_list_statuses_report_view, name='project_list_report'),
     path('projects/status_report/<str:project_status>/', views.project_list_statuses_report_view, name='status_project_list_report'),
     path('projects/status_report/<str:project_status>/<slug:project_deliver_slug>/', views.project_list_statuses_report_view, name='project_list_status_deliver_report'),

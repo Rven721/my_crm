@@ -14,26 +14,6 @@
     <title>Document</title>
 </head>
 <body>
-<div style="mt:2">
-    <form method="get">
-        <input type="search" name="status_search">
-        <input type="submit" value="искать">
-    </form>
-</div>
-<div style="mt: 2">
-    <form method="get" action="{% url 'test_report' %}">
-        <input type="hidden" name="report_data" value="{{projects}}">
-        <input type="submit" value="Report">
-    </form>
-    <a href="{% url 'test' %}"><input style="pt: 3px" type="button" value="Rest"></a>
-</div>
-<ul>
-{% for project in projects %}
-  <li>{{project.name}}: {{project.statuses.last.status}}</li>
-{% endfor %}
-</ul>
-<p>Projects: {{projects}}</p>
-<p>Report data: {{report_data}}</p>
-
+    {{calendar}}
 </body>
 </html>

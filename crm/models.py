@@ -61,8 +61,8 @@ class Project(models.Model):
     end_date = models.DateField(null=True, verbose_name='Окончание проекта')
     grant = models.FloatField(null=True, verbose_name='Грант')
     full_cost = models.FloatField(null=True, verbose_name='Бюджет проекта')
-    company = models.ForeignKey(Company, on_delete=models.CASCADE, related_name='projects', verbose_name='Компания')
-    contacts = models.ManyToManyField(Contact, related_name='projects', verbose_name='Контакты')
+    company = models.ForeignKey(Company, on_delete=models.CASCADE, blank=True, null=True, related_name='projects', verbose_name='Компания')
+    contacts = models.ManyToManyField(Contact, related_name='projects', verbose_name='Контакты', blank=True)
     project_deliver = models.ForeignKey(ProjectDeliver, related_name='projects', on_delete=models.PROTECT, blank=True, null=True, verbose_name='Источник проекта')
 
     def __str__(self):
@@ -77,7 +77,7 @@ class Status(models.Model):
     status_list = [
         ('new', 'Новый проект'),
         ('progress', 'В работе'),
-        ('finished', 'Работа завершена')
+        ('finished', 'Работа завершена'),
     ]
 
     status = models.CharField(max_length=10, choices=status_list, verbose_name='Статус')
@@ -104,10 +104,10 @@ class Event(models.Model):
         ('project_update', 'Изменение статуса'),
         ('discuss', 'Обсуждение'),
         ('due_dil', 'Контрактация'),
-        ]
+    ]
 
     projects = models.ManyToManyField(Project, related_name='events', verbose_name='Проекты')
-    type = models.CharField(max_length=25, choices=type_list, verbose_name='Категория')
+    event_type = models.CharField(max_length=25, choices=type_list, verbose_name='Категория')
     description = models.TextField(verbose_name='Описание')
     date = models.DateField(blank=True, null=True, verbose_name='Дата')
     time = models.TimeField(blank=True, null=True, verbose_name='Время')
@@ -120,12 +120,12 @@ class Event(models.Model):
         null=True,
         on_delete=models.SET_NULL,
         related_name='events',
-        verbose_name='Автор события'
+        verbose_name='Автор события',
     )
     small = models.BooleanField(default=True, verbose_name='Локальное событие')
 
     def __str__(self):
-        return f'{self.type}, {self.date}'
+        return f'{self.event_type}, {self.date}'
 
     class Meta:
         verbose_name = 'Событие'
