@@ -1,6 +1,7 @@
 .idea/
 venv/
 env/
+cmr_env/
 .venv
 *.env*
 my_script.bs
