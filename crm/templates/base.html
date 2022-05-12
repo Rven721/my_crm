@@ -1,3 +1,4 @@
+{% load static %}
 {% load crispy_forms_tags %}
 
 <!DOCTYPE html>
@@ -8,6 +9,7 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
+    <link rel="stylesheet" href="{% static 'cal/styles.css'%}">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ" crossorigin="anonymous"></script>
 
     <title>{% block title %}{%endblock%}</title>
@@ -23,7 +25,7 @@
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav fs-5">
           <li class="navbar-item">
-            <a class="nav-link" href="{% url 'events'%}">Календарь</a>
+            <a class="nav-link" href="{% url 'calendar'%}">Календарь</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="{% url 'projects' %}">Проекты</a>

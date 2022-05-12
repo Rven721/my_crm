@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+
+{% block tilte %}Calendar{% endblock %}
+
+{% block content %}
+    {% autoescape off %}
+        {{cal}}
+    {% endautoescape %}
+{% endblock %}

@@ -204,8 +204,10 @@ def project_list_view(request):
 @login_required
 def project_details_view(request, project_id):
     project = Project.objects.get(id=project_id)
+    events = project.events.all().order_by('-date', '-time')
     ctx = {
         'project': project,
+        'events': events,
     }
     return render(request, 'crm/project_details.html', ctx)
 

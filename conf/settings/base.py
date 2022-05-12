@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'crm.apps.CrmConfig',
     'crispy_forms',
     'account.apps.AccountConfig',
+    'cal.apps.CalConfig',
 ]
 
 MIDDLEWARE = [
