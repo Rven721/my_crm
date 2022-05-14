@@ -94,7 +94,7 @@ class Status(models.Model):
 
 class Event(models.Model):
 
-    type_list = [
+    category_list = [
         ('text_consult', 'Письменная консультация'),
         ('phone_consult', 'Телефонная консультация'),
         ('call', 'ВКС'),
@@ -107,7 +107,7 @@ class Event(models.Model):
     ]
 
     projects = models.ManyToManyField(Project, related_name='events', verbose_name='Проекты')
-    event_type = models.CharField(max_length=25, choices=type_list, verbose_name='Категория')
+    category = models.CharField(max_length=25, choices=category_list, verbose_name='Категория')
     description = models.TextField(verbose_name='Описание')
     date = models.DateField(blank=True, null=True, verbose_name='Дата')
     time = models.TimeField(blank=True, null=True, verbose_name='Время')
@@ -125,7 +125,7 @@ class Event(models.Model):
     small = models.BooleanField(default=True, verbose_name='Локальное событие')
 
     def __str__(self):
-        return f'{self.event_type}, {self.date}'
+        return f'{self.category}, {self.date}'
 
     class Meta:
         verbose_name = 'Событие'

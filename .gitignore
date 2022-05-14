@@ -1,6 +1,8 @@
 .idea/
 venv/
 env/
+cal/templates/cal/test_page.html
+cal/static/cal/css_play.css
 cmr_env/
 .venv
 *.env*

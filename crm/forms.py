@@ -101,7 +101,7 @@ class EventSmallAddForm(forms.ModelForm):
     """A form for add local event"""
     class Meta:
         model = Event
-        fields = ('event_type', 'description', 'date', 'time', 'took_time', 'result', 'small')
+        fields = ('category', 'description', 'date', 'time', 'took_time', 'result', 'small')
         widgets = {'date': forms.SelectDateWidget}
         help_texts = {'time': 'чч:мм'}
 
@@ -110,7 +110,7 @@ class MeetingAddForm(forms.ModelForm):
     """A for for adding meeting event"""
     class Meta:
         model = Event
-        fields = ('projects', 'event_type', 'description', 'date', 'time', 'invited_persons', 'small')
+        fields = ('projects', 'category', 'description', 'date', 'time', 'invited_persons', 'small')
         widgets = {'date': forms.SelectDateWidget}
         help_texts = {'time': 'чч:мм'}
 
@@ -133,7 +133,7 @@ class EventUpdateForm(forms.ModelForm):
     """Form for event update"""
     class Meta:
         model = Event
-        fields = ('projects', 'event_type', 'description', 'date', 'time', 'invited_persons', 'result')
+        fields = ('projects', 'category', 'description', 'date', 'time', 'invited_persons', 'result')
 
 
 class FilterByCompanyForm(forms.Form):

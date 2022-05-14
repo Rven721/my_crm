@@ -8,7 +8,7 @@ os.environ['DJANGO_SETTINGS_MODULE'] = 'conf.settings.base'
 django.setup()
 from crm.models import Project
 
-event_type_decoder = {
+event_category_decoder = {
     'text_consult': 'Письменная консультация',
     'phone_consult': 'Телефонная консультация',
     'call': 'ВКС',
@@ -43,7 +43,7 @@ def project_event_history_report(project_id):
     ws.merge_cells('b1:f1')
     ws.merge_cells('b2:f2')
     for event in event_history:
-        data = [event_type_decoder[event.event_type], event.date, event.description, event.result]
+        data = [event_category_decoder[event.category], event.date, event.description, event.result]
         ws.append(data)
     tab = Table(displayName='report_table', ref=f"a4:d{5+event_history.count()}")
     style = TableStyleInfo(name="TableStyleMedium9")

@@ -48,7 +48,7 @@ def event_details_update(event_id, new_data):
     """Will retrun updated event instanse"""
     event = Event.objects.get(id=event_id)
     event.projects.set(new_data['projects'])
-    event.event_type = new_data['event_type']
+    event.category = new_data['category']
     event.description = new_data['description']
     event.date = new_data['date']
     event.time = new_data['time']

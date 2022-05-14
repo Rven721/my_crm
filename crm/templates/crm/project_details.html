@@ -44,7 +44,7 @@
         <div id="event_list" class="accordion-collapse collapse show" aria-labelledby="event_list_headline" data-bs-parent="#event_list_accordion">
           <div class="accordion-body">
               {% for event in events %}
-                <p><a href="{% url 'event_details' event.id %}">{{ event.get_event_type_display }}</a> - {{ event.date }}</p>
+                <p><a href="{% url 'event_details' event.id %}">{{ event.get_category_display }}</a> - {{ event.date }}</p>
               {% empty %}
                 <p>Список пуст</p>
               {% endfor %}
