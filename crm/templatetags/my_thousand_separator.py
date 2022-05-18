@@ -1,4 +1,4 @@
-"""My thousand separator"""
+"""Filter for to get shortest company name"""
 from django import template
 
 register = template.Library()

@@ -19,6 +19,11 @@ class ContactSearchForm(forms.Form):
 
 class CompanyAddForm(forms.ModelForm):
     """A form for adding a company using DADATA"""
+    contacts = forms.ModelMultipleChoiceField(
+        Contact.objects.all().order_by("first_name"),
+        label="Контакты",
+    )
+
     class Meta:
         model = Company
         fields = ('ogrn_number', 'contacts')
@@ -36,6 +41,11 @@ class CompanyAddForm(forms.ModelForm):
 
 class CompanyContactAddForm(forms.ModelForm):
     """A form for adding contact to comapny"""
+    contacts = forms.ModelMultipleChoiceField(
+        Contact.objects.all().order_by("first_name"),
+        label="Контакты",
+    )
+
     class Meta:
         model = Company
         fields = ('contacts',)
@@ -45,6 +55,11 @@ class ProjectAddForm(forms.ModelForm):
     """A form for adding a project"""
     grant = forms.DecimalField(max_digits=11, decimal_places=2, label='Сумма гранта')
     full_cost = forms.DecimalField(max_digits=11, decimal_places=2, label='Бюджет проекта')
+    contacts = forms.ModelMultipleChoiceField(
+        Contact.objects.all().order_by("first_name"),
+        label="Контакты",
+        required=False,
+    )
 
     class Meta:
         model = Project
@@ -71,6 +86,11 @@ class ProjectUpdateForm(forms.ModelForm):
     """A form for updating a project details"""
     grant = forms.DecimalField(max_digits=11, decimal_places=2, label='Сумма гранта')
     full_cost = forms.DecimalField(max_digits=11, decimal_places=2, label='Бюджет проекта')
+    contacts = forms.ModelMultipleChoiceField(
+        Contact.objects.all().order_by("first_name"),
+        label="Контакты",
+        required=False,
+    )
 
     class Meta:
         model = Project
@@ -133,7 +153,16 @@ class EventUpdateForm(forms.ModelForm):
     """Form for event update"""
     class Meta:
         model = Event
-        fields = ('projects', 'category', 'description', 'date', 'time', 'invited_persons', 'result')
+        fields = (
+            'projects',
+            'category',
+            'description',
+            'date',
+            'time',
+            'took_time',
+            'result',
+            'small',
+        )
 
 
 class FilterByCompanyForm(forms.Form):

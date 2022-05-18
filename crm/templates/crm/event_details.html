@@ -18,7 +18,7 @@
   {% if event.result is None %}
   <a href="{% url 'event_result_add' event.id %}">Добавить результат</a>
   {% else %}
-  <p>{{ event.result }}</p>
+    <p>{{ event.result }}</p>
   {% endif %}
   </div>
   <a class="btn btn-primary" href="{% url 'event_update' event.id %}">Обновить</a>

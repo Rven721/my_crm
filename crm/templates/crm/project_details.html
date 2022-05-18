@@ -1,5 +1,6 @@
 {% extends 'base.html'%}
-{% load my_thousand_separator %}
+{% load my_thousand_separator cut_the_phrase %}
+
 
 {% block title %}Описание проекта{% endblock %}
 
@@ -44,7 +45,13 @@
         <div id="event_list" class="accordion-collapse collapse show" aria-labelledby="event_list_headline" data-bs-parent="#event_list_accordion">
           <div class="accordion-body">
               {% for event in events %}
-                <p><a href="{% url 'event_details' event.id %}">{{ event.get_category_display }}</a> - {{ event.date }}</p>
+                <p> {{ event.date }} - <a href="{% url 'event_details' event.id %}">{{ event.get_category_display }}</a>: 
+                    {% if event.result %}
+                        {{event.result|cut_string}}
+                    {% else %}
+                        Нет результата
+                    {% endif %}
+</p>
               {% empty %}
                 <p>Список пуст</p>
               {% endfor %}

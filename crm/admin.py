@@ -4,7 +4,7 @@ from crm.models import Contact, Company, Project, Status, Event, ProjectDeliver,
 
 @admin.register(Contact)
 class ContactAdmin(admin.ModelAdmin):
-    pass
+    ordering = ("first_name", )
 
 
 @admin.register(Company)
@@ -35,4 +35,3 @@ class ProjectDeliverAdmin(admin.ModelAdmin):
 @admin.register(Document)
 class DocumentAdmin(admin.ModelAdmin):
     list_display = ['name', 'event']
-
