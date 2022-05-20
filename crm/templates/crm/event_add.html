@@ -16,7 +16,7 @@
     <form method="post">
       {% csrf_token %}
       {{form|crispy}}
-      <input class="btn btn-primary fs-5 mt-3"  type="submit" value="Сохранить">
+      {% include 'buttons_block.html' %}
     </form>
   </div>
 </div>
