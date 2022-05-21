@@ -12,7 +12,7 @@ from crm.forms import ContactAddForm,\
     ProjectAddForm,\
     ProjectUpdateForm,\
     StatusAddForm,\
-    MeetingAddForm,\
+    MultipleEventAddForm,\
     EventResultAddForm, \
     CompanyContactAddForm,\
     EventSmallAddForm,\
@@ -313,13 +313,13 @@ def event_details_view(request, event_id):
 @login_required
 def event_add_view(request):
     if request.method == "POST":
-        form = MeetingAddForm(request.POST)
+        form = MultipleEventAddForm(request.POST)
         if form.is_valid():
             event = form.save()
             event.save()
             return HttpResponseRedirect(reverse('event_details', kwargs={'event_id': event.id}))
         return render(request, 'crm/event_add.html', {'form': form})
-    form = MeetingAddForm()
+    form = MultipleEventAddForm()
     return render(request, 'crm/event_add.html', {'form': form})
 
 

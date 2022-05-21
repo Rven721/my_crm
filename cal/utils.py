@@ -23,7 +23,10 @@ class MyCalendar(HTMLCalendar):
         for event in events:
             event_link = f"/events/{event.id}"
             event_time = event.time.strftime('%H:%M')
-            project_name = event.projects.first().name[0:6]
+            if event.projects.count() > 1:
+                project_name = "Общее"
+            else:
+                project_name = event.projects.first().name
             day_events += f"<a href={event_link}><div class='event'>{event_time} - {project_name}</div></a>\n"
         if day != 0:
             return f"<td><span class='date'>{day}</span>{day_events}</td>"
@@ -42,7 +45,7 @@ class MyCalendar(HTMLCalendar):
 
     def get_the_month(self):
         """Will return an HTML string to display a month calendar"""
-        events = Event.objects.filter(date__year=self.year, date__month=self.month, small=False).order_by('date', 'time')
+        events = Event.objects.filter(date__year=self.year, date__month=self.month, small=True).order_by('date', 'time')
         cal = "<table class='calendar'>\n"
         cal += f"{self.formatmonthname(self.year, self.month, withyear=True)}\n"
         cal += f"{self.formatweekheader()}"

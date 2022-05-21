@@ -93,7 +93,7 @@ class Status(models.Model):
 
 
 class Event(models.Model):
-
+    """Описание сущности событие, которое может произойти с проектом"""
     category_list = [
         ('text_consult', 'Письменная консультация'),
         ('phone_consult', 'Телефонная консультация'),
@@ -122,7 +122,7 @@ class Event(models.Model):
         related_name='events',
         verbose_name='Автор события',
     )
-    small = models.BooleanField(default=True, verbose_name='Локальное событие')
+    small = models.BooleanField(default=False, verbose_name='Добавить в календарь')
 
     def __str__(self):
         return f'{self.category}, {self.date}'

@@ -119,19 +119,20 @@ class StatusAddForm(forms.ModelForm):
 
 class EventSmallAddForm(forms.ModelForm):
     """A form for add local event"""
+
     class Meta:
         model = Event
         fields = ('category', 'description', 'date', 'time', 'took_time', 'result', 'small')
-        widgets = {'date': forms.SelectDateWidget}
+        widgets = {'date': forms.SelectDateWidget(years=(2022, 2023))}
         help_texts = {'time': 'чч:мм'}
 
 
-class MeetingAddForm(forms.ModelForm):
+class MultipleEventAddForm(forms.ModelForm):
     """A for for adding meeting event"""
     class Meta:
         model = Event
-        fields = ('projects', 'category', 'description', 'date', 'time', 'invited_persons', 'small')
-        widgets = {'date': forms.SelectDateWidget}
+        fields = ('projects', 'category', 'description', 'date', 'time', 'result', 'small')
+        widgets = {'date': forms.SelectDateWidget(years=(2022, 2023))}
         help_texts = {'time': 'чч:мм'}
 
     def clean_date(self):
