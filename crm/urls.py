@@ -32,6 +32,9 @@ urlpatterns = [
     path('events/<event_id>/', views.event_details_view, name='event_details'),
     path('event/<event_id>/result_add/', views.event_result_add_view, name='event_result_add'),
     path('event/<event_id>/update', views.event_update_view, name='event_update'),
+    path('event/<event_id>/task_add', views.event_task_add_view, name='event_task_add'),
     path('new_event/', views.event_add_view, name='event_add'),
-    path('test/', views.test, name='test'),
+    path('task/<task_id>/', views.task_details_view, name='task_details'),
+    path('task/<task_id>/status_change/', views.task_status_change_view, name='task_status_change'),
+    path('new_task/', views.task_add_view, name='task_add'),
 ]

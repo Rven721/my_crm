@@ -65,9 +65,10 @@
               {% for event in events %}
                 <div class="container d-flex flex-row my-2">
                   <div class="align-self-end"> {{ event.date }} - <a href="{% url 'event_details' event.id %}">{{ event.get_category_display }}</a></div>
-                  <button type="button" class="btn btn-outline-secondary ms-3 py-0" data-bs-toggle="collapse" data-bs-target="#result_{{event.pk}}" aria-expanded="false">
+                  <button type="button" class="btn btn-outline-success btn-sm ms-3" data-bs-toggle="collapse" data-bs-target="#result_{{event.pk}}" aria-expanded="false">
                     итоги
                   </button>
+                <a href="{% url 'event_task_add' event.id %}"><button type="button" class="btn btn-outline-dark btn-sm ms-3 ">задача</button></a>
                 </div>
                 {% if forloop.first %}
                   <div id="result_{{event.pk}}" class="container collapse-show my-2">
@@ -88,5 +89,4 @@
       </div>
     </div>
   </div>
-
 {% endblock %}

@@ -14,6 +14,25 @@
     Список пуст
     {% endfor %}
   </div>
+  <p>
+    <b>Задачи:</b>
+    <a class="btn btn-outline-dark ms-3 py-0" href="{% url 'event_task_add' event.id %}">Добавить задачу</a>
+  </p>
+    {% for task in event.tasks.all %}
+      {% if task.statuses.last.status == 'NEW' %}
+      <p><a class="link-danger" href="{% url 'task_details' task.id %}">{{task.name}}</a>, завершить до {% if task.end_date.date <= cur_date %}
+        <b><u>{{task.end_date.date}}</u></b>
+     {% else %} 
+        {{task.end_date.date}}
+     {% endif %}</p>
+      {% elif task.statuses.last.status == 'PROGRESS' %}
+      <p><a class="link-warning" href="{% url 'task_details' task.id %}">{{task.name}}</a>, завершить до {{task.end_date.date}}</p>
+      {% else %}
+      <p><a class="link-success" href="{% url 'task_details' task.id %}">{{task.name}}</a>, завершить до {{task.end_date.date}}</p>
+      {% endif %}
+    {% empty %}
+       Нет задач
+    {% endfor %}
   <p><b>Результат:</b></p>
   {% if event.result is None %}
   <a href="{% url 'event_result_add' event.id %}">Добавить результат</a>

@@ -2,7 +2,7 @@
 
 from django import forms
 from django.utils import timezone
-from .models import Contact, Company, Project, Status, Event, ProjectDeliver
+from .models import Contact, Company, Project, Status, Event, ProjectDeliver, Task, TaskStatus
 
 
 class ContactAddForm(forms.ModelForm):
@@ -188,3 +188,24 @@ class FilterByCompanyAndSource(forms.Form):
         label='Текущий статус',
         required=False,
     )
+
+
+class TaskAddForm(forms.ModelForm):
+    """Form for adding a new task"""
+    class Meta:
+        model = Task
+        fields = ('name', 'event', 'start_date', 'end_date', 'doer', 'description')
+
+
+class TaskStatusChangeForm(forms.ModelForm):
+    """Form to change a status of a task"""
+    class Meta:
+        model = TaskStatus
+        fields = ('status', )
+
+
+class EventTaskAddForm(forms.ModelForm):
+    """Form for adding a new task for one event"""
+    class Meta:
+        model = Task
+        fields = ('name', 'start_date', 'end_date', 'doer', 'description')

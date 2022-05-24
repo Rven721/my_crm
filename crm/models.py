@@ -105,12 +105,11 @@ class Event(models.Model):
         ('discuss', 'Обсуждение'),
         ('due_dil', 'Контрактация'),
     ]
-
     projects = models.ManyToManyField(Project, related_name='events', verbose_name='Проекты')
     category = models.CharField(max_length=25, choices=category_list, verbose_name='Категория')
     description = models.TextField(verbose_name='Описание')
-    date = models.DateField(blank=True, null=True, verbose_name='Дата')
-    time = models.TimeField(blank=True, null=True, verbose_name='Время')
+    date = models.DateField(blank=True, null=True, default=timezone.now, verbose_name='Дата')
+    time = models.TimeField(blank=True, null=True, default=timezone.now, verbose_name='Время')
     invited_persons = models.ManyToManyField(User, blank=True, verbose_name='Приглашенные сотрудники')
     took_time = models.IntegerField(blank=True, null=True, verbose_name='Затраченное время в секундах')
     result = models.TextField(blank=True, null=True, verbose_name='Результат')
@@ -125,7 +124,7 @@ class Event(models.Model):
     small = models.BooleanField(default=False, verbose_name='Добавить в календарь')
 
     def __str__(self):
-        return f'{self.category}, {self.date}'
+        return f'{self.get_category_display()}, {self.date}'
 
     class Meta:
         verbose_name = 'Событие'
@@ -140,6 +139,43 @@ class Event(models.Model):
             'month': month,
             'year': year,
         })
+
+
+class Task(models.Model):
+    """Description of task for event"""
+    name = models.CharField(max_length=120, verbose_name='Название задачи')
+    start_date = models.DateTimeField(default=timezone.now, verbose_name='Дата начала')
+    end_date = models.DateTimeField(default=timezone.now, verbose_name='Дата окончания')
+    doer = models.ForeignKey(User, on_delete=models.PROTECT, related_name="tasks", blank=True, null=True, verbose_name='Исполнители')
+    event = models.ForeignKey(Event, on_delete=models.PROTECT, related_name="tasks", blank=True, null=True, verbose_name='События')
+    description = models.TextField(blank=True, verbose_name='Описание задачи')
+
+    def __str__(self):
+        return f"{self.name}-{self.event} "
+
+    class Meta:
+        verbose_name = 'Задача'
+        verbose_name_plural = 'Задачи'
+
+
+class TaskStatus(models.Model):
+    """A class to track task status changes"""
+    STATUS_LIST = [
+        ("NEW", "Новая задача"),
+        ("PROGRESS", "В работе"),
+        ("DONE", "Завершено"),
+    ]
+
+    status = models.CharField(max_length=10, choices=STATUS_LIST, verbose_name='Статус')
+    date = models.DateField(default=timezone.now, verbose_name='Дата')
+    task = models.ForeignKey(Task, on_delete=models.CASCADE, related_name='statuses', verbose_name='Задача')
+
+    def __str__(self):
+        return f"{self.status}-{self.task}"
+
+    class Meta:
+        verbose_name = 'Статус задачи'
+        verbose_name_plural = 'Статусы задачи'
 
 
 class Document(models.Model):

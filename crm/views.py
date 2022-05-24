@@ -1,4 +1,5 @@
 from calendar import HTMLCalendar
+from datetime import datetime
 from django.shortcuts import render, reverse
 from django.http import HttpResponseRedirect, FileResponse
 from django.utils import timezone
@@ -6,7 +7,7 @@ from django.db.models import Q
 from django.utils.encoding import uri_to_iri
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
-from crm.models import Contact, Company, Project, Status, Event, ProjectDeliver
+from crm.models import Contact, Company, Project, Status, Event, Task, ProjectDeliver, TaskStatus
 from crm.forms import ContactAddForm,\
     CompanyAddForm,\
     ProjectAddForm,\
@@ -19,7 +20,10 @@ from crm.forms import ContactAddForm,\
     EventUpdateForm,\
     FilterByCompanyForm,\
     FilterByCompanyAndSource, \
-    ContactSearchForm
+    ContactSearchForm,\
+    TaskAddForm, \
+    EventTaskAddForm, \
+    TaskStatusChangeForm
 from crm.busines_logic import data_update
 from crm.busines_logic.company_data_dadata import get_company_data
 from crm.busines_logic.my_calendar import get_request_date
@@ -304,8 +308,10 @@ def event_list_on_date_view(request, day, month, year):
 @login_required
 def event_details_view(request, event_id):
     event = Event.objects.get(id=event_id)
+    cur_date = datetime.now().date()
     ctx = {
         'event': event,
+        'cur_date': cur_date,
     }
     return render(request, 'crm/event_details.html', ctx)
 
@@ -371,6 +377,25 @@ def event_update_view(request, event_id):
 
 
 @login_required
+def event_task_add_view(request, event_id):
+    event = Event.objects.get(id=event_id)
+    form = EventTaskAddForm()
+    ctx = {
+        'form': form,
+    }
+    if request.method == 'POST':
+        form = TaskAddForm(request.POST)
+        if form.is_valid():
+            task = form.save(commit=False)
+            task.event = event
+            task.save()
+            TaskStatus.objects.create(status='NEW', task=task)
+            return HttpResponseRedirect(reverse('event_details', kwargs={'event_id': event.id}))
+        return render(request, 'crm/task_add.html', ctx)
+    return render(request, 'crm/task_add.html', ctx)
+
+
+@login_required
 def project_event_history_report_view(request, project_id):
     buffer = io.BytesIO()
     wb = report_generator.project_event_history_report(project_id)
@@ -388,6 +413,42 @@ def project_list_statuses_report_view(request, company_id=None, project_deliver_
     wb.save(buffer)
     buffer.seek(0)
     return FileResponse(buffer, as_attachment=True, filename='status_report.xlsx')
+
+
+@login_required
+def task_add_view(request, event_id=None):
+    """A form to add a new task to event"""
+    if request.method == "POST":
+        form = TaskAddForm(request.POST)
+        if form.is_valid():
+            task = form.save()
+            TaskStatus.objects.create(status='NEW', task=task)
+            return HttpResponseRedirect(reverse('event_details', kwargs={'event_id': task.event.id}))
+        return render(request, 'crm/task_add.html', {'form': form})
+    form = TaskAddForm()
+    return render(request, 'crm/task_add.html', {'form': form})
+
+
+@login_required
+def task_details_view(request, task_id):
+    task = Task.objects.get(id=task_id)
+    ctx = {'task': task}
+    return render(request, 'crm/task_details.html', ctx)
+
+
+@login_required
+def task_status_change_view(request, task_id):
+    task = Task.objects.get(id=task_id)
+    form = TaskStatusChangeForm(instance=task.statuses.last())
+    if request.method == "POST":
+        form = TaskStatusChangeForm(request.POST)
+        if form.is_valid():
+            status = form.save(commit=False)
+            status.task = task
+            status.save()
+            return HttpResponseRedirect(reverse('event_details', kwargs={'event_id': task.event.id}))
+        return render(request, 'crm/task_status_change.html', {'form': form})
+    return render(request, 'crm/task_status_change.html', {'form': form})
 
 
 def test(request):
