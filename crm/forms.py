@@ -204,6 +204,13 @@ class TaskStatusChangeForm(forms.ModelForm):
         fields = ('status', )
 
 
+class DoerChooseForm(forms.ModelForm):
+    """Form to choose a doer on a task"""
+    class Meta:
+        model = Task
+        fields = ('doer',)
+
+
 class EventTaskAddForm(forms.ModelForm):
     """Form for adding a new task for one event"""
     class Meta:

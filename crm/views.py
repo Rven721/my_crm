@@ -23,7 +23,8 @@ from crm.forms import ContactAddForm,\
     ContactSearchForm,\
     TaskAddForm, \
     EventTaskAddForm, \
-    TaskStatusChangeForm
+    TaskStatusChangeForm, \
+    DoerChooseForm
 from crm.busines_logic import data_update
 from crm.busines_logic.company_data_dadata import get_company_data
 from crm.busines_logic.my_calendar import get_request_date
@@ -413,6 +414,29 @@ def project_list_statuses_report_view(request, company_id=None, project_deliver_
     wb.save(buffer)
     buffer.seek(0)
     return FileResponse(buffer, as_attachment=True, filename='status_report.xlsx')
+
+
+@login_required
+def task_list_view(request, day=None, month=None, year=None):
+    form = DoerChooseForm()
+    tasks = Task.objects.all().order_by('end_date').reverse()
+    today = datetime.now().date
+    if request.method == "POST" and request.POST['doer'] != "":
+        doer = request.POST['doer']
+        tasks = tasks.filter(doer=doer)
+        form = DoerChooseForm(instance=tasks[0])
+    if day and month and year:
+        tasks = tasks.filter(
+            end_date__day=day,
+            end_date__month=month,
+            end_date__year=year,
+        )
+    ctx = {
+        'tasks': tasks,
+        'form': form,
+        'today': today,
+    }
+    return render(request, 'crm/task_list.html', ctx)
 
 
 @login_required

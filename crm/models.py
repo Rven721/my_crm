@@ -157,6 +157,16 @@ class Task(models.Model):
         verbose_name = 'Задача'
         verbose_name_plural = 'Задачи'
 
+    def get_absolute_url(self):
+        day = self.end_date.day
+        month = self.end_date.month
+        year = self.end_date.year
+        return reverse('tasks_on_date', kwargs={
+            'day': day,
+            'month': month,
+            'year': year,
+        })
+
 
 class TaskStatus(models.Model):
     """A class to track task status changes"""

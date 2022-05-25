@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% block title %}Список задач{% endblock %}
+
+{% block content %}
+<div class="container mt-3">
+  <h2 class="text-center mt-3">Список задач</h2>
+  <div class="d-flex justify-content-between mt-5">
+    <div class="container">
+      <form method="post" class="mb-2">
+        {% csrf_token %}
+        {{form.as_p}}
+        <input class='btn btn-outline-primary btn-sm' type='submit' value="Выбрать">
+      </form>
+      <a href="{% url 'tasks' %}"><button class="btn btn-outline-success btn-sm mb-3">Сбросить</button></a>
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <th scope="col">Задача</th>
+            <th scope="col">Проект</th>
+            <th scope="col">Срок выполнения</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for task in tasks %}
+            <tr>
+              {% if task.statuses.last.status == 'NEW' %}
+              <td><a class="link-info" href="{% url 'task_details' task.id %}">{{ task.name }}</a></td>
+              {% elif task.statuses.last.status == 'PROGRESS' %}
+              <td><a class="link-warning" href="{% url 'task_details' task.id %}">{{ task.name }}</a></td>
+              {% else %}
+              <td><a class="link-dark" href="{% url 'task_details' task.id %}">{{ task.name }}</a></td>
+              {% endif %}
+              {% if task.event.projects.all.count == 1 %}
+              <td><a class="link-dark" href="{% url 'project_details' task.event.projects.all.0.id %}">{{ task.event.projects.all.0.name }}</a></td>
+              {% else %}
+              <td><a>Несколько проектов</a></td>
+              {% endif %}
+              {% if task.statuses.last.status != 'DONE' and task.end_date.date <= today %}
+              <td><a class="link-danger" href="{{task.get_absolute_url}}">{{task.end_date}}</a></td>
+              {% else %}
+              <td><a class="link-dark" href="{{task.get_absolute_url}}">{{task.end_date}}</a></td>
+              {% endif %}
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+  </div>
+</div>
+{% endblock %}
