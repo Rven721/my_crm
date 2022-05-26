@@ -212,11 +212,11 @@ def project_details_view(request, project_id):
     project = Project.objects.get(id=project_id)
     events = project.events.all().order_by('-date', '-time')
     roadmap = RoadMap.objects.filter(project__id=project_id)
-    form = RoadMapForm(instance=roadmap[0])
     if not roadmap:
         RoadMap.objects.create(project=project)
         roadmap = RoadMap.objects.filter(project__id=project_id)
         form = RoadMapForm(instance=roadmap)
+    form = RoadMapForm(instance=roadmap[0])
     if request.method == "POST":
         form = RoadMapForm(request.POST)
         if form.is_valid():
