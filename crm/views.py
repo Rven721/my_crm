@@ -7,7 +7,7 @@ from django.db.models import Q
 from django.utils.encoding import uri_to_iri
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
-from crm.models import Contact, Company, Project, Status, Event, Task, ProjectDeliver, TaskStatus
+from crm.models import Contact, Company, Project, Status, Event, Task, ProjectDeliver, TaskStatus, RoadMap
 from crm.forms import ContactAddForm,\
     CompanyAddForm,\
     ProjectAddForm,\
@@ -24,7 +24,8 @@ from crm.forms import ContactAddForm,\
     TaskAddForm, \
     EventTaskAddForm, \
     TaskStatusChangeForm, \
-    DoerChooseForm
+    DoerChooseForm, \
+    RoadMapForm
 from crm.busines_logic import data_update
 from crm.busines_logic.company_data_dadata import get_company_data
 from crm.busines_logic.my_calendar import get_request_date
@@ -210,9 +211,21 @@ def project_list_view(request):
 def project_details_view(request, project_id):
     project = Project.objects.get(id=project_id)
     events = project.events.all().order_by('-date', '-time')
+    roadmap = RoadMap.objects.filter(project__id=project_id)
+    form = RoadMapForm(instance=roadmap[0])
+    if not roadmap:
+        RoadMap.objects.create(project=project)
+        roadmap = RoadMap.objects.filter(project__id=project_id)
+        form = RoadMapForm(instance=roadmap)
+    if request.method == "POST":
+        form = RoadMapForm(request.POST)
+        if form.is_valid():
+            new_data = form.cleaned_data
+            data_update.roadmap_update(roadmap[0].id, new_data)
     ctx = {
         'project': project,
         'events': events,
+        'form': form,
     }
     return render(request, 'crm/project_details.html', ctx)
 
@@ -224,6 +237,7 @@ def project_add_view(request):
         if form.is_valid():
             project = form.save()
             Status.objects.create(status='new', project=project)
+            RoadMap.objects.create(project=project)
             return HttpResponseRedirect(reverse('project_details', kwargs={'project_id': project.id}))
         return render(request, 'crm/project_add.html', {'form': form})
     form = ProjectAddForm()

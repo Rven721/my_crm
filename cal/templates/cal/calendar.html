@@ -3,6 +3,7 @@
 {% block tilte %}Calendar{% endblock %}
 
 {% block content %}
+    {{user.id}}
     {% autoescape off %}
         {{cal}}
     {% endautoescape %}

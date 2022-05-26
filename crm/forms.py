@@ -2,7 +2,7 @@
 
 from django import forms
 from django.utils import timezone
-from .models import Contact, Company, Project, Status, Event, ProjectDeliver, Task, TaskStatus
+from .models import Contact, Company, Project, Status, Event, ProjectDeliver, Task, TaskStatus, RoadMap
 
 
 class ContactAddForm(forms.ModelForm):
@@ -115,6 +115,13 @@ class StatusAddForm(forms.ModelForm):
     class Meta:
         model = Status
         fields = ('status',)
+
+
+class RoadMapForm(forms.ModelForm):
+    """A form for to update roadmap of a project"""
+    class Meta:
+        model = RoadMap
+        fields = ('kick_off_meeting', 'contract', 'to_do_list')
 
 
 class EventSmallAddForm(forms.ModelForm):

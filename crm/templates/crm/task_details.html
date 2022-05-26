@@ -14,6 +14,7 @@
   <p><b>Событие:</b><a href="{% url 'event_details' task.event.id %}"> {{task.event.get_category_display}}</a></p>
   <p><b>Срок выполнения:</b> {{task.end_date}}</p>
   <p><b>Ответственный:</b> {{task.doer}}</p>
-  <p><b>Описание:</b> {{task.description}}</p>
+  <p><b>Дополнительная информация:</b> {{task.description}}</p>
+<a href="{% url 'event_update' task.event.id %}"><button class="btn btn-primary">Обновить событие</button></a>
 </div>
 {% endblock %}

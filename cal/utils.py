@@ -43,9 +43,13 @@ class MyCalendar(HTMLCalendar):
             one_week += self.get_the_day(day_of_the_month, events)
         return f"<tr>{one_week}</tr>"
 
-    def get_the_month(self):
+    def get_the_month(self, events=None):
         """Will return an HTML string to display a month calendar"""
-        events = Event.objects.filter(date__year=self.year, date__month=self.month, small=True).order_by('date', 'time')
+        if not events:
+            events = Event.objects.filter(
+                date__year=self.year,
+                date__month=self.month,
+                small=True).order_by('date', 'time')
         cal = "<table class='calendar'>\n"
         cal += f"{self.formatmonthname(self.year, self.month, withyear=True)}\n"
         cal += f"{self.formatweekheader()}"

@@ -143,12 +143,12 @@ class Event(models.Model):
 
 class Task(models.Model):
     """Description of task for event"""
-    name = models.CharField(max_length=120, verbose_name='Название задачи')
+    name = models.CharField(max_length=120, verbose_name='Задача')
     start_date = models.DateTimeField(default=timezone.now, verbose_name='Дата начала')
     end_date = models.DateTimeField(default=timezone.now, verbose_name='Дата окончания')
     doer = models.ForeignKey(User, on_delete=models.PROTECT, related_name="tasks", blank=True, null=True, verbose_name='Исполнители')
     event = models.ForeignKey(Event, on_delete=models.PROTECT, related_name="tasks", blank=True, null=True, verbose_name='События')
-    description = models.TextField(blank=True, verbose_name='Описание задачи')
+    description = models.TextField(blank=True, verbose_name='Дополнительные данные')
 
     def __str__(self):
         return f"{self.name}-{self.event} "
@@ -186,6 +186,21 @@ class TaskStatus(models.Model):
     class Meta:
         verbose_name = 'Статус задачи'
         verbose_name_plural = 'Статусы задачи'
+
+
+class RoadMap(models.Model):
+    """A road map with milstones on a givvn project"""
+    project = models.ForeignKey(Project, on_delete=models.PROTECT, related_name='roadmap', verbose_name='Проект')
+    kick_off_meeting = models.BooleanField(default=False, verbose_name="Установочная встреча")
+    contract = models.BooleanField(default=False, verbose_name="Договор")
+    to_do_list = models.BooleanField(default=False, verbose_name="To-Do List")
+
+    def __str__(self):
+        return f"{self.project} roadmap"
+
+    class Meta:
+        verbose_name = 'Дорожная карта'
+        verbose_name_plural = 'Дорожные карты'
 
 
 class Document(models.Model):

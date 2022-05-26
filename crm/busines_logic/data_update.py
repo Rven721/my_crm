@@ -5,7 +5,7 @@ import django
 os.environ['DJANGO_SETTINGS_MODULE'] = 'conf.settings.base'
 django.setup()
 
-from crm.models import Contact, Company, Project, Event
+from crm.models import Contact, Company, Project, Event, RoadMap
 from crm.busines_logic.company_data_dadata import get_company_data
 
 
@@ -44,6 +44,15 @@ def company_profile_update(ogrn_number):
     return company
 
 
+def roadmap_update(roadmap_id, new_data):
+    roadmap = RoadMap.objects.get(id=roadmap_id)
+    roadmap.kick_off_meeting = new_data['kick_off_meeting']
+    roadmap.contract = new_data['contract']
+    roadmap.to_do_list = new_data['to_do_list']
+    roadmap.save()
+    return roadmap
+
+
 def event_details_update(event_id, new_data):
     """Will retrun updated event instanse"""
     event = Event.objects.get(id=event_id)
@@ -52,7 +61,7 @@ def event_details_update(event_id, new_data):
     event.description = new_data['description']
     event.date = new_data['date']
     event.time = new_data['time']
-    #event.invited_persons.set(new_data['invited_persons'])
+    # event.invited_persons.set(new_data['invited_persons'])
     event.result = new_data['result']
     event.save()
     return event

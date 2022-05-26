@@ -1,6 +1,6 @@
 {% extends 'base.html'%}
 {% load my_thousand_separator cut_the_phrase %}
-
+{% load crispy_forms_tags %}
 
 {% block title %}Описание проекта{% endblock %}
 
@@ -52,7 +52,7 @@
   <a class="btn btn-outline-success ms-3 fs-5 p-2" href="{% url 'project_event_history' project.id %}">Отчет</a>
 </div>
 <div class="container my-4">
-  <div class="d-flex flex-column flex-md-row justify-content-md-between">
+  <div class="d-flex flex-column flex-lg-row justify-content-md-between">
     <div class="accordion w-75" id="event_list_accordion">
       <div class="accordion-item mb-3">
         <h2 class="accordion-header" id="event_list_headline">
@@ -65,10 +65,10 @@
               {% for event in events %}
                 <div class="container d-flex flex-row my-2">
                   <div class="align-self-end"> {{ event.date }} - <a href="{% url 'event_details' event.id %}">{{ event.get_category_display }}</a></div>
-                  <button type="button" class="btn btn-outline-success btn-sm ms-3" data-bs-toggle="collapse" data-bs-target="#result_{{event.pk}}" aria-expanded="false">
+                  <button type="button" class="btn btn-outline-success btn-sm ms-3 d-none d-sm-block" data-bs-toggle="collapse" data-bs-target="#result_{{event.pk}}" aria-expanded="false">
                     итоги
                   </button>
-                <a href="{% url 'event_task_add' event.id %}"><button type="button" class="btn btn-outline-dark btn-sm ms-3 ">задача</button></a>
+                <a class="d-none d-sm-block" href="{% url 'event_task_add' event.id %}"><button type="button" class="btn btn-outline-dark btn-sm ms-3">задача</button></a>
                 </div>
                 {% if forloop.first %}
                   <div id="result_{{event.pk}}" class="container collapse-show my-2">
@@ -87,6 +87,13 @@
           </div>
         </div>
       </div>
+    </div>
+    <div class="d-inline-flex">  
+      <form class="border border-2 p-2 rounded" method='POST'>
+      {% csrf_token %}
+      {{form|crispy}}
+      <input class="btn btn-sm btn-outline-info mt-3" type='submit' value='Сохранить'>
+      </form>
     </div>
   </div>
 {% endblock %}

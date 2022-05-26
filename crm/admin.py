@@ -1,5 +1,5 @@
 from django.contrib import admin
-from crm.models import Contact, Company, Project, Status, Event, Task, ProjectDeliver, Document
+from crm.models import Contact, Company, Project, Status, Event, Task, ProjectDeliver, Document, RoadMap
 
 
 @admin.register(Contact)
@@ -14,6 +14,11 @@ class CompanyAdmin(admin.ModelAdmin):
 
 @admin.register(Project)
 class ProjectAdmin(admin.ModelAdmin):
+    pass
+
+
+@admin.register(RoadMap)
+class RoadMapAdmin(admin.ModelAdmin):
     pass
 
 
