@@ -5,7 +5,7 @@ import django
 os.environ['DJANGO_SETTINGS_MODULE'] = 'conf.settings.base'
 django.setup()
 
-from crm.models import Contact, Company, Project, Event, RoadMap
+from crm.models import Contact, Company, Project, Event, RoadMap, Task
 from crm.busines_logic.company_data_dadata import get_company_data
 
 
@@ -63,6 +63,7 @@ def event_details_update(event_id, new_data):
     event.time = new_data['time']
     # event.invited_persons.set(new_data['invited_persons'])
     event.result = new_data['result']
+    event.small = new_data['small']
     event.save()
     return event
 
@@ -80,3 +81,16 @@ def project_details_update(project_id, new_data):
     project.project_deliver = new_data['project_deliver']
     project.save()
     return project
+
+
+def task_details_update(task_id, new_data):
+    """Will update a data for givven task"""
+    task = Task.objects.get(id=task_id)
+    task.name = new_data['name']
+    task.start_date = new_data['start_date']
+    task.end_date = new_data['end_date']
+    task.doer = new_data['doer']
+    task.event = new_data['event']
+    task.description = new_data['description']
+    task.save()
+    return task

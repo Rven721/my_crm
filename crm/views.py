@@ -489,6 +489,19 @@ def task_status_change_view(request, task_id):
     return render(request, 'crm/task_status_change.html', {'form': form})
 
 
+@login_required
+def task_update(request, task_id):
+    task = Task.objects.get(id=task_id)
+    if request.method == "POST":
+        form = TaskAddForm(request.POST)
+        if form.is_valid():
+            task_details = form.cleaned_data
+            data_update.task_details_update(task_id, task_details)
+            return HttpResponseRedirect(reverse(task_list_view))
+    form = TaskAddForm(instance=task)
+    return render(request, 'crm/task_add.html', {'form': form})
+
+
 def test(request):
     calendar = HTMLCalendar()
     ctx = {

@@ -38,5 +38,6 @@ urlpatterns = [
     path('tasks/<int:day>/<int:month>/<int:year>/', views.task_list_view, name='tasks_on_date'),
     path('task/<task_id>/', views.task_details_view, name='task_details'),
     path('task/<task_id>/status_change/', views.task_status_change_view, name='task_status_change'),
+    path('task/<task_id>/update', views.task_update, name='task_update'),
     path('new_task/', views.task_add_view, name='task_add'),
 ]

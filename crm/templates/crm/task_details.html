@@ -2,7 +2,7 @@
 
 {% block title %}Задача{% endblock %}
 {% block content %}
-<h2>Задача {{task.name}}.</h2>
+<h2>Задача: {{task.name}}</h2>
 {% if task.statuses.last.status == 'NEW' %}
   <a href="{% url 'task_status_change' task.id %}"><button class="btn btn-danger my-3">{{task.statuses.last.get_status_display}}</button></a>
 {% elif task.statuses.last.status == 'PROGRESS' %}
@@ -15,6 +15,7 @@
   <p><b>Срок выполнения:</b> {{task.end_date}}</p>
   <p><b>Ответственный:</b> {{task.doer}}</p>
   <p><b>Дополнительная информация:</b> {{task.description}}</p>
-<a href="{% url 'event_update' task.event.id %}"><button class="btn btn-primary">Обновить событие</button></a>
+<a href="{% url 'task_update' task.id %}"><button class="btn btn-outline-dark">Обновить задачу</button></a>
+<a href="{% url 'event_update' task.event.id %}"><button class="btn btn-outline-primary">Обновить событие</button></a>
 </div>
 {% endblock %}
