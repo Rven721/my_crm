@@ -62,6 +62,7 @@ def event_details_update(event_id, new_data):
     event.date = new_data['date']
     event.time = new_data['time']
     # event.invited_persons.set(new_data['invited_persons'])
+    event.took_time = new_data['took_time']
     event.result = new_data['result']
     event.small = new_data['small']
     event.save()
