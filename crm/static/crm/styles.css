@@ -1,0 +1,33 @@
+.task-new {
+    color:  #089fcf;
+    text-decoration: none;
+}
+
+.task-progress {
+    color: #e57606;
+    text-decoration: none;
+}
+
+.task-done {
+    color: black;
+    text-decoration: none;
+}
+
+.task-list a {
+    text-decoration: none;
+}
+
+.task-list a:hover {
+    color: black;
+    text-decoration: underline;
+}
+
+.event-list a {
+    color: black;
+    text-decoration: none;
+}
+
+.event-list a:hover {
+    color: black;
+    text-decoration: underline;
+}

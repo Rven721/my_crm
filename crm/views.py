@@ -386,7 +386,8 @@ def event_update_view(request, event_id):
         form = EventUpdateForm(request.POST)
         if form.is_valid():
             data_update.event_details_update(event_id, form.cleaned_data)
-            return HttpResponseRedirect(reverse('event_details', kwargs={'event_id': event.id}))
+            return HttpResponseRedirect(reverse('events'))
+            #return HttpResponseRedirect(reverse('event_details', kwargs={'event_id': event.id}))
         return render(request, 'crm/event_add.html', ctx)
     return render(request, 'crm/event_add.html', ctx)
 

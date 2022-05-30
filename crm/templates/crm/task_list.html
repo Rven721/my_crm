@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load shortest_company_name %}
 
 {% block title %}Список задач{% endblock %}
 
@@ -13,7 +14,7 @@
         <input class='btn btn-outline-primary btn-sm' type='submit' value="Выбрать">
       </form>
       <a href="{% url 'tasks' %}"><button class="btn btn-outline-success btn-sm mb-3">Сбросить</button></a>
-      <table class="table table-hover">
+      <table class="table table-hover task-list">
         <thead>
           <tr>
             <th scope="col">Задача</th>
@@ -25,14 +26,14 @@
           {% for task in tasks %}
             <tr>
               {% if task.statuses.last.status == 'NEW' %}
-              <td><a class="link-info" href="{% url 'task_details' task.id %}">{{ task.name }}</a></td>
+              <td><a class="task-new" href="{% url 'task_details' task.id %}">{{ task.name }}</a></td>
               {% elif task.statuses.last.status == 'PROGRESS' %}
-              <td><a class="link-warning" href="{% url 'task_details' task.id %}">{{ task.name }}</a></td>
+              <td><a class="task-progress" href="{% url 'task_details' task.id %}">{{ task.name }}</a></td>
               {% else %}
-              <td><a class="link-dark" href="{% url 'task_details' task.id %}">{{ task.name }}</a></td>
+              <td><a class="task-done" href="{% url 'task_details' task.id %}">{{ task.name }}</a></td>
               {% endif %}
               {% if task.event.projects.all.count == 1 %}
-              <td><a class="link-dark" href="{% url 'project_details' task.event.projects.all.0.id %}">{{ task.event.projects.all.0.name }}</a></td>
+              <td><a class="link-dark" href="{% url 'project_details' task.event.projects.all.0.id %}">{{task.event.projects.all.0.company.short_name|get_shortest_company_name}}: {{ task.event.projects.all.0.name }}</a></td>
               {% else %}
               <td><a>Несколько проектов</a></td>
               {% endif %}
