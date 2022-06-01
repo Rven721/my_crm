@@ -3,6 +3,11 @@
 {% block tilte %}Calendar{% endblock %}
 
 {% block content %}
+    <div class='period-buttons d-flex  justify-content-between'>
+        <a class="period-change-button" href="{% url 'given_month_cal' prev_year prev_month %}">предыдущий месяц</a>
+        <a class="period-change-button" href="{% url 'calendar' %}">текущий месяц</a>
+        <a class="period-change-button" href="{% url 'given_month_cal' next_year next_month %}">следующий месяц</a>
+    </div>
     {% autoescape off %}
         {{cal}}
     {% endautoescape %}

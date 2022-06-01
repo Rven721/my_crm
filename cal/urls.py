@@ -7,5 +7,5 @@ from . import views
 
 urlpatterns = [
     path('', views.calendar_view, name='calendar'),
-    path('<user_id>/', views.user_calendar_view, name='user_calendar'),
+    path('<int:year>/<int:month>', views.given_month_calendar_view, name="given_month_cal"),
 ]
