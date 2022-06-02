@@ -124,7 +124,7 @@ class Event(models.Model):
     small = models.BooleanField(default=False, verbose_name='Добавить в календарь')
 
     def __str__(self):
-        return f'{self.get_category_display()}, {self.date}'
+        return f'{self.get_category_display()}, {self.projects.all()[0]} {self.date}'
 
     class Meta:
         verbose_name = 'Событие'

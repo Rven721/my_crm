@@ -29,7 +29,13 @@ class StatusAdmin(admin.ModelAdmin):
 
 @admin.register(Event)
 class EventAdmin(admin.ModelAdmin):
-    pass
+    ordering = ("date",)
+    list_display = ("category", "date", "get_project", "author")
+    list_filter = ("author", "date")
+
+    def get_project(self, event):
+        """Will return first project of event"""
+        return event.projects.all()[0]
 
 
 @admin.register(Task)
