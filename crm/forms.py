@@ -121,7 +121,7 @@ class RoadMapForm(forms.ModelForm):
     """A form for to update roadmap of a project"""
     class Meta:
         model = RoadMap
-        fields = ('kick_off_meeting', 'contract', 'to_do_list')
+        fields = ('kick_off_meeting', 'contract', 'to_do_list', 'first_pay', 'application')
 
 
 class EventSmallAddForm(forms.ModelForm):

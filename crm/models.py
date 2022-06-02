@@ -194,6 +194,8 @@ class RoadMap(models.Model):
     kick_off_meeting = models.BooleanField(default=False, verbose_name="Установочная встреча")
     contract = models.BooleanField(default=False, verbose_name="Договор")
     to_do_list = models.BooleanField(default=False, verbose_name="To-Do List")
+    first_pay = models.BooleanField(default=False, verbose_name="Аванс получен")
+    application = models.BooleanField(default=False, verbose_name="Заявка подана")
 
     def __str__(self):
         return f"{self.project} roadmap"

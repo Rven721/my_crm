@@ -49,6 +49,8 @@ def roadmap_update(roadmap_id, new_data):
     roadmap.kick_off_meeting = new_data['kick_off_meeting']
     roadmap.contract = new_data['contract']
     roadmap.to_do_list = new_data['to_do_list']
+    roadmap.first_pay = new_data['first_pay']
+    roadmap.application = new_data['application']
     roadmap.save()
     return roadmap
 
