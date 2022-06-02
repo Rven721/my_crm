@@ -211,6 +211,7 @@ def project_list_view(request):
 def project_details_view(request, project_id):
     project = Project.objects.get(id=project_id)
     events = project.events.all().order_by('-date', '-time')
+    incomplete_events = fitrer_engine.get_incomplete_events(events)
     roadmap = RoadMap.objects.filter(project__id=project_id)
     if not roadmap:
         RoadMap.objects.create(project=project)
@@ -226,6 +227,7 @@ def project_details_view(request, project_id):
         'project': project,
         'events': events,
         'form': form,
+        'incomplete_events': incomplete_events,
     }
     return render(request, 'crm/project_details.html', ctx)
 
