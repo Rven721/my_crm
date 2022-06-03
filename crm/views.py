@@ -486,6 +486,7 @@ def task_status_change_view(request, task_id):
         if form.is_valid():
             status = form.save(commit=False)
             status.task = task
+            status.changer = request.user
             status.save()
             return HttpResponseRedirect(reverse('event_details', kwargs={'event_id': task.event.id}))
         return render(request, 'crm/task_status_change.html', {'form': form})

@@ -81,7 +81,7 @@ class Status(models.Model):
     ]
 
     status = models.CharField(max_length=10, choices=status_list, verbose_name='Статус')
-    date = models.DateField(default=timezone.now, verbose_name='Дата')
+    date = models.DateField(default=timezone.localtime, verbose_name='Дата')
     project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='statuses', verbose_name='Проект')
 
     def __str__(self):
@@ -108,8 +108,8 @@ class Event(models.Model):
     projects = models.ManyToManyField(Project, related_name='events', verbose_name='Проекты')
     category = models.CharField(max_length=25, choices=category_list, verbose_name='Категория')
     description = models.TextField(verbose_name='Описание')
-    date = models.DateField(blank=True, null=True, default=timezone.now, verbose_name='Дата')
-    time = models.TimeField(blank=True, null=True, default=timezone.now, verbose_name='Время')
+    date = models.DateField(blank=True, null=True, default=timezone.localtime, verbose_name='Дата')
+    time = models.TimeField(blank=True, null=True, default=timezone.localtime, verbose_name='Время')
     invited_persons = models.ManyToManyField(User, blank=True, verbose_name='Приглашенные сотрудники')
     took_time = models.IntegerField(blank=True, null=True, verbose_name='Затраченное время в секундах')
     result = models.TextField(blank=True, null=True, verbose_name='Результат')
@@ -144,8 +144,8 @@ class Event(models.Model):
 class Task(models.Model):
     """Description of task for event"""
     name = models.CharField(max_length=120, verbose_name='Задача')
-    start_date = models.DateTimeField(default=timezone.now, verbose_name='Дата начала')
-    end_date = models.DateTimeField(default=timezone.now, verbose_name='Дата окончания')
+    start_date = models.DateTimeField(default=timezone.localtime, verbose_name='Дата начала')
+    end_date = models.DateTimeField(default=timezone.localtime, verbose_name='Дата окончания')
     doer = models.ForeignKey(User, on_delete=models.PROTECT, related_name="tasks", blank=True, null=True, verbose_name='Исполнители')
     event = models.ForeignKey(Event, on_delete=models.PROTECT, related_name="tasks", blank=True, null=True, verbose_name='События')
     description = models.TextField(blank=True, verbose_name='Дополнительные данные')
@@ -177,8 +177,16 @@ class TaskStatus(models.Model):
     ]
 
     status = models.CharField(max_length=10, choices=STATUS_LIST, verbose_name='Статус')
-    date = models.DateField(default=timezone.now, verbose_name='Дата')
+    date = models.DateField(default=timezone.localtime, verbose_name='Дата')
     task = models.ForeignKey(Task, on_delete=models.CASCADE, related_name='statuses', verbose_name='Задача')
+    changer = models.ForeignKey(
+        User,
+        blank=True,
+        null=True,
+        on_delete=models.SET_NULL,
+        related_name='task_satatus_changes',
+        verbose_name='Автор статуса',
+    )
 
     def __str__(self):
         return f"{self.status}-{self.task}"
