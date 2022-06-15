@@ -29,7 +29,11 @@
             <ul class="dropdown-menu">
               <li><a class="dropdown-item" href="{% url 'calendar' %}">Календарь</a></li>
               <li><a class="dropdown-item" href="{% url 'events' %}">События</a></li>
+              {% if user.id %}
               <li><a class="dropdown-item" href="{% url 'tasks_for_doer' user.id %}">Задачи</a></li>
+              {% else %}
+              <li><a class="dropdown-item" href="{% url 'tasks' %}">Задачи</a></li>
+              {% endif %}
             </ul>
           </li>
           <li class="nav-item">
