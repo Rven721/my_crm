@@ -35,6 +35,7 @@ urlpatterns = [
     path('event/<event_id>/task_add', views.event_task_add_view, name='event_task_add'),
     path('new_event/', views.event_add_view, name='event_add'),
     path('tasks/', views.task_list_view, name='tasks'),
+    path('tasks/doer/<int:doer_id>/', views.task_list_view, name='tasks_for_doer'),
     path('tasks/<int:day>/<int:month>/<int:year>/', views.task_list_view, name='tasks_on_date'),
     path('task/<task_id>/', views.task_details_view, name='task_details'),
     path('task/<task_id>/status_change/', views.task_status_change_view, name='task_status_change'),

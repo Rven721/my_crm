@@ -434,7 +434,7 @@ def project_list_statuses_report_view(request, company_id=None, project_deliver_
 
 
 @login_required
-def task_list_view(request, day=None, month=None, year=None):
+def task_list_view(request, doer_id=None, day=None, month=None, year=None):
     form = DoerChooseForm()
     tasks = Task.objects.all().order_by('end_date').reverse()
     today = datetime.now().date
@@ -442,6 +442,8 @@ def task_list_view(request, day=None, month=None, year=None):
         doer = request.POST['doer']
         tasks = tasks.filter(doer=doer)
         form = DoerChooseForm(instance=tasks[0])
+    elif doer_id:
+        tasks = tasks.filter(doer=doer_id)
     if day and month and year:
         tasks = tasks.filter(
             end_date__day=day,

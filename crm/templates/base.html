@@ -29,7 +29,7 @@
             <ul class="dropdown-menu">
               <li><a class="dropdown-item" href="{% url 'calendar' %}">Календарь</a></li>
               <li><a class="dropdown-item" href="{% url 'events' %}">События</a></li>
-              <li><a class="dropdown-item" href="{% url 'tasks' %}">Задачи</a></li>
+              <li><a class="dropdown-item" href="{% url 'tasks_for_doer' user.id %}">Задачи</a></li>
             </ul>
           </li>
           <li class="nav-item">

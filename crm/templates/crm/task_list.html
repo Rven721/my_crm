@@ -13,12 +13,13 @@
         {{form.as_p}}
         <input class='btn btn-outline-primary btn-sm' type='submit' value="Выбрать">
       </form>
-      <a href="{% url 'tasks' %}"><button class="btn btn-outline-success btn-sm mb-3">Сбросить</button></a>
+      <a href="{% url 'tasks' %}"><button class="btn btn-outline-success btn-sm mb-3">Показать все</button></a>
       <table class="table table-hover task-list">
         <thead>
           <tr>
             <th scope="col">Задача</th>
             <th scope="col">Проект</th>
+            <th scope="col">Исполнитель</th>
             <th scope="col">Срок выполнения</th>
           </tr>
         </thead>
@@ -36,6 +37,11 @@
               <td><a class="link-dark" href="{% url 'project_details' task.event.projects.all.0.id %}">{{task.event.projects.all.0.company.short_name|get_shortest_company_name}}: {{ task.event.projects.all.0.name }}</a></td>
               {% else %}
               <td><a>Несколько проектов</a></td>
+              {% endif %}
+              {% if task.doer.id %}
+              <td><a class='link-dark' href="{% url 'tasks_for_doer' task.doer.id%}">{{task.doer}}</a></td>
+              {% else %}
+              <td><a class='link-dark' href="#">{{task.doer}}</a></td>
               {% endif %}
               {% if task.statuses.last.status != 'DONE' and task.end_date.date <= today %}
               <td><a class="link-danger" href="{{task.get_absolute_url}}">{{task.end_date}}</a></td>
