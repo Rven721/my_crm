@@ -26,6 +26,7 @@
             {% else %}
             <td><a class="link-dark" href="{% url 'project_summary_update' project.id %}">{{project.summary}}</a></td>
             {% endif %}
+            {% include 'crm/pagination_block.html' %}
           </tr>
           {% endfor %}
         </tbody>
