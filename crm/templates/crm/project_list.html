@@ -26,11 +26,11 @@
             {% else %}
             <td><a class="link-dark" href="{% url 'project_summary_update' project.id %}">{{project.summary}}</a></td>
             {% endif %}
-            {% include 'crm/pagination_block.html' %}
           </tr>
-          {% endfor %}
+          {% endfor %}j
         </tbody>
       </table>
+      {% include 'crm/pagination_block.html' %}
     <div class="position-relative">
       <div class="d-flex flex-column mt-3">
         <a class="btn btn-primary mt-5 fs-5" href="{% url 'project_add' %}">Добавить проект</a>
