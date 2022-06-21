@@ -7,12 +7,14 @@ from django.db.models import Q
 from django.utils.encoding import uri_to_iri
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
+from cal import google_calendar as GC
 from crm.models import Contact, Company, Project, Status, Event, Task, ProjectDeliver, TaskStatus, RoadMap
 from crm.forms import ContactAddForm,\
     CompanyAddForm,\
     ProjectAddForm,\
     ProjectUpdateForm,\
     StatusAddForm,\
+    ProjectSummaryUpdateForm,\
     MultipleEventAddForm,\
     EventResultAddForm, \
     CompanyContactAddForm,\
@@ -261,6 +263,20 @@ def project_update_view(request, project_id):
 
 
 @login_required
+def project_summary_update_view(request, project_id):
+    project = Project.objects.get(id=project_id)
+    form = ProjectSummaryUpdateForm(instance=project)
+    if request.method == "POST":
+        form = ProjectSummaryUpdateForm(request.POST)
+        if form.is_valid():
+            project.summary = form.cleaned_data['summary']
+            project.save()
+            return HttpResponseRedirect(reverse('projects'))
+        return render(request, 'crm/project_summary_update.html', {'form': form})
+    return render(request, 'crm/project_summary_update.html', {'form': form})
+
+
+@login_required
 def status_change_view(request, project_id):
     if request.method == 'POST':
         project = Project.objects.get(id=project_id)
@@ -339,6 +355,9 @@ def event_add_view(request):
         form = MultipleEventAddForm(request.POST)
         if form.is_valid():
             event = form.save()
+            if event.small:
+                gc_event = GC.add_google_calendar_event(event)
+                event.gc_event_id = gc_event['id']
             event.save()
             return HttpResponseRedirect(reverse('event_details', kwargs={'event_id': event.id}))
         return render(request, 'crm/event_add.html', {'form': form})

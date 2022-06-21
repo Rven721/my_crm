@@ -64,6 +64,7 @@ class Project(models.Model):
     company = models.ForeignKey(Company, on_delete=models.CASCADE, blank=True, null=True, related_name='projects', verbose_name='Компания')
     contacts = models.ManyToManyField(Contact, related_name='projects', verbose_name='Контакты', blank=True)
     project_deliver = models.ForeignKey(ProjectDeliver, related_name='projects', on_delete=models.PROTECT, blank=True, null=True, verbose_name='Источник проекта')
+    summary = models.TextField(blank=True, verbose_name='Краткий статус')
 
     def __str__(self):
         return self.name
@@ -122,6 +123,7 @@ class Event(models.Model):
         verbose_name='Автор события',
     )
     small = models.BooleanField(default=False, verbose_name='Добавить в календарь')
+    gc_event_id = models.CharField(max_length=100, blank=True)
 
     def __str__(self):
         return f'{self.get_category_display()}, {self.projects.all()[0]} {self.date}'

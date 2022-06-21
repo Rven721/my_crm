@@ -74,6 +74,7 @@ class ProjectAddForm(forms.ModelForm):
             'company',
             'contacts',
             'project_deliver',
+            'summary',
         )
         widgets = {
             'full_name': forms.Textarea,
@@ -103,11 +104,21 @@ class ProjectUpdateForm(forms.ModelForm):
             'company',
             'contacts',
             'project_deliver',
+            'summary',
         )
         widgets = {
             'start_date': forms.SelectDateWidget,
             'end_date': forms.SelectDateWidget,
         }
+
+
+class ProjectSummaryUpdateForm(forms.ModelForm):
+    """A form for updating project_summary"""
+    class Meta:
+        model = Project
+        fields = (
+            'summary',
+        )
 
 
 class StatusAddForm(forms.ModelForm):

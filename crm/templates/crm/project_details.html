@@ -47,6 +47,12 @@
   </div>
 </div>
 <div class="container d-flex my-3">
+  <div class="container d-flex flex-column border py-3">
+    <h5><a href="{% url 'project_summary_update' project.id %}">Текущий статус:<a></h5>
+    <p>{{project.summary}}</p>
+  </div>
+</div>
+<div class="container d-flex my-3">
   <div class="p-2 me-auto fs-5">Список событий:</div>
   <a class="btn btn-primary fs-5 p-2" href="{% url 'event_small_add' project.id %}">Новое событие</a>
   <a class="btn btn-outline-success ms-3 fs-5 p-2" href="{% url 'project_event_history' project.id %}">Отчет</a>

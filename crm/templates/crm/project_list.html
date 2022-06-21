@@ -7,15 +7,29 @@
 {% block content %}
 <div class="container mt-3">
   <h2 class="my-3">Список проектов</h2>
-  <div class="d-flex flex-column flex-md-row justify-content-between">
-    <div class="mt-5">
-      {% for project in page_object %}
-      <p class="fs-5">{{ project.company.short_name|get_shortest_company_name }}: <a href="{% url 'project_details' project.id %}">{{project.name}}</a></p>
-      {% empty %}
-      <h4>Список проектов пуст</h4>
-      {% endfor %}
-      {% include 'crm/pagination_block.html' %}
-    </div>
+  <div class="container d-flex flex-column flex-md-row">
+      <table class="table me-5">
+        <thead>
+          <tr>
+            <th scope="col">Компания</th>
+            <th scope="col">Проект</th>
+            <th scope="col">Статус</th>
+          </tr>      
+        </thead>
+        <tbody>
+          {% for project in page_object %}
+          <tr>
+            <td>{{ project.company.short_name|get_shortest_company_name }}</td>
+            <td><a href="{% url 'project_details' project.id %}">{{project.name}}</a></td>
+            {% if project.summary == "" %}
+            <td><a class="link-dark" href="{% url 'project_summary_update' project.id %}">Добавить</a></td>
+            {% else %}
+            <td><a class="link-dark" href="{% url 'project_summary_update' project.id %}">{{project.summary}}</a></td>
+            {% endif %}
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
     <div class="position-relative">
       <div class="d-flex flex-column mt-3">
         <a class="btn btn-primary mt-5 fs-5" href="{% url 'project_add' %}">Добавить проект</a>

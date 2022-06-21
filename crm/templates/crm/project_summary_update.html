@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}Обновить статус{% endblock %}
+{% block content %}
+<div class="container mt-5">
+  <form method="POST">
+    {% csrf_token %}
+    {{form|crispy}}  
+    {% include 'buttons_block.html' %}
+  </form>
+<div>
+{% endblock %}

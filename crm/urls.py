@@ -26,6 +26,7 @@ urlpatterns = [
     path('project/<project_id>/status_change/', views.status_change_view, name='status_change'),
     path('project/<project_id>/event_add/', views.event_small_add_view, name='event_small_add'),
     path('project/<project_id>/event_history', views.project_event_history_report_view, name='project_event_history'),
+    path('project/<project_id>/summary_update/', views.project_summary_update_view, name='project_summary_update'),
     path('new_project/', views.project_add_view, name='project_add'),
     path('events/', views.event_list_view, name='events'),
     path('events/<int:day>/<int:month>/<int:year>/', views.event_list_on_date_view, name='events_on_date'),
