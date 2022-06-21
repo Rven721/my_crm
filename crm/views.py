@@ -7,7 +7,6 @@ from django.db.models import Q
 from django.utils.encoding import uri_to_iri
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
-from cal import google_calendar as GC
 from crm.models import Contact, Company, Project, Status, Event, Task, ProjectDeliver, TaskStatus, RoadMap
 from crm.forms import ContactAddForm,\
     CompanyAddForm,\
@@ -355,9 +354,6 @@ def event_add_view(request):
         form = MultipleEventAddForm(request.POST)
         if form.is_valid():
             event = form.save()
-            if event.small:
-                gc_event = GC.add_google_calendar_event(event)
-                event.gc_event_id = gc_event['id']
             event.save()
             return HttpResponseRedirect(reverse('event_details', kwargs={'event_id': event.id}))
         return render(request, 'crm/event_add.html', {'form': form})
