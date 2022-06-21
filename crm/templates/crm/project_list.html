@@ -8,7 +8,8 @@
 <div class="container mt-3">
   <h2 class="my-3">Список проектов</h2>
   <div class="container d-flex flex-column flex-md-row">
-      <table class="table me-5">
+    <div class="container me-5 ">
+      <table class="table">
         <thead>
           <tr>
             <th scope="col">Компания</th>
@@ -27,10 +28,11 @@
             <td><a class="link-dark" href="{% url 'project_summary_update' project.id %}">{{project.summary}}</a></td>
             {% endif %}
           </tr>
-          {% endfor %}j
+          {% endfor %}
         </tbody>
       </table>
-      {% include 'crm/pagination_block.html' %}
+    {% include 'crm/pagination_block.html' %}      
+    </div>
     <div class="position-relative">
       <div class="d-flex flex-column mt-3">
         <a class="btn btn-primary mt-5 fs-5" href="{% url 'project_add' %}">Добавить проект</a>
