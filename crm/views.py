@@ -204,6 +204,7 @@ def project_list_view(request):
         'project_deliver': project_deliver,
         'project_status': project_status,
         'page_object': page_object,
+        'cur_date': datetime.now().date(),
     }
     return render(request, 'crm/project_list.html', ctx)
 

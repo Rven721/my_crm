@@ -1,31 +1,48 @@
 {% extends 'base.html'%}
 {% load crispy_forms_tags %}
 {% load shortest_company_name %}
+{% load check_timespread %}
+{% load undone_task_checker %}
 
 {% block title %}Список проектов{% endblock %}
 
 {% block content %}
 <div class="container mt-3">
-  <h2 class="my-3">Список проектов</h2>
-  <div class="container d-flex flex-column flex-md-row">
+  <h2 class="text-center mt-3">Список проектов</h2>
+  <div class="container d-flex flex-column flex-xl-row mt-5">
     <div class="container me-5 ">
       <table class="table">
         <thead>
           <tr>
-            <th scope="col">Компания</th>
-            <th scope="col">Проект</th>
+            <th scope="col">   </th>
+            <th scope="col">Проект</th> <th scope="col">Компания</th>
             <th scope="col">Статус</th>
+            <th scope="col">Последнее событие</th>
           </tr>      
         </thead>
         <tbody>
           {% for project in page_object %}
           <tr>
-            <td>{{ project.company.short_name|get_shortest_company_name }}</td>
-            <td><a href="{% url 'project_details' project.id %}">{{project.name}}</a></td>
-            {% if project.summary == "" %}
-            <td><a class="link-dark" href="{% url 'project_summary_update' project.id %}">Добавить</a></td>
+            {% if project.id|has_undone_tasks %}
+              <td><i class="bi bi-exclamation-square text-danger"></i></td>
             {% else %}
-            <td><a class="link-dark" href="{% url 'project_summary_update' project.id %}">{{project.summary}}</a></td>
+              <td><i class="bi bi-check-square text-success"></i></td>
+            {% endif %}
+            <td><a href="{% url 'project_details' project.id %}">{{project.name}}</a></td>
+            <td>{{ project.company.short_name|get_shortest_company_name }}</td>
+            {% if project.summary == "" %}
+            <td class='event-list'><a href="{% url 'project_summary_update' project.id %}">Добавить</a></td>
+            {% else %}
+            <td class="event-list"><a href="{% url 'project_summary_update' project.id %}">{{project.summary}}</a></td>
+            {% endif %}
+            {% if project.events.last.date %} 
+                  {% if project.events.last.date|check_timespread %}
+                    <td class="text-danger">{{project.events.last.date}}</td>
+                  {% else %}
+                    <td>{{project.events.last.date}}</td>
+                  {% endif %}
+            {% else %}
+              <td>No events</td>
             {% endif %}
           </tr>
           {% endfor %}
