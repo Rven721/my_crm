@@ -92,7 +92,7 @@
                 {% if event.result %}
                   {{event.result}}
                 {% else %}
-                  Итоги отсутствуют
+                  <a class="link-secondary" href="{% url 'event_result_add' event.id %}">Добавить итог</a>
                 {% endif %}
                 </div>
               {% empty %}

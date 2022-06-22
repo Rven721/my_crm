@@ -384,6 +384,7 @@ def event_result_add_view(request, event_id):
     if request.method == 'POST':
         form = EventResultAddForm(request.POST)
         if form.is_valid():
+            event.took_time = form.cleaned_data['took_time']
             event.result = form.cleaned_data['result']
             event.save()
             return HttpResponseRedirect(reverse('event_details', kwargs={'event_id': event_id}))

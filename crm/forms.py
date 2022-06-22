@@ -165,7 +165,7 @@ class EventResultAddForm(forms.ModelForm):
     """Form for event results adding"""
     class Meta:
         model = Event
-        fields = ('result',)
+        fields = ('took_time', 'result')
 
 
 class EventUpdateForm(forms.ModelForm):

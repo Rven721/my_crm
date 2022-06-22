@@ -4,7 +4,7 @@
 {% block title %}Результат события{% endblock %}
 
 {% block content %}
-<h3>Опишите результат события</h3>
+<h2 class="text-center">Опишите результат события</h3>
   <form method="post">
     {% csrf_token %}
     {{form|crispy}}
