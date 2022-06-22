@@ -22,7 +22,7 @@ class Contact(models.Model):
     second_name = models.CharField(max_length=50, verbose_name='Отчество', blank=True, null=True)
     last_name = models.CharField(max_length=50, verbose_name='Фамилия', blank=True, null=True)
     email = models.EmailField(max_length=124, verbose_name='e-mail', blank=True, null=True)
-    phone = models.CharField(max_length=12, verbose_name='Телефон', blank=True, null=True)
+    phone = models.CharField(max_length=17, verbose_name='Телефон', blank=True, null=True)
     additional_info = models.TextField(blank=True, verbose_name='Дополнительная информация')
 
     def __str__(self):

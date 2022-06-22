@@ -3,6 +3,7 @@
 from django import forms
 from django.utils import timezone
 from .models import Contact, Company, Project, Status, Event, ProjectDeliver, Task, TaskStatus, RoadMap
+from .busines_logic.phone_standartizator import get_standart_phone
 
 
 class ContactAddForm(forms.ModelForm):
@@ -10,6 +11,13 @@ class ContactAddForm(forms.ModelForm):
     class Meta:
         model = Contact
         fields = ('first_name', 'second_name', 'last_name', 'email', 'phone', 'additional_info')
+
+    def clean_phone(self):
+        """will return stardart phone number or raise error"""
+        phone = get_standart_phone(self.cleaned_data['phone'])
+        if not phone:
+            raise forms.ValidationError("Телефон указан не корректно")
+        return phone
 
 
 class ContactSearchForm(forms.Form):
