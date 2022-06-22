@@ -203,6 +203,7 @@ def project_list_view(request):
         'company': company,
         'project_deliver': project_deliver,
         'project_status': project_status,
+        'project_list': project_list,
         'page_object': page_object,
         'cur_date': datetime.now().date(),
     }

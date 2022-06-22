@@ -21,7 +21,7 @@
           </tr>      
         </thead>
         <tbody>
-          {% for project in page_object %}
+          {% for project in project_list %}
           <tr>
             {% if project.id|has_undone_tasks %}
               <td><i class="bi bi-exclamation-square text-danger"></i></td>
@@ -48,7 +48,7 @@
           {% endfor %}
         </tbody>
       </table>
-    {% include 'crm/pagination_block.html' %}      
+    <!--{% include 'crm/pagination_block.html' %}-->      
     </div>
     <div class="position-relative">
       <div class="d-flex flex-column mt-3">
