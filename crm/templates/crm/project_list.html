@@ -3,6 +3,7 @@
 {% load shortest_company_name %}
 {% load check_timespread %}
 {% load undone_task_checker %}
+{% load get_last_date %}
 
 {% block title %}Список проектов{% endblock %}
 
@@ -37,9 +38,9 @@
             {% endif %}
             {% if project.events.last.date %} 
                   {% if project.events.last.date|check_timespread %}
-                    <td class="text-danger">{{project.events.last.date}}</td>
+                    <td class="text-danger">{{project.events|get_last_event_date}}</td>
                   {% else %}
-                    <td>{{project.events.last.date}}</td>
+                    <td>{{project.events.all|get_last_event_date}}</td>
                   {% endif %}
             {% else %}
               <td>No events</td>
