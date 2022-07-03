@@ -15,7 +15,7 @@ class ContactAddForm(forms.ModelForm):
     def clean_phone(self):
         """will return stardart phone number or raise error"""
         phone = get_standart_phone(self.cleaned_data['phone'])
-        if not phone:
+        if phone == 'bad_number':
             raise forms.ValidationError("Телефон указан не корректно")
         return phone
 
