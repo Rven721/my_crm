@@ -1,0 +1,34 @@
+
+    <div class="position-relative">
+      <div class="d-flex flex-column mt-3">
+        <a class="btn btn-primary mt-5 fs-5" href="{% url 'project_add' %}">Добавить проект</a>
+        <a class="btn btn-outline-secondary mt-3 fs-5" href={% url 'event_add' %}>Общее событие</a>
+        {% if project_status == "" and company.id is None and project_deliver.id is None %}
+        <a class="btn btn-outline-success mt-3 fs-5" href="{% url 'project_list_report' %}">Скачать отчет</a>
+        {% elif project_status != "" and company.id is None and project_deliver.id is None %}
+        <a class="btn btn-outline-success mt-3 fs-5" href="{% url 'status_project_list_report' project_status %}">Скачать отчет</a>
+        {% elif project_status != "" and company.id is None and project_deliver.id is not None %}
+        <a class="btn btn-outline-success mt-3 fs-5" href="{% url 'project_list_status_deliver_report' project_status project_deliver.slug %}">Скачать отчет</a>
+        {% elif project_status != "" and company.id is not None and project_deliver.id is not None %}
+        <a class="btn btn-outline-success mt-3 fs-5" href="{% url 'full_report' project_status project_deliver.slug company.id %}">Скачать отчет</a>
+        {% elif project_status != "" and company.id is not None and project_deliver.slug is None %}
+        <a class="btn btn-outline-success mt-3 fs-5" href="{% url 'project_list_status_company_report' company_id=company.id project_status=project_status %}">Скачать отчет</a>
+        {% elif project_status == "" and company.id is not None and project_deliver.slug is None %}
+        <a class="btn btn-outline-success mt-3 fs-5" href="{% url 'company_project_list_report' company_id=company.id %}">Скачать отчет</a>
+        {% elif project_status == "" and company.id is None and project_deliver.slug is not None %}
+        <a class="btn btn-outline-success mt-3 fs-5" href="{% url 'source_project_list_report' project_deliver_slug=project_deliver.slug %}">Скачать отчет</a>
+        {% elif project_status == "" and company.id is not None and project_deliver.slug is not None %}
+        <a class="btn btn-outline-success mt-3 fs-5" href="{% url 'source_company_report' project_deliver_slug=project_deliver.slug company_id=company.id %}">Скачать отчет</a>
+        {% else %}
+        <a class="btn btn-outline-success mt-3 fs-5" href="#">Скачать отчет</a>
+        {% endif %}
+          <form class="mt-4" method="post">
+          {% csrf_token %}
+          {{form|crispy}}
+          <div class="d-flex justify-content-start">
+            <input class="btn btn-outline-success mt-3" type="submit" value="Подобрать">
+            <a class="btn btn-outline-dark mt-3 ms-3 " href="{% url 'projects' %}">Сбросить</a>
+          </div>
+        </form>
+      </div>
+    </div>

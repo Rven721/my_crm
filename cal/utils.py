@@ -1,9 +1,11 @@
 """
 An utilite to create my html calendar with meetings
 """
-
+from datetime import datetime
 from calendar import HTMLCalendar
-from crm.models import Event
+from .google_calendar import get_google_calendar_events
+from .syncronization import internal_events_sync
+from httplib2 import ServerNotFoundError
 
 
 class MyCalendar(HTMLCalendar):
@@ -18,16 +20,27 @@ class MyCalendar(HTMLCalendar):
            Will return an HTML string \
            with description of events planed for a day
         """
-        events = events.filter(date__day=day)
         day_events = ''
         for event in events:
-            event_link = f"/events/{event.id}"
-            event_time = event.time.strftime('%H:%M')
-            if event.projects.count() > 1:
-                project_name = "Общее"
-            else:
-                project_name = event.projects.first().name
-            day_events += f"<a href={event_link}><div class='event'>{event_time} - {project_name}</div></a>\n"
+            try:
+                event_date = datetime.fromisoformat(event['start']['dateTime']).date().day
+                event_time = datetime.fromisoformat(event['start']['dateTime']).time().strftime("%H:%M")
+            except KeyError:
+                event_date = datetime.fromisoformat(event['start']['date']).date().day
+                event_time = None
+            if event_date == day:
+                try:
+                    event_link = event['description']
+                    if 'event' not in event_link:
+                        event_link = event['htmlLink']
+                except KeyError:
+                    event_link = "#"
+                day_events += f"\
+                    <a href='{event_link}'>\
+                      <div class='event'>\
+                        {event_time}: {event['summary']}\
+                      </div>\
+                    </a>\n"
         if day != 0:
             return f"<td><span class='date'>{day}</span>{day_events}</td>"
         return "<td></td>"
@@ -43,13 +56,14 @@ class MyCalendar(HTMLCalendar):
             one_week += self.get_the_day(day_of_the_month, events)
         return f"<tr>{one_week}</tr>"
 
-    def get_the_month(self, events=None):
+    def get_the_month(self):
         """Will return an HTML string to display a month calendar"""
-        if not events:
-            events = Event.objects.filter(
-                date__year=self.year,
-                date__month=self.month,
-                small=True).order_by('date', 'time')
+        try:
+            events = get_google_calendar_events(self.month, self.year)
+            internal_events_sync(events)
+        except (ServerNotFoundError, TypeError):
+            return "<h1 class='text-center'>Гугл календарь недоступен<br>\
+                         Проверьте подлючение к сети</h1>"
         cal = "<table class='calendar'>\n"
         cal += f"{self.formatmonthname(self.year, self.month, withyear=True)}\n"
         cal += f"{self.formatweekheader()}"

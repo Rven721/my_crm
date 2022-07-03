@@ -1,6 +1,10 @@
 .idea/
 venv/
 env/
+credentials.json
+token.json
+gc_reds_hash.txt
+cal/gc_creds.py
 cal/templates/cal/test_page.html
 cal/static/cal/css_play.css
 cmr_env/
@@ -18,6 +22,7 @@ __pycache__/
 # Distribution / packaging
 .Python
 build/
+set_gc_id.sh
 develop-eggs/
 dist/
 downloads/

@@ -1,3 +1,4 @@
+import cal.google_calendar as gc
 from calendar import HTMLCalendar
 from datetime import datetime
 from django.shortcuts import render, reverse
@@ -356,6 +357,9 @@ def event_add_view(request):
         form = MultipleEventAddForm(request.POST)
         if form.is_valid():
             event = form.save()
+            if event.small:
+                gc_event = gc.add_google_calendar_event(event)
+                event.gc_event_id = gc_event['id']
             event.save()
             return HttpResponseRedirect(reverse('event_details', kwargs={'event_id': event.id}))
         return render(request, 'crm/event_add.html', {'form': form})
@@ -372,6 +376,9 @@ def event_small_add_view(request, project_id):
             event = form.save()
             event.author = request.user
             event.projects.add(project)
+            if event.small:
+                gc_event = gc.add_google_calendar_event(event)
+                event.gc_event_id = gc_event['id']
             event.save()
             return HttpResponseRedirect(reverse('project_details', kwargs={'project_id': project.id}))
         return render(request, 'crm/event_add.html', {'form': form})
@@ -407,7 +414,6 @@ def event_update_view(request, event_id):
         if form.is_valid():
             data_update.event_details_update(event_id, form.cleaned_data)
             return HttpResponseRedirect(reverse('events'))
-            #return HttpResponseRedirect(reverse('event_details', kwargs={'event_id': event.id}))
         return render(request, 'crm/event_add.html', ctx)
     return render(request, 'crm/event_add.html', ctx)
 
