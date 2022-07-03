@@ -1,7 +1,7 @@
 """Block with logic for database update"""
 import os
 import django
-
+import cal.google_calendar as gc
 os.environ['DJANGO_SETTINGS_MODULE'] = 'conf.settings.base'
 django.setup()
 
@@ -56,17 +56,23 @@ def roadmap_update(roadmap_id, new_data):
 
 
 def event_details_update(event_id, new_data):
-    """Will retrun updated event instanse"""
+    """Will retrun updated event instanse and add data to google calendar if it is nessesary"""
     event = Event.objects.get(id=event_id)
     event.projects.set(new_data['projects'])
     event.category = new_data['category']
     event.description = new_data['description']
     event.date = new_data['date']
     event.time = new_data['time']
-    # event.invited_persons.set(new_data['invited_persons'])
     event.took_time = new_data['took_time']
     event.result = new_data['result']
     event.small = new_data['small']
+    if event.small:
+        if not event.gc_event_id:
+            gc_event = gc.add_google_calendar_event(event)
+            event.gc_event_id = gc_event['id']
+            event.save()
+        else:
+            gc.update_google_calndar_evnet(event)
     event.save()
     return event
 
