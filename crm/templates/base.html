@@ -28,7 +28,7 @@
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" role="button"  aria-expanded="false">Календарь</a>
             <ul class="dropdown-menu">
-              <li><a class="dropdown-item" href="{% url 'calendar' %}">Календарь</a></li>
+              <li><a class="dropdown-item" href="#">Календарь</a></li>
               <li><a class="dropdown-item" href="{% url 'events' %}">События</a></li>
               {% if user.id %}
               <li><a class="dropdown-item" href="{% url 'tasks_for_doer' user.id %}">Задачи</a></li>
