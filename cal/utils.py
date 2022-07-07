@@ -62,8 +62,8 @@ class MyCalendar(HTMLCalendar):
             events = get_google_calendar_events(self.month, self.year)
             internal_events_sync(events)
         except (ServerNotFoundError, TypeError):
-            return "<h1 class='text-center'>Гугл календарь недоступен<br>\
-                         Проверьте подлючение к сети</h1>"
+            return "<h1 class='text-center'>Синхронизация с Гугл календарем нарушена<br>\
+                         Обратитесь к администратору.</h1>"
         cal = "<table class='calendar'>\n"
         cal += f"{self.formatmonthname(self.year, self.month, withyear=True)}\n"
         cal += f"{self.formatweekheader()}"
