@@ -1,0 +1,20 @@
+An app to display calendar in CRM.
+
+It allows to add and update evetns from CRM to givven google calendar.
+On a calendar main page you can find only events goted from gogle calendar.
+If event were deleted from google calendar it will not bi display on calendar page but will be reacheble in projct card.
+
+Main Molules:
+ - utils.py: a logic to display a calendar page.
+ - google_calendar.py: a logic to get connection with google calendar.
+ - gc_creds.py: a logick to create has from credentials_file from google console.
+
+For correct work of the app you should use several envi defenitions:
+    REDIRECT_URI - uri from google console credentials
+    GC_ID - ID of a calendar you want to conetct
+    GC_CRED_HASH - a hash goted from credentials file from google console 
+
+Befor first use you should get approvment from the calendar owner (".../calendar/gc/approvment"). It will create credentials file on server and save token with credentials for further service run.
+To clear credentials use "../calendar/gc/clear" 
+
+

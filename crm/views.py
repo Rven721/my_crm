@@ -359,7 +359,8 @@ def event_add_view(request):
             event = form.save()
             if event.small:
                 gc_event = gc.add_google_calendar_event(event)
-                event.gc_event_id = gc_event['id']
+                if gc_event:
+                    event.gc_event_id = gc_event['id']
             event.save()
             return HttpResponseRedirect(reverse('event_details', kwargs={'event_id': event.id}))
         return render(request, 'crm/event_add.html', {'form': form})
@@ -378,7 +379,8 @@ def event_small_add_view(request, project_id):
             event.projects.add(project)
             if event.small:
                 gc_event = gc.add_google_calendar_event(event)
-                event.gc_event_id = gc_event['id']
+                if gc_event:
+                    event.gc_event_id = gc_event['id']
             event.save()
             return HttpResponseRedirect(reverse('project_details', kwargs={'project_id': project.id}))
         return render(request, 'crm/event_add.html', {'form': form})
