@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'crispy_forms',
     'account.apps.AccountConfig',
     'cal.apps.CalConfig',
+    'smeta.apps.SmetaConfig',
 ]
 
 MIDDLEWARE = [

@@ -21,4 +21,5 @@ urlpatterns = [
     path('', include('crm.urls')),
     path('accounts/', include('account.urls')),
     path('calendar/', include('cal.urls')),
+    path('smeta/', include('smeta.urls')),
 ]

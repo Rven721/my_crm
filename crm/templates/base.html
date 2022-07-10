@@ -70,6 +70,9 @@
             <a class="nav-link px-2 text-muted" href="#">Контакты</a>
         </li>
         <li class="nav_item">
+            <a class="nav-link px-2 text-muted" href="{% url 'smeta_calculation' %}">Смета</a>
+        </li>
+        <li class="nav_item">
             {% if not user.is_authenticated %}
             <a class="nav-link px-2 text-muted" href="{% url 'login' %}">Авторизация</a>
             {% else %}

@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}Расчет сметы {% endblock %}
+{% block content %}
+<div class="container mt-3">
+  <h2 class="text-center mb-5">Загрузите файл</h2>
+  <div class="d-flex justify-content-center">
+    <form method="post" enctype='multipart/form-data'>
+      {% csrf_token %}
+      {{form|crispy}}
+      <input class='btn btn-success mt-5' type='submit' value='Рассчитать'>
+    </form>
+  </div>
+</div>
+{% endblock %}
