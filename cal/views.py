@@ -8,6 +8,7 @@ from django.contrib.auth.decorators import login_required
 from .utils import MyCalendar
 from .busines_logic import period_getter
 from .google_calendar import get_google_approvment, handle_google_response, remove_creds_files
+from .syncronization import external_events_sync
 
 
 @login_required
@@ -44,6 +45,10 @@ def calendar_view(request):
     """A clendar view"""
     month = datetime.now().month
     year = datetime.now().year
+    try:
+        external_events_sync()
+    except TypeError:
+        pass
     cal = MyCalendar(year, month)
     next_period = period_getter.get_next_period(year, month)
     prev_period = period_getter.get_prev_period(year, month)

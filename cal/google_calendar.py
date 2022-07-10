@@ -9,6 +9,7 @@ from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import Flow
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
+from .busines_logic.period_getter import get_next_period
 
 
 # If modifying these scopes, delete the file token.json.
@@ -120,8 +121,12 @@ def get_google_calendar_events(month=None, year=None):
         month = now.month
         year = now.year
     month_begin = datetime.datetime(year, month, 1).isoformat() + 'Z'
+    next_period = get_next_period(year, month)
+    next_month = datetime.datetime(next_period['year'], next_period['month'], 1).isoformat() + 'Z'
     try:
-        events_result = service.events().list(calendarId=CAL_ID, timeMin=month_begin,
+        events_result = service.events().list(calendarId=CAL_ID,
+                                              timeMin=month_begin,
+                                              timeMax=next_month,
                                               singleEvents=True,
                                               orderBy='startTime').execute()
         events = events_result.get('items', [])

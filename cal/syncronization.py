@@ -1,11 +1,12 @@
 """A logic for event syncronizataion"""
 import datetime
+import cal.google_calendar as gc
 from crm.models import Event
 from django.core.exceptions import ObjectDoesNotExist
 
 
 def internal_events_sync(gc_events):
-    """wil compare enternal events with GC and update enternal events if nessesary"""
+    """will compare enternal events with GC and update enternal events if nessesary"""
     for gc_event in gc_events:
         try:
             internal_event = Event.objects.get(gc_event_id=gc_event['id'])
@@ -17,3 +18,13 @@ def internal_events_sync(gc_events):
                 internal_event.save()
         except (ObjectDoesNotExist, KeyError):
             next
+
+
+def external_events_sync():
+    """Will add evetns to google calendar if event were added to crm while connections with calendar were loose"""
+    no_return_point = datetime.date(2022, 7, 1)
+    events = Event.objects.filter(small=True, date__gte=no_return_point, gc_event_id="")
+    for event in events:
+        gc_event = gc.add_google_calendar_event(event)
+        event.gc_event_id = gc_event['id']
+        event.save()

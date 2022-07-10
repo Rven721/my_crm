@@ -34,7 +34,7 @@ class MyCalendar(HTMLCalendar):
                     if 'event' not in event_link:
                         event_link = event['htmlLink']
                 except KeyError:
-                    event_link = "#"
+                    event_link = event['htmlLink']
                 day_events += f"\
                     <a href='{event_link}'>\
                       <div class='event'>\
@@ -62,8 +62,10 @@ class MyCalendar(HTMLCalendar):
             events = get_google_calendar_events(self.month, self.year)
             internal_events_sync(events)
         except (ServerNotFoundError, TypeError):
-            return "<h1 class='text-center'>Синхронизация с Гугл календарем нарушена<br>\
-                         Обратитесь к администратору.</h1>"
+            return "<h1 class='text-center'>Синхронизация с календарем приостановлена</h1><br> \
+                         <div class='d-flex justify-content-center'>\
+                         <a href='gc/approvment'><button class='btn btn-success'>Восстановить</button></a>\
+                         </div>"
         cal = "<table class='calendar'>\n"
         cal += f"{self.formatmonthname(self.year, self.month, withyear=True)}\n"
         cal += f"{self.formatweekheader()}"
