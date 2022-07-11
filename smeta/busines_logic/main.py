@@ -2,7 +2,7 @@
 
 import sys
 from openpyxl import Workbook
-from . import logic as l
+from . import logic
 from . import data_extractor as de
 
 
@@ -13,19 +13,19 @@ def count_stage_load(file_name: str) -> None:
     events = de.get_events(file_name)
     workers = de.get_workers(file_name)
     monthes = de.get_monthes(file_name)
-    stages = l.get_workers_stage_load(workers, events, monthes)
+    stages = logic.get_workers_stage_load(workers, events, monthes)
     work_book = Workbook()
     work_sheet = work_book.active
-    work_sheet.append(['Worker', 'Events', 'Hours', 'Avarage_time'])
-    for stage in stages.values():
-        work_sheet.append(['New Stage'])
+    work_sheet.append(['Worker', 'Events', 'Hours', 'Avarage_time', 'Stage'])
+    for stage_num, stage in stages.items():
         for worker, data in stage.items():
             events = ','.join([str(i) for i in data['events']])
             hours = data['work_hour']
             avarage_time = data['avarage_time']
-            work_sheet_data = [worker, events, hours, avarage_time]
+            work_sheet_data = [worker, events, hours, avarage_time, stage_num]
             work_sheet.append(work_sheet_data)
     return work_book
+
 
 if __name__ == '__main__':
     base_data = sys.argv[1]
