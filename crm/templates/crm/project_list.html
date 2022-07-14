@@ -17,8 +17,8 @@
           <tr>
             <th scope="col">   </th>
             <th scope="col">Проект</th> <th scope="col">Компания</th>
-            <th scope="col">Состояние</th>
-            <th scope="col">Последнее событие</th>
+            <th class="d-none d-sm-table-cell" scope="col">Состояние</th>
+            <th class="d-none d-sm-table-cell" scope="col">Последнее событие</th>
           </tr>      
         </thead>
         <tbody>
@@ -32,18 +32,18 @@
             <td><a href="{% url 'project_details' project.id %}">{{project.name}}</a></td>
             <td>{{ project.company.short_name|get_shortest_company_name }}</td>
             {% if project.summary == "" %}
-            <td class='event-list'><a href="{% url 'project_summary_update' project.id %}">Добавить</a></td>
+            <td class='event-list d-none d-sm-table-cell'><a href="{% url 'project_summary_update' project.id %}">Добавить</a></td>
             {% else %}
-            <td class="event-list"><a href="{% url 'project_summary_update' project.id %}">{{project.summary}}</a></td>
+            <td class='event-list d-none d-sm-table-cell'><a href="{% url 'project_summary_update' project.id %}">{{project.summary}}</a></td>
             {% endif %}
             {% if project.events.last.date %} 
                   {% if project.events.last.date|check_timespread %}
-                    <td class="text-danger">{{project.events|get_last_event_date}}</td>
+                    <td class='text-danger d-none d-sm-table-cell'>{{project.events|get_last_event_date}}</td>
                   {% else %}
-                    <td>{{project.events.all|get_last_event_date}}</td>
+                    <td class='d-none d-sm-table-cell'>{{project.events.all|get_last_event_date}}</td>
                   {% endif %}
             {% else %}
-              <td>No events</td>
+              <td class='d-none d-sm-table-cell'>No events</td>
             {% endif %}
           </tr>
           {% endfor %}
