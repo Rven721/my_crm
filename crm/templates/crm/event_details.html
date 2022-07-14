@@ -20,15 +20,15 @@
   </p>
     {% for task in event.tasks.all %}
       {% if task.statuses.last.status == 'NEW' %}
-      <p>{{task.start_date.date}} <a class="link-danger" href="{% url 'task_details' task.id %}">{{task.name}}</a>, завершить: {% if task.end_date.date <= cur_date %}
+      <p>{{task.start_date.date}}, {{task.doer}} -  <a class="link-danger" href="{% url 'task_details' task.id %}">{{task.name}}</a>, завершить: {% if task.end_date.date <= cur_date %}
         <b><u>{{task.end_date}}</u></b>
      {% else %} 
         {{task.end_date.date}}
      {% endif %}</p>
       {% elif task.statuses.last.status == 'PROGRESS' %}
-      <p>{{task.start_date.date}} <a class="link-warning" href="{% url 'task_details' task.id %}">{{task.name}}</a>, завершить: {{task.end_date}}</p>
+      <p>{{task.start_date.date}}, {{task.doer}} - <a class="link-warning" href="{% url 'task_details' task.id %}">{{task.name}}</a>, завершить: {{task.end_date}}</p>
       {% else %}
-      <p>{{task.start_date.date}} <a class="link-success" href="{% url 'task_details' task.id %}">{{task.name}}</a>, завершить: {{task.end_date}}</p>
+      <p>{{task.start_date.date}} {{task.doer}} - <a class="link-success" href="{% url 'task_details' task.id %}">{{task.name}}</a>, завершить: {{task.end_date}}</p>
       {% endif %}
     {% empty %}
        Нет задач

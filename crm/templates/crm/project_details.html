@@ -91,6 +91,7 @@
                 {% endif %}
                 {% if event.result %}
                   {{event.result}}
+                  <p class="mt-2">Трудились: {% for task in event.tasks.all %} {{task.doer}}{% if not forloop.last %}, {% endif %}{% endfor %}</p>
                 {% else %}
                   <a class="link-secondary" href="{% url 'event_result_add' event.id %}">Добавить итог</a>
                 {% endif %}
