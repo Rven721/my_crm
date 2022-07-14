@@ -12,6 +12,7 @@ def get_workers(file_name: str) -> list:
         workers.append(worker)
     return workers
 
+
 def get_events(file_name: str) -> list:
     """Will return a list of vents from prepared ecxel file"""
     workbook = load_workbook(filename=file_name)
@@ -19,10 +20,17 @@ def get_events(file_name: str) -> list:
     events = []
     for row in workbook_ws:
         event = [cell.value for cell in row]
-        event[1] = tuple(int(i) for i in event[1].split(','))
-        event[2] = tuple(int(i) for i in event[2].split(','))
+        if not isinstance(event[1], int):
+            event[1] = tuple(int(i) for i in event[1].split(','))
+        else:
+            event[1] = (int(event[1]),)
+        if not isinstance(event[2], int):
+            event[2] = tuple(int(i) for i in event[2].split(','))
+        else:
+            event[2] = (int(event[2]),)
         events.append(tuple(event))
     return events
+
 
 def get_monthes(file_name: str) -> list:
     """Will return a list of monthes from prepared ecxel file"""
