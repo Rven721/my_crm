@@ -7,10 +7,17 @@ django.setup()
 
 from crm.models import Project
 
+ORDERING = {
+    'name': 'name',
+    'company': 'company_name',
+    'event_date_rev': 'last_event_date',
+}
 
-def project_list_filter(company=None, project_deliver=None, project_status=None):
+
+def project_list_filter(order_by='name', company=None, project_deliver=None, project_status=None):
     """will return a list of projects based on given data"""
-    result = Project.objects.order_by('name')
+    ordering = ORDERING[order_by]
+    result = Project.objects.all()
     if project_deliver:
         result = result.filter(project_deliver=project_deliver)
     if company:
@@ -24,7 +31,25 @@ def project_list_filter(company=None, project_deliver=None, project_status=None)
                     result.remove(project)
             except AttributeError:
                 result.remove(project)
-    return result
+    res = []
+    for project in result:
+        if len(project.events.all()) > 0:
+            res.append({
+                'id': project.id,
+                'name': project.name,
+                'company_name': project.company.short_name,
+                'summary': project.summary,
+                'last_event_date': project.events.order_by('-date')[0].date,
+            })
+        else:
+            res.append({
+                'id': project.id,
+                'name': project.name,
+                'company_name': project.company.short_name,
+                'summary': project.summary,
+                'last_event_date': None,
+            })
+    return sorted(res, key=lambda element: (element[ordering] is None, element[ordering]))
 
 
 def get_incomplete_events(events):

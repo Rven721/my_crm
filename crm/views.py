@@ -183,19 +183,21 @@ def company_contacts_update_view(request, company_id):
 
 @login_required
 def project_list_view(request):
-    project_list = fitrer_engine.project_list_filter(project_status="progress")
+    order_by = request.GET.get('order_by', 'name')
+    project_list = fitrer_engine.project_list_filter(order_by, project_status="progress")
     form = FilterByCompanyAndSource()
     company = None
     project_deliver = None
     project_status = ''
     if request.method == "POST":
-        project_list = Project.objects.all().order_by('name')
+        order_by = request.POST.get('order_by', 'name')
+        project_list = Project.objects.all()
         form = FilterByCompanyAndSource(request.POST)
         if form.is_valid():
             company = form.cleaned_data['company']
             project_deliver = form.cleaned_data['project_deliver']
             project_status = form.cleaned_data['project_status']
-            project_list = fitrer_engine.project_list_filter(company, project_deliver, project_status)
+            project_list = fitrer_engine.project_list_filter(order_by, company, project_deliver, project_status)
     paginator = Paginator(project_list, os.environ.get('STRINGS_ON_PAGE', 5))
     page_number = request.GET.get('page')
     page_object = paginator.get_page(page_number)
