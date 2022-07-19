@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'crm.apps.CrmConfig',
     'crispy_forms',
+    'crispy_bootstrap5',
     'account.apps.AccountConfig',
     'cal.apps.CalConfig',
     'smeta.apps.SmetaConfig',
@@ -140,3 +141,6 @@ STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 THOUSAND_SEPARATOR = ' '
 USE_THOUSAND_SEPARATOR = True
+
+CRISPY_ALLOWED_TEMPLATE_PACKS = 'bootstrap5'
+CRISPY_TEMPLATE_PACK = 'bootstrap5'
