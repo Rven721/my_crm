@@ -5,13 +5,14 @@
 
 {% block content %}
 <h3 class="text-center">Заполните форму</h3>
-<div class="container mt-4">
+<div class="container mt-4 mb-4">
   <div class="d-flex justify-content-center">
-    <form method="post">
+    <!-- <form method="post">
       {% csrf_token %}
       {{form|crispy}}
       {% include 'buttons_block.html' %}
-    </form>
+    </form> -->
+    {% crispy form %}
   </div>
 </div>
 {% endblock %}

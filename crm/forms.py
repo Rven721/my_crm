@@ -3,9 +3,14 @@
 from django import forms
 from django.utils import timezone
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Layout, Row, Column, Submit, HTML, Field
+from crispy_forms.layout import Layout, Row, Column, Submit, HTML
 from .models import Contact, Company, Project, Status, Event, ProjectDeliver, Task, TaskStatus, RoadMap
 from .busines_logic.phone_standartizator import get_standart_phone
+
+BUTTON_BLOCK = Row(
+    Column(Submit('submit', 'Сохранить', css_class="btn btn-primary mt-3 fs-5"), css_class="col-auto"),
+    Column(HTML("""<a class="btn btn-secondary mt-3 fs-5" href="{{request.META.HTTP_REFERER}}">Выйти без сохранения</a>""")),
+    css_class="d-flex flex-row")
 
 
 class ContactAddForm(forms.ModelForm):
@@ -20,6 +25,23 @@ class ContactAddForm(forms.ModelForm):
         if phone == 'bad_number':
             raise forms.ValidationError("Телефон указан не корректно")
         return phone
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.layout = Layout(
+            Row(
+                Column('first_name', css_class='w-30'),
+                Column('second_name', css_class='w-30'),
+                Column('last_name', css_class='w-30'),
+            ),
+            Row(
+                Column('email', css_class='col-md-6'),
+                Column('phone', css_class='col-md-6'),
+            ),
+            'additional_info',
+            BUTTON_BLOCK,
+        )
 
 
 class ContactSearchForm(forms.Form):
@@ -169,16 +191,7 @@ class EventSmallAddForm(forms.ModelForm):
                 Column('result', css_class="col-sm-6"),
             ),
             'small',
-            Row(
-                Column(
-                    Submit('submit', 'Сохранить', css_class="btn btn-primary mt-3 fs-5"),
-                    css_class="col-auto",
-                ),
-                Column(
-                    HTML("""<a class="btn btn-secondary mt-3 fs-5" href="{{request.META.HTTP_REFERER}}">Выйти без сохранения</a>"""),
-                ),
-                css_class="d-flex flex-row",
-            ),
+            BUTTON_BLOCK,
         )
 
 
@@ -236,16 +249,7 @@ class EventUpdateForm(forms.ModelForm):
                 Column('result', css_class="col-sm-6"),
             ),
             'small',
-            Row(
-                Column(
-                    Submit('submit', 'Сохранить', css_class="btn btn-primary mt-3 fs-5"),
-                    css_class="col-auto",
-                ),
-                Column(
-                    HTML("""<a class="btn btn-secondary mt-3 fs-5" href="{{request.META.HTTP_REFERER}}">Выйти без сохранения</a>"""),
-                ),
-                css_class="d-flex flex-row",
-            ),
+            BUTTON_BLOCK,
         )
 
 
@@ -279,6 +283,20 @@ class TaskAddForm(forms.ModelForm):
         model = Task
         fields = ('name', 'event', 'start_date', 'end_date', 'doer', 'description')
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.layout = Layout(
+            'name',
+            Row(
+                Column('start_date', css_class='col-md-4 me-2'),
+                Column('end_date', css_class='col-md-4 me-2'),
+                Column('doer', css_class='col-md-3 me-2'),
+            ),
+            'description',
+            BUTTON_BLOCK,
+        )
+
 
 class TaskStatusChangeForm(forms.ModelForm):
     """Form to change a status of a task"""
@@ -299,3 +317,18 @@ class EventTaskAddForm(forms.ModelForm):
     class Meta:
         model = Task
         fields = ('name', 'start_date', 'end_date', 'doer', 'description')
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.layout = Layout(
+            'name',
+            Row(
+                Column('start_date', css_class='w-30'),
+                Column('end_date', css_class='w-30'),
+                Column('doer', css_class='w-30'),
+                css_class='justify-content-between',
+            ),
+            'description',
+            BUTTON_BLOCK,
+        )
