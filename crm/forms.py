@@ -2,6 +2,8 @@
 
 from django import forms
 from django.utils import timezone
+from crispy_forms.helper import FormHelper
+from crispy_forms.layout import Layout, Row, Column, Submit, HTML, Field
 from .models import Contact, Company, Project, Status, Event, ProjectDeliver, Task, TaskStatus, RoadMap
 from .busines_logic.phone_standartizator import get_standart_phone
 
@@ -149,8 +151,35 @@ class EventSmallAddForm(forms.ModelForm):
     class Meta:
         model = Event
         fields = ('category', 'description', 'date', 'time', 'took_time', 'result', 'small')
-        widgets = {'date': forms.SelectDateWidget(years=(2022, 2023))}
-        help_texts = {'time': 'чч:мм'}
+        widgets = {'date': forms.DateInput(attrs={'class': 'datepicker'})}
+        help_texts = {'time': 'чч:мм', 'took_time': 'В секундах'}
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.layout = Layout(
+            Column('category', css_class="col-md-5"),
+            Row(
+                Column('date', css_class="col-sm-4 col-md-3 me-3"),
+                Column('time', css_class="col-sm-3 me-3"),
+                Column('took_time', css_class="col-sm-5 col-md-3"),
+            ),
+            Row(
+                Column('description', css_class="col-sm-6"),
+                Column('result', css_class="col-sm-6"),
+            ),
+            'small',
+            Row(
+                Column(
+                    Submit('submit', 'Сохранить', css_class="btn btn-primary mt-3 fs-5"),
+                    css_class="col-auto",
+                ),
+                Column(
+                    HTML("""<a class="btn btn-secondary mt-3 fs-5" href="{{request.META.HTTP_REFERER}}">Выйти без сохранения</a>"""),
+                ),
+                css_class="d-flex flex-row",
+            ),
+        )
 
 
 class MultipleEventAddForm(forms.ModelForm):
@@ -158,7 +187,7 @@ class MultipleEventAddForm(forms.ModelForm):
     class Meta:
         model = Event
         fields = ('projects', 'category', 'description', 'date', 'time', 'result', 'small')
-        widgets = {'date': forms.SelectDateWidget(years=(2022, 2023))}
+        widgets = {'date': forms.DateInput(attrs={'class': 'datepicker'})}
         help_texts = {'time': 'чч:мм'}
 
     def clean_date(self):
@@ -180,6 +209,7 @@ class EventUpdateForm(forms.ModelForm):
     """Form for event update"""
     class Meta:
         model = Event
+        widgets = {'date': forms.DateInput(attrs={'class': 'datepicker'})}
         fields = (
             'projects',
             'category',
@@ -189,6 +219,33 @@ class EventUpdateForm(forms.ModelForm):
             'took_time',
             'result',
             'small',
+        )
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.layout = Layout(
+            Column('category', css_class="col-md-5"),
+            Row(
+                Column('date', css_class="col-sm-4 col-md-3 me-3"),
+                Column('time', css_class="col-sm-3 me-3"),
+                Column('took_time', css_class="col-sm-5 col-md-3"),
+            ),
+            Row(
+                Column('description', css_class="col-sm-6"),
+                Column('result', css_class="col-sm-6"),
+            ),
+            'small',
+            Row(
+                Column(
+                    Submit('submit', 'Сохранить', css_class="btn btn-primary mt-3 fs-5"),
+                    css_class="col-auto",
+                ),
+                Column(
+                    HTML("""<a class="btn btn-secondary mt-3 fs-5" href="{{request.META.HTTP_REFERER}}">Выйти без сохранения</a>"""),
+                ),
+                css_class="d-flex flex-row",
+            ),
         )
 
 

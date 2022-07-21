@@ -112,7 +112,7 @@ class Event(models.Model):
     date = models.DateField(blank=True, null=True, default=timezone.localtime, verbose_name='Дата')
     time = models.TimeField(blank=True, null=True, default=timezone.localtime, verbose_name='Время')
     invited_persons = models.ManyToManyField(User, blank=True, verbose_name='Приглашенные сотрудники')
-    took_time = models.IntegerField(blank=True, null=True, verbose_name='Затраченное время в секундах')
+    took_time = models.IntegerField(blank=True, null=True, verbose_name='Затраченное время')
     result = models.TextField(blank=True, null=True, verbose_name='Результат')
     author = models.ForeignKey(
         User,
