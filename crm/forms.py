@@ -10,7 +10,7 @@ from .busines_logic.phone_standartizator import get_standart_phone
 BUTTON_BLOCK = Row(
     Column(Submit('submit', 'Сохранить', css_class="btn btn-primary mt-3 fs-5"), css_class="col-auto"),
     Column(HTML("""<a class="btn btn-secondary mt-3 fs-5" href="{{request.META.HTTP_REFERER}}">Выйти без сохранения</a>""")),
-    css_class="d-flex flex-row")
+    css_class="d-flex flex-row mb-5")
 
 
 class ContactAddForm(forms.ModelForm):
@@ -18,6 +18,7 @@ class ContactAddForm(forms.ModelForm):
     class Meta:
         model = Contact
         fields = ('first_name', 'second_name', 'last_name', 'email', 'phone', 'additional_info')
+        widgets = {'additional_info': forms.Textarea(attrs={'rows': 4})}
 
     def clean_phone(self):
         """will return stardart phone number or raise error"""
@@ -109,10 +110,37 @@ class ProjectAddForm(forms.ModelForm):
             'summary',
         )
         widgets = {
-            'full_name': forms.Textarea,
-            'start_date': forms.SelectDateWidget,
-            'end_date': forms.SelectDateWidget,
+            'start_date': forms.DateInput(attrs={'class': 'datepicker'}),
+            'end_date': forms.DateInput(attrs={'class': 'datepicker'}),
+            'description': forms.Textarea(attrs={'rows': 4}),
+            'summary': forms.Textarea(attrs={'rows': 4}),
         }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.layout = Layout(
+            'name',
+            'full_name',
+            Row(
+                Column('start_date', css_class='col-md-4 me-3'),
+                Column('end_date', css_class='col-md-4 me-3'),
+            ),
+            Row(
+                Column('grant', css_class='w-45'),
+                Column('full_cost', css_class='w-45'),
+            ),
+            Row(
+                Column('project_deliver', css_class='w-30'),
+                Column('company', css_class='w-30'),
+                Column('contacts', css_class='w-30'),
+            ),
+            Row(
+                Column('description', css_class='col-md-6'),
+                Column('summary', css_class='col-md-6'),
+            ),
+            BUTTON_BLOCK,
+        )
 
 
 class ProjectUpdateForm(forms.ModelForm):
@@ -173,7 +201,11 @@ class EventSmallAddForm(forms.ModelForm):
     class Meta:
         model = Event
         fields = ('category', 'description', 'date', 'time', 'took_time', 'result', 'small')
-        widgets = {'date': forms.DateInput(attrs={'class': 'datepicker'})}
+        widgets = {
+            'date': forms.DateInput(attrs={'class': 'datepicker'}),
+            'description': forms.Textarea(attrs={'rows': 4}),
+            'result': forms.Textarea(attrs={'rows': 4}),
+        }
         help_texts = {'time': 'чч:мм', 'took_time': 'В секундах'}
 
     def __init__(self, *args, **kwargs):
@@ -200,7 +232,11 @@ class MultipleEventAddForm(forms.ModelForm):
     class Meta:
         model = Event
         fields = ('projects', 'category', 'description', 'date', 'time', 'result', 'small')
-        widgets = {'date': forms.DateInput(attrs={'class': 'datepicker'})}
+        widgets = {
+            'date': forms.DateInput(attrs={'class': 'datepicker'}),
+            'description': forms.Textarea(attrs={'rows': 4}),
+            'result': forms.Textarea(attrs={'rows': 4}),
+        }
         help_texts = {'time': 'чч:мм'}
 
     def clean_date(self):
@@ -222,7 +258,11 @@ class EventUpdateForm(forms.ModelForm):
     """Form for event update"""
     class Meta:
         model = Event
-        widgets = {'date': forms.DateInput(attrs={'class': 'datepicker'})}
+        widgets = {
+            'date': forms.DateInput(attrs={'class': 'datepicker'}),
+            'description': forms.Textarea(attrs={'rows': 4}),
+            'result': forms.Textarea(attrs={'rows': 4}),
+        }
         fields = (
             'projects',
             'category',
