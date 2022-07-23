@@ -418,6 +418,9 @@ def event_update_view(request, event_id):
         if form.is_valid():
             data_update.event_details_update(event_id, form.cleaned_data)
             return HttpResponseRedirect(reverse('events'))
+        print(form.errors.as_data())
+        ctx['error'] = 'Got errors'
+        ctx['form'] = EventUpdateForm(request.POST)
         return render(request, 'crm/event_add.html', ctx)
     return render(request, 'crm/event_add.html', ctx)
 

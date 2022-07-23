@@ -262,6 +262,7 @@ class EventUpdateForm(forms.ModelForm):
             'date': forms.DateInput(attrs={'class': 'datepicker'}),
             'description': forms.Textarea(attrs={'rows': 4}),
             'result': forms.Textarea(attrs={'rows': 4}),
+            'projects': forms.SelectMultiple(attrs={'size': 1}),
         }
         fields = (
             'projects',
@@ -278,7 +279,10 @@ class EventUpdateForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.layout = Layout(
-            Column('category', css_class="col-md-5"),
+            Row(
+                Column('category', css_class="col-md-4"),
+                Column('projects', css_class="col-md-4"),
+            ),
             Row(
                 Column('date', css_class="col-sm-4 col-md-3 me-3"),
                 Column('time', css_class="col-sm-3 me-3"),
@@ -327,11 +331,14 @@ class TaskAddForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.layout = Layout(
-            'name',
             Row(
-                Column('start_date', css_class='col-md-4 me-2'),
-                Column('end_date', css_class='col-md-4 me-2'),
-                Column('doer', css_class='col-md-3 me-2'),
+                Column('name', css_class='w-50'),
+                Column('event', css_class='w-50'),
+            ),
+            Row(
+                Column('start_date', css_class='w-30'),
+                Column('end_date', css_class='w-30'),
+                Column('doer', css_class='w-30'),
             ),
             'description',
             BUTTON_BLOCK,
