@@ -418,7 +418,6 @@ def event_update_view(request, event_id):
         if form.is_valid():
             data_update.event_details_update(event_id, form.cleaned_data)
             return HttpResponseRedirect(reverse('events'))
-        print(form.errors.as_data())
         ctx['error'] = 'Got errors'
         ctx['form'] = EventUpdateForm(request.POST)
         return render(request, 'crm/event_add.html', ctx)
@@ -440,6 +439,9 @@ def event_task_add_view(request, event_id):
             task.save()
             TaskStatus.objects.create(status='NEW', task=task)
             return HttpResponseRedirect(reverse('event_details', kwargs={'event_id': event.id}))
+        ctx = {
+            'form': form,
+        }
         return render(request, 'crm/task_add.html', ctx)
     return render(request, 'crm/task_add.html', ctx)
 
