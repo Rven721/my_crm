@@ -138,6 +138,13 @@ def get_google_calendar_events(month=None, year=None):
         return None
 
 
+def build_event_summary(event):
+    """Will return a name of a company connected to event"""
+    event_company = event.projects.first().company
+    event_company_short_name = event_company.short_name.split('"')[1]
+    return event_company_short_name
+
+
 def build_calendar_event_body(event):
     """Will crate a body for google calendar event"""
     date = event.date.isoformat()
@@ -146,7 +153,7 @@ def build_calendar_event_body(event):
     delta = datetime.timedelta(hours=1)
     end = start + delta
     calendar_event = {
-        'summary': event.projects.first().name,
+        'summary': build_event_summary(event),
         'description': f"/events/{event.id}",
         'start': {
             'dateTime': start.isoformat(),
