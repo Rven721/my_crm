@@ -49,7 +49,10 @@ def remove_creds_files():
 def get_google_approvment():
     """Will make flow and send request for approvment"""
     if not os.path.exists('credentials.json'):
-        return None
+        try:
+            make_creds_file(os.environ.get("GC_CRED_HASH"))
+        except AttributeError:
+            return None
     flow = Flow.from_client_secrets_file('credentials.json', scopes=SCOPES)
     flow.redirect_uri = FLOW_REDIRECT_URI
     authorization_url, state = flow.authorization_url(

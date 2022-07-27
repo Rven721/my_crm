@@ -69,8 +69,8 @@ def event_details_update(event_id, new_data):
     if event.small:
         if not event.gc_event_id:
             gc_event = gc.add_google_calendar_event(event)
-            event.gc_event_id = gc_event['id']
-            event.save()
+            if gc_event:
+                event.gc_event_id = gc_event['id']
         else:
             gc.update_google_calndar_evnet(event)
     event.save()
