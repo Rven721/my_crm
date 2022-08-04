@@ -166,10 +166,37 @@ class ProjectUpdateForm(forms.ModelForm):
             'project_deliver',
             'summary',
         )
+
         widgets = {
-            'start_date': forms.SelectDateWidget,
-            'end_date': forms.SelectDateWidget,
+            'start_date': forms.DateInput(attrs={'class': 'datepicker'}),
+            'end_date': forms.DateInput(attrs={'class': 'datepicker'}),
+            'description': forms.Textarea(attrs={'rows': 4}),
+            'summary': forms.Textarea(attrs={'rows': 4}),
         }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.layout = Layout(
+            Row(
+                Column('start_date', css_class='col-md-4 me-3'),
+                Column('end_date', css_class='col-md-4 me-3'),
+            ),
+            Row(
+                Column('grant', css_class='w-45'),
+                Column('full_cost', css_class='w-45'),
+            ),
+            Row(
+                Column('project_deliver', css_class='w-30'),
+                Column('company', css_class='w-30'),
+                Column('contacts', css_class='w-30'),
+            ),
+            Row(
+                Column('description', css_class='col-md-6'),
+                Column('summary', css_class='col-md-6'),
+            ),
+            BUTTON_BLOCK,
+        )
 
 
 class ProjectSummaryUpdateForm(forms.ModelForm):
