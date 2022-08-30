@@ -37,8 +37,10 @@ def make_debt_calculateon(debts):
         result = debtors[creditor] - creditors[creditor]
         if result > 0:
             results['debtors'][creditor] = abs(result)
-        else:
+        if result < 0:
             results['creditors'][creditor] = abs(result)
+        else:
+            next
     return results
 
 def get_opt_debts_payers(debts_data):

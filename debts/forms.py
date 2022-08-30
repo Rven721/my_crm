@@ -45,7 +45,6 @@ class TranshForm(forms.ModelForm):
                 Column('date', css_class='w-30'),
                 Column('charge', css_class='w-30'),
             ),
-            'return_required',
             BUTTON_BLOCK,
         )
 
