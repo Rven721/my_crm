@@ -9,6 +9,7 @@ BUTTON_BLOCK = Row(
     Column(HTML("""<a class="btn btn-secondary mt-3 fs-5" href="{{request.META.HTTP_REFERER}}">Выйти без сохранения</a>""")),
     css_class="d-flex flex-row mb-5")
 
+
 class PersonForm(forms.ModelForm):
     """Form to add new person"""
     class Meta:
@@ -20,7 +21,7 @@ class ExpenseForm(forms.ModelForm):
     """Form to add new expense"""
     class Meta:
         model = Expense
-        fields = ('name', 'comment',)
+        fields = ('name', 'comment')
 
 
 class TranshForm(forms.ModelForm):
@@ -28,7 +29,7 @@ class TranshForm(forms.ModelForm):
     class Meta:
         model = Transh
         fields = ('payer', 'receiver', 'expense', 'date', 'charge', 'return_required')
-        widgets = {'date': forms.DateInput(attrs={'class': 'datepicker'}),}
+        widgets = {'date': forms.DateInput(attrs={'class': 'datepicker'})}
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -42,7 +43,7 @@ class TranshForm(forms.ModelForm):
             Row(
                 Column('expense', css_class='w-30'),
                 Column('date', css_class='w-30'),
-                Column('cahrge', css_class='w-30'),
+                Column('charge', css_class='w-30'),
             ),
             'return_required',
             BUTTON_BLOCK,
