@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block title %}
+Новое основание
+{% endblock %}
+{% block content %}
+<div class="container w-75">
+    <h3 class="m-3 text-center">Заполните форму</h3>
+    <form method="post">
+      {% csrf_token %}
+      {{form.as_p}}
+      <input class="btn btn-primary" type="submit" value="Сохранить">
+    </form>
+</div>
+{% endblock %}

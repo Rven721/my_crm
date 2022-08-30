@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% block title %} 
+    Список долгов
+{% endblock %}
+{% block content %}
+<div class="container w-75">
+  <h3 class="text-center">Список долгов</h3>
+  <div class="container text-center mt-3">
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col"><a class="{% if order_by == 'debtor' %}link-danger{% else %} link-dark {% endif %}" href="?order_by=debtor">Должник</a></th>
+          <th scope="col"><a class="{% if order_by == 'creditor' %}link-danger{% else %} link-dark {% endif %}"href="?order_by=creditor">Кредитор</a></th>
+          <th scope="col"><a class="{% if order_by == 'charge' %}link-danger{% else %} link-dark {% endif %}"href="?order_by=charge">Сумма</a></th>
+        </tr>
+      </thead>
+      <tbody>
+      {% for debt in debts %}
+        {% if debt.charge > 0 %}
+          <tr>
+            <td>{{debt.debtor.name}}</td>
+            <td>{{debt.creditor.name}}</td>
+            <td>{{debt.charge}}</td>
+          </tr>
+        {% endif %}
+      {% endfor %}    
+      </tbody>
+    </table>
+  </div>
+  <div class="container mt-5 text-center">
+    <a class="btn btn-outline-success" href="{% url 'new_transh' %}">Новый транш</a>
+    <a class="btn btn-outline-secondary" href="{% url 'payment_order' %}">Порядок оплаты</a>
+  </div>
+</div>
+{% endblock %}

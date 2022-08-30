@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% block title %} 
+  Новый пееревод
+{% endblock %}
+{% block content %}
+<div class="container w-75">
+  <h3 class="m-3 text-center">Новый перевод</h3>
+  {% crispy form %}
+</div>
+{% endblock %}

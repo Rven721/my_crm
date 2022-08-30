@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block title %} 
+{% endblock %}
+{% block content %}
+<div class='container mt-4'>
+  <p>Перевод на сумму {{transh.charge}}</p>
+  <p>Плательщик: {{transh.payer}}</p>
+  <p>Плучатель: {{transh.receiver}}</p>
+  <p>Требуется возврат: {% if transh.return_required %}Да{% else %}Нет{% endif %}</p>
+</div>
+{% endblock %}

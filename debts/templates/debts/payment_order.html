@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block title %} 
+Время расплаты
+{% endblock %}
+{% block content %}
+<div class='container mt-4'>
+    <h3 class="m-3 text-center">Порядок возврата</h3>
+    {% autoescape off %}
+    {{ payment_order }}
+    {% endautoescape %}
+</div>
+{% endblock %}

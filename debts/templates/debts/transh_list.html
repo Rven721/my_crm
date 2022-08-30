@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% block title %}Список траншей{% endblock %}
+{% block content %}
+<div class="container w-75">
+  <h3 class="text-center my-3">Список переводов</h3>
+  <div class="contaitabner">
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <th scope="col">Плательщик</th>
+            <th scope="col">Получаетль</th>
+            <th scope="col" class="d-none d-md-table-cell">Расход</th>
+            <th scope="col" class="d-none d-md-table-cell">Дата</th>
+            <th scope="col">Сумма</th>
+            <th scope="col">Действие</th>
+          </tr>
+        </thead>
+        <tbody>
+        {% for transh in transh_list %} 
+        <tr>
+          <td>{{transh.payer.name}}</td> 
+          <td>{{transh.receiver.name}}</td> 
+          <td>{{transh.expense.name}}</td> 
+          <td><a class="text-reset" href="{% url 'transhes_on_date' transh.date.day transh.date.month transh.date.year %}">{{transh.date}}</a></td> 
+          <td>{{transh.charge}}</td> 
+          <td class="decoration-none"><a class="text-reset" href="{% url 'new_transh' %}?transh_id={{transh.id}}">сопировать</a></td>
+        </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block title %} 
+{% endblock %}
+{% block content %}
+<div class="container mt-4 w-75">
+  <h3 class="m-3 text-center">Платеж успешно сохранен</h3>
+  <div class="d-flex flex-column flex-lg-row justify-content-evenly">
+    <a class="btn btn-success m-3" href="{% url 'new_transh' %}">Добавить новый</a>
+    <a class="btn btn-warning m-3" href="{% url 'new_transh' %}?transh_id={{transh_id}}">Скопировать транш</a>
+    <a class="btn btn-secondary m-3" href="{% url 'debt_list' %}">К списку долгов</a>
+  </div>
+</div>
+{% endblock %}
