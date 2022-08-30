@@ -22,4 +22,5 @@ urlpatterns = [
     path('accounts/', include('account.urls')),
     path('calendar/', include('cal.urls')),
     path('smeta/', include('smeta.urls')),
+    path('debts/', include('debts.urls')),
 ]

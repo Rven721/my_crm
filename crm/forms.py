@@ -39,8 +39,8 @@ class ContactAddForm(forms.ModelForm):
             Row(
                 Column('email', css_class='col-md-6'),
                 Column('phone', css_class='col-md-6'),
+                Column('additional_info', css_class='col-md-6')
             ),
-            'additional_info',
             BUTTON_BLOCK,
         )
 

@@ -69,6 +69,14 @@
           <li class="nav-item">
             <a class="nav-link" href="{% url 'contacts' %}">Контакты</a>
           </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" role="button"  aria-expanded="false">Долги</a>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="{% url 'debts' %}">Долги</a></li>
+              <li><a class="dropdown-item" href="{% url 'transh_list' %}">Транши</a></li>
+              <li><a class="dropdown-item" href="{% url 'payment_order'%}">Порядок оплаты</a></li>
+            </ul>
+          </li>
         </ul>
       </div>
     </div>

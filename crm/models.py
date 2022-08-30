@@ -126,7 +126,7 @@ class Event(models.Model):
     gc_event_id = models.CharField(max_length=100, blank=True)
 
     def __str__(self):
-        return f'{self.get_category_display()}, {self.projects.all()[0]} {self.date}'
+        return f'{self.get_category_display()}, {self.date}'
 
     class Meta:
         verbose_name = 'Событие'
@@ -148,8 +148,8 @@ class Task(models.Model):
     name = models.CharField(max_length=120, verbose_name='Задача')
     start_date = models.DateTimeField(default=timezone.localtime, verbose_name='Дата начала')
     end_date = models.DateTimeField(default=timezone.localtime, verbose_name='Дата окончания')
-    doer = models.ForeignKey(User, on_delete=models.PROTECT, related_name="tasks", blank=True, null=True, verbose_name='Исполнители')
-    event = models.ForeignKey(Event, on_delete=models.PROTECT, related_name="tasks", blank=True, null=True, verbose_name='События')
+    doer = models.ForeignKey(User, on_delete=models.CASCADE, related_name="tasks", blank=True, null=True, verbose_name='Исполнители')
+    event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name="tasks", blank=True, null=True, verbose_name='События')
     description = models.TextField(blank=True, verbose_name='Дополнительные данные')
 
     def __str__(self):
@@ -200,7 +200,7 @@ class TaskStatus(models.Model):
 
 class RoadMap(models.Model):
     """A road map with milstones on a givvn project"""
-    project = models.ForeignKey(Project, on_delete=models.PROTECT, related_name='roadmap', verbose_name='Проект')
+    project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='roadmap', verbose_name='Проект')
     kick_off_meeting = models.BooleanField(default=False, verbose_name="Установочная встреча")
     contract = models.BooleanField(default=False, verbose_name="Договор")
     to_do_list = models.BooleanField(default=False, verbose_name="To-Do List")

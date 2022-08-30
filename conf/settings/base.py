@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'account.apps.AccountConfig',
     'cal.apps.CalConfig',
     'smeta.apps.SmetaConfig',
+    'debts.apps.DebtsConfig',
 ]
 
 MIDDLEWARE = [
