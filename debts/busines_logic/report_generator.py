@@ -5,7 +5,7 @@ def form_report(report):
     """Will give a form to pyment_order_report"""
     output = ""
     if len(report) == 0:
-        output += '<div class="alert alert-success" role="alert">Все долги зактыры</div>'
+        output += '<div class="alert alert-success" role="alert">Все долги погашены</div>'
         return output
     for debtor in report:
         output += f"<p class='mb-3'><strong>Должник - {debtor}:</strong><br>"

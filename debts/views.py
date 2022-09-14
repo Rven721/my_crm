@@ -1,5 +1,6 @@
 """Here will be veiews for debts app"""
 from datetime import date
+from django.core.paginator import Paginator
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from debts.models import Person, Expense, Transh, Debt
@@ -58,7 +59,10 @@ def transh_list_view(request, day=None, month=None, year=None):
     if day and month and year:
         target_date = date(day=day, month=month, year=year)
         transh_list = transh_list.filter(date=target_date)
-    return render(request, 'debts/transh_list.html', {'transh_list': transh_list})
+    paginator = Paginator(transh_list, 7)
+    page_number = request.GET.get('page')
+    page_object = paginator.get_page(page_number)
+    return render(request, 'debts/transh_list.html', {'page_object': page_object})
 
 
 @login_required
