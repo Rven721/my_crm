@@ -1,11 +1,5 @@
-import os
-import django
-
-os.environ['DJANGO_SETTINGS_MODULE'] = 'conf.settings.base'
-django.setup()
-
-
 from crm.models import Project
+
 
 ORDERING = {
     'name': 'name',
@@ -33,11 +27,15 @@ def project_list_filter(order_by='name', company=None, project_deliver=None, pro
                 result.remove(project)
     res = []
     for project in result:
+        try:
+            company_name = project.company.short_name
+        except AttributeError:
+            company_name = r'"Не определено'
         if len(project.events.all()) > 0:
             res.append({
                 'id': project.id,
                 'name': project.name,
-                'company_name': project.company.short_name,
+                'company_name': company_name,
                 'summary': project.summary,
                 'last_event_date': project.events.order_by('-date')[0].date,
             })
@@ -45,7 +43,7 @@ def project_list_filter(order_by='name', company=None, project_deliver=None, pro
             res.append({
                 'id': project.id,
                 'name': project.name,
-                'company_name': project.company.short_name,
+                'company_name': company_name,
                 'summary': project.summary,
                 'last_event_date': None,
             })
