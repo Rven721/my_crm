@@ -215,7 +215,7 @@ def project_list_view(request):
 
 @login_required
 def project_list_dates_view(request):
-    project_list = Project.objects.all()
+    project_list = Project.objects.all().order_by('start_date')
     project_list = [project for project in project_list if project.statuses.last().status == "progress"]
     ctx = {
         'project_list': project_list,

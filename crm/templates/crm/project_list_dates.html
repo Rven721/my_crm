@@ -36,7 +36,11 @@
             {% else %}
             <td class='event-list col-lg-5 d-none d-md-table-cell'><a href="{% url 'project_summary_update' project.id %}">{{project.summary}}</a></td>
             {% endif %}
-            <td class='text-danger d-none d-sm-table-cell'>{{project.start_date}}</td>
+            {% if project.start_date|check_timespread %}
+                <td class='text-danger d-none d-sm-table-cell'>{{project.start_date}}</td>
+            {% else %}
+                <td class='d-none d-sm-table-cell'>{{project.start_date}}</td>
+            {% endif %}
           </tr>
           {% endfor %}
         </tbody>
