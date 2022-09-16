@@ -1,0 +1,47 @@
+{% extends 'base.html'%}
+{% load crispy_forms_tags %}
+{% load shortest_company_name %}
+{% load check_timespread %}
+{% load undone_task_checker %}
+{% load get_last_date %}
+
+{% block title %}Список проектов{% endblock %}
+{% block content %}
+<div class="container mt-3">
+  <h2 class="text-center mt-3">Список проектов</h2>
+  <div class="container d-flex flex-column flex-xl-row mt-5">
+    <div class="container me-5 ">
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">   </th>
+            <th class="event-list" scope="col"><a href="?order_by=name">Проект</a></th> 
+            <th class="event-list" scope="col"><a href="?order_by=company">Компания</a></th>
+            <th class="d-none col-lg-5 d-md-table-cell" scope="col">Состояние</th>
+            <th class="d-none d-sm-table-cell event-list" scope="col"><a href="?order_by=event_date_rev">Начало проекта</a></th>
+          </tr>      
+        </thead>
+        <tbody>
+          {% for project in project_list %}
+          <tr>
+            {% if project.id|has_undone_tasks %}
+              <td><i class="bi bi-exclamation-square text-danger"></i></td>
+            {% else %}
+              <td><i class="bi bi-check-square text-success"></i></td>
+            {% endif %}
+            <td><a href="{% url 'project_details' project.id %}">{{project.name}}</a></td>
+            <td>{{ project.company.short_name|get_shortest_company_name}}</td>
+            {% if project.summary == "" %}
+            <td class='event-list col-lg-5 d-none d-md-table-cell'><a href="{% url 'project_summary_update' project.id %}">Добавить</a></td>
+            {% else %}
+            <td class='event-list col-lg-5 d-none d-md-table-cell'><a href="{% url 'project_summary_update' project.id %}">{{project.summary}}</a></td>
+            {% endif %}
+            <td class='text-danger d-none d-sm-table-cell'>{{project.start_date}}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+{% endblock %}

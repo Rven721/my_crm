@@ -214,6 +214,17 @@ def project_list_view(request):
 
 
 @login_required
+def project_list_dates_view(request):
+    project_list = Project.objects.all()
+    project_list = [project for project in project_list if project.statuses.last().status == "progress"]
+    ctx = {
+        'project_list': project_list,
+        'cur_date': datetime.now().date(),
+    }
+    return render(request, 'crm/project_list_dates.html', ctx)
+
+
+@login_required
 def project_details_view(request, project_id):
     project = Project.objects.get(id=project_id)
     events = project.events.all().order_by('-date', '-time')
