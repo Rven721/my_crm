@@ -1,5 +1,4 @@
 """A logic to create a form of report on debts"""
-from debts.models import Person
 
 
 def form_report(report):
@@ -9,9 +8,8 @@ def form_report(report):
         output += '<div class="alert alert-success" role="alert">Все долги погашены</div>'
         return output
     for debtor in report:
-        output += f"<p class='my-3'><strong>{debtor}:</strong><br>"
+        output += f"<p class='mb-3'><strong>Должник - {debtor}:</strong><br>"
         for creditor, charge in report[debtor].items():
-            cred_name = Person.objects.get(name=creditor)
-            output += f"<span>{cred_name.name_in_dat} - {charge}</span><br>"
+            output += f"<span>{creditor.} - {charge}</span><br>"
         output += "</p>"
     return output

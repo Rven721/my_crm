@@ -6,6 +6,7 @@ from django.db import models
 class Person(models.Model):
     """A class for person who can bee a creditr or a debtor"""
     name = models.CharField(max_length=30, verbose_name="Имя", unique=True)
+    name_in_dat = models.CharField(max_length=30, default=str(name) + '_dat', verbose_name="Имя в дательном падеже")
 
     def __str__(self):
         return self.name
