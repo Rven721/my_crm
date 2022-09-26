@@ -86,6 +86,8 @@ def transh_add_view(request):
     if request.GET.get('transh_id'):
         template_transh = Transh.objects.get(pk=request.GET['transh_id'])
         form = TranshForm(instance=template_transh)
+    elif request.GET.get('charge'):
+        form = TranshForm(tp.get_close_transh_data(request.GET))
     else:
         form = TranshForm()
     return render(request, 'debts/new_transh.html', {'form': form})

@@ -1,7 +1,8 @@
 """Some logic to work with debts"""
+from datetime import date
 from decimal import Decimal
 from django.core.exceptions import ObjectDoesNotExist
-from debts.models import Person, Expense, Transh, Debt
+from debts.models import Person, Expense, Debt
 
 
 def add_debt(transh, charge=None):
@@ -36,3 +37,18 @@ def proceed_transh(transh):
             debt.save()
     except ObjectDoesNotExist:
         add_debt(transh)
+
+
+def get_close_transh_data(request_data):
+    """Will return a dict with data to pre-populate transh form required to close one debt"""
+    creditor = Person.objects.get(id=request_data['cred'])
+    debtor = Person.objects.get(id=request_data['deb'])
+    charge = request_data['charge']
+    form_data = {
+        'payer': debtor,
+        'receiver': creditor,
+        'expense': Expense.objects.get(name='Возврат'),
+        'date': date.today(),
+        'charge': charge,
+    }
+    return form_data
