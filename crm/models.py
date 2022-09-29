@@ -53,6 +53,18 @@ class Company(models.Model):
         verbose_name_plural = 'Компании'
 
 
+class Tag(models.Model):
+    """Tag for project"""
+    name = models.CharField(max_length=15, verbose_name="Тэг")
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = "Тэг"
+        verbose_name_plural = "Тэги"
+
+
 class Project(models.Model):
     name = models.CharField(max_length=500, unique=True, verbose_name='Короткое название проекта')
     full_name = models.CharField(max_length=500, unique=True, blank=True, verbose_name='Полное название проекта')
@@ -65,6 +77,7 @@ class Project(models.Model):
     contacts = models.ManyToManyField(Contact, related_name='projects', verbose_name='Контакты', blank=True)
     project_deliver = models.ForeignKey(ProjectDeliver, related_name='projects', on_delete=models.PROTECT, blank=True, null=True, verbose_name='Источник проекта')
     summary = models.TextField(blank=True, verbose_name='Краткий статус')
+    tags = models.ManyToManyField(Tag, related_name='tags', verbose_name='Тэги', blank=True)
 
     def __str__(self):
         return self.name

@@ -1,5 +1,5 @@
 from django.contrib import admin
-from crm.models import Contact, Company, Project, Status, Event, Task, ProjectDeliver, Document, RoadMap, TaskStatus
+from crm.models import Contact, Company, Project, Status, Event, Task, ProjectDeliver, Document, RoadMap, TaskStatus, Tag
 
 
 @admin.register(Contact)
@@ -18,6 +18,12 @@ class CompanyAdmin(admin.ModelAdmin):
 class ProjectAdmin(admin.ModelAdmin):
     """Class for project model administration"""
     pass
+
+
+@admin.register(Tag)
+class TagAdmin(admin.ModelAdmin):
+    """Class for tag model administration"""
+    ordering = ("name", )
 
 
 @admin.register(RoadMap)
