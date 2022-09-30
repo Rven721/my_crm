@@ -8,7 +8,7 @@ from django.db.models import Q
 from django.utils.encoding import uri_to_iri
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
-from crm.models import Contact, Company, Project, Status, Event, Task, ProjectDeliver, TaskStatus, RoadMap
+from crm.models import Contact, Company, Project, Status, Event, Task, ProjectDeliver, TaskStatus, RoadMap, Tag
 from crm.forms import ContactAddForm,\
     CompanyAddForm,\
     ProjectAddForm,\
@@ -27,7 +27,8 @@ from crm.forms import ContactAddForm,\
     EventTaskAddForm, \
     TaskStatusChangeForm, \
     DoerChooseForm, \
-    RoadMapForm
+    RoadMapForm, \
+    TagForm
 from crm.busines_logic import data_update
 from crm.busines_logic.company_data_dadata import get_company_data
 from crm.busines_logic.my_calendar import get_request_date
@@ -550,6 +551,39 @@ def task_update(request, task_id):
             return HttpResponseRedirect(reverse(task_list_view))
     form = TaskAddForm(instance=task)
     return render(request, 'crm/task_add.html', {'form': form})
+
+
+@login_required
+def tag_add_view(request):
+    if request.method == "POST":
+        form = TagForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse(tag_list_view))
+        return render(request, 'crm/tag_add.html', {'form': form})
+    form = TagForm()
+    return render(request, 'crm/tag_add.html', {'form': form})
+
+
+@login_required
+def tag_update_view(request, tag_id):
+    tag = Tag.objects.get(id=tag_id)
+    if request.method == "POST":
+        form = TagForm(request.POST)
+        if form.is_valid():
+            tag.name = form.cleaned_data['name']
+            tag.save()
+            return HttpResponseRedirect(reverse(tag_list_view))
+        return render(request, 'crm/tag_update.html', {'form': form})
+    form = TagForm(instance=tag)
+    return render(request, 'crm/tag_update.html', {'form': form})
+
+
+@login_required
+def tag_list_view(request):
+    tags = Tag.objects.all()
+    ctx = {"tags": tags}
+    return render(request, 'crm/tag_list.html', ctx)
 
 
 def test(request):
