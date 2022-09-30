@@ -4,7 +4,7 @@ from django import forms
 from django.utils import timezone
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Row, Column, Submit, HTML
-from .models import Contact, Company, Project, Status, Event, ProjectDeliver, Task, TaskStatus, RoadMap
+from .models import Contact, Company, Project, Status, Event, ProjectDeliver, Task, TaskStatus, RoadMap, Tag
 from .busines_logic.phone_standartizator import get_standart_phone
 
 BUTTON_BLOCK = Row(
@@ -39,10 +39,18 @@ class ContactAddForm(forms.ModelForm):
             Row(
                 Column('email', css_class='col-md-6'),
                 Column('phone', css_class='col-md-6'),
-                Column('additional_info', css_class='col-md-6')
+                Column('additional_info', css_class='col-md-6'),
             ),
             BUTTON_BLOCK,
         )
+
+
+class TagForm(forms.ModelForm):
+    """From for new tag add"""
+
+    class Meta:
+        model = Tag
+        fields = ("name",)
 
 
 class ContactSearchForm(forms.Form):

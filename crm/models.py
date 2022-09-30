@@ -55,14 +55,14 @@ class Company(models.Model):
 
 class Tag(models.Model):
     """Tag for project"""
-    name = models.CharField(max_length=15, verbose_name="Тэг")
+    name = models.CharField(max_length=15, verbose_name="Тэг", unique=True)
 
     def __str__(self):
         return self.name
 
     class Meta:
-        verbose_name = "Тэг"
-        verbose_name_plural = "Тэги"
+        verbose_name = "Тег"
+        verbose_name_plural = "Теги"
 
 
 class Project(models.Model):

@@ -47,9 +47,28 @@
   </div>
 </div>
 <div class="container d-flex my-3">
-  <div class="container d-flex flex-column border py-3">
+  <div class="container d-flex flex-column border py-2">
     <h5><a href="{% url 'project_summary_update' project.id %}">Текущий статус:<a></h5>
     <p>{{project.summary}}</p>
+  </div>
+</div>
+<div class="container d-flex my-3">
+  <div class="container d-flex flex-column border py-2">
+    <h5>Тeги:<a></h5>
+    {% for tag in project.tags.all %}j
+      <div class="container">
+        <div class="row">
+          <div class="col">
+            <p>tag</p>
+          </div>
+          <div class="col">
+            <a href="#"><i class="text-success fs-4 bi bi-plus"></i></a>
+          </div> 
+        </div>
+      </div>
+    {% empty %}
+      <a href="#"><i class="text-success fs-4 bi bi-plus"></i></a>
+    {% endfor %}
   </div>
 </div>
 <div class="container d-flex my-3">
