@@ -4,6 +4,7 @@ from django import forms
 from django.utils import timezone
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Row, Column, Submit, HTML
+from crispy_forms.bootstrap import FieldWithButtons, StrictButton
 from .models import Contact, Company, Project, Status, Event, ProjectDeliver, Task, TaskStatus, RoadMap, Tag
 from .busines_logic.phone_standartizator import get_standart_phone
 
@@ -51,6 +52,23 @@ class TagForm(forms.ModelForm):
     class Meta:
         model = Tag
         fields = ("name",)
+
+    def clean_name(self):
+        """Return name in upper case"""
+        return self.cleaned_data["name"].upper()
+
+
+class TagSearchForm(forms.Form):
+    """Form for tag search"""
+    query = forms.CharField(label="Тег")
+
+    def __init__(self, *args, **qwargs):
+        super().__init__(*args, **qwargs)
+        self.helper = FormHelper()
+        self.helper.form_method = "GET"
+        self.helper.layout = Layout(
+            FieldWithButtons('query', Submit(name="submit", value="Искать", css_class="btn btn-success"), input_size="input-group-lg"),
+        )
 
 
 class ContactSearchForm(forms.Form):

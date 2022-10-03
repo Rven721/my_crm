@@ -28,7 +28,8 @@ from crm.forms import ContactAddForm,\
     TaskStatusChangeForm, \
     DoerChooseForm, \
     RoadMapForm, \
-    TagForm
+    TagForm,\
+    TagSearchForm
 from crm.busines_logic import data_update
 from crm.busines_logic.company_data_dadata import get_company_data
 from crm.busines_logic.my_calendar import get_request_date
@@ -554,11 +555,13 @@ def task_update(request, task_id):
 
 
 @login_required
-def tag_add_view(request):
+def tag_add_view(request, project_id=None):
     if request.method == "POST":
         form = TagForm(request.POST)
         if form.is_valid():
             form.save()
+            if project_id:
+                return HttpResponseRedirect(reverse('project_tag_list', kwargs={'project_id': project_id}))
             return HttpResponseRedirect(reverse(tag_list_view))
         return render(request, 'crm/tag_add.html', {'form': form})
     form = TagForm()
@@ -580,9 +583,24 @@ def tag_update_view(request, tag_id):
 
 
 @login_required
-def tag_list_view(request):
-    tags = Tag.objects.all()
-    ctx = {"tags": tags}
+def tag_list_view(request, project_id=None):
+    form = TagSearchForm()
+    current_taggs = None
+    if project_id:
+        current_taggs = Project.objects.get(id=project_id).tags.all().order_by('name')
+        unused_tags = Tag.objects.exclude(id__in=[tag.id for tag in current_taggs]).order_by('name')
+    else:
+        unused_tags = Tag.objects.all()
+    if "query" in request.GET:
+        tag_request = uri_to_iri(request.GET["query"]).upper()
+        unused_tags = unused_tags.filter(name__icontains=tag_request)
+        form = TagSearchForm(request.GET)
+    ctx = {
+        "project_id": project_id,
+        "current_tags": current_taggs,
+        "unused_tags": unused_tags,
+        "tag_search_form": form,
+    }
     return render(request, 'crm/tag_list.html', ctx)
 
 
@@ -592,3 +610,21 @@ def test(request):
         "calendar": calendar.formatmonth(),
     }
     return render(request, 'crm/test.html', ctx)
+
+
+@login_required
+def project_tag_add_view(request, project_id, tag_id):
+    project = Project.objects.get(id=project_id)
+    tag = Tag.objects.get(id=tag_id)
+    project.tags.add(tag)
+    project.save()
+    return HttpResponseRedirect(reverse('project_tag_list', kwargs={'project_id': project_id}))
+
+
+@login_required
+def project_tag_remove_view(request, project_id, tag_id):
+    project = Project.objects.get(id=project_id)
+    tag = Tag.objects.get(id=tag_id)
+    project.tags.remove(tag)
+    project.save()
+    return HttpResponseRedirect(reverse('project_tag_list', kwargs={'project_id': project_id}))

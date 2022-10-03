@@ -5,9 +5,46 @@
 
 {% block content %}
 <h3 class="text-center mt-3">Список тегов</h3>
-<div class="container mt-3">
-  <div class="d-flex justify-content-center">
-    Here should be a list of tags
+  <div class="container d-flex flex-row justify-content-end w-80">
+      {% crispy tag_search_form %}
   </div>
+<div class="container d-flex flex-column">
+  {% if project_id %}
+    <h4 class="mb-3">Используемые теги </h4>
+      <div class="d-flex flex-row mb-5">
+        {% for tag in current_tags %}
+          {% if forloop.counter == current_tags|length %}
+          <span class="fs-5">{{tag.name}} </span><a href="{% url 'project_tag_remove' project_id tag.id %}"><i class="text-danger ms-1 bi bi-eraser"></i></a>
+          {% else %}
+          <span class="me-2 fs-5">{{tag.name}}<a href="{% url 'project_tag_remove' project_id tag.id %}"><i class="text-danger ms-1 bi bi-eraser"></i></a>
+, </span>
+          {% endif %}
+        {% empty %}
+          <p>Не определены</p> 
+        {% endfor %}
+      </div>
+    <h4 class="mb-3">Неиспользуемые теги </h4>
+      <div class="d-flex flex-row">
+        {% for tag in unused_tags %}
+          <a class="link-dark me-3 mb-3 fs-4" href="{% url 'project_tag_add' project_id tag.id %}">{{tag.name}}</a>
+        {% empty %}
+          <div class="mt-2">
+            <h3 class="text-center">Теги не найдены - <a class="text-success" href="{% url 'tag_add_project' project_id %}">добавить</a></h3>
+          </div>
+        {% endfor %}
+      </div>
+      <a href="{% url 'project_details' project_id %}" class="mt-4 col-3 btn btn-outline-secondary">К проекту</a>
+  {% else %}
+    <h4 class="mb-3">Список тегов</h4>
+      <div class="d-flex flex-row">
+        {% for tag in unused_tags %}
+        <a class="link-dark me-3 mb-3 fs-4" href="#">{{tag.name}}</a>
+        {% empty %}
+        <div class="mt-2">
+          <h3 class="text-center">Теги не найдены - <a class="text-success" href="{% url 'tag_add' %}">добавить</a></h3>
+        </div>
+        {% endfor %}
+      </div>
+  {% endif %}
 </div>
 {% endblock %}

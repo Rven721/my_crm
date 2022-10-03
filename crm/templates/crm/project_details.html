@@ -54,21 +54,18 @@
 </div>
 <div class="container d-flex my-3">
   <div class="container d-flex flex-column border py-2">
-    <h5>Тeги:<a></h5>
-    {% for tag in project.tags.all %}j
-      <div class="container">
-        <div class="row">
-          <div class="col">
-            <p>tag</p>
-          </div>
-          <div class="col">
-            <a href="#"><i class="text-success fs-4 bi bi-plus"></i></a>
-          </div> 
-        </div>
-      </div>
-    {% empty %}
-      <a href="#"><i class="text-success fs-4 bi bi-plus"></i></a>
-    {% endfor %}
+    <h5>Тeги:</h5>
+    <div class="d-flex flex-row">
+        {% for tag in project.tags.all %}
+          {% if forloop.counter == project.tags.all|length %}
+          <span>{{tag}}</span><a href="{% url 'project_tag_list' project.id %}"><i class="ms-1 bi bi-plus-square-dotted"></i></a>
+          {% else %}
+          <a href="#" class="text-black text-decoration-none me-1">{{tag}}, </span>
+          {% endif %}
+        {% empty %}
+          <a href="{% url 'project_tag_list' project.id  %}"><i class="text-success fs-4 bi bi-plus"></i></a>
+        {% endfor %}
+    </div>
   </div>
 </div>
 <div class="container d-flex my-3">
