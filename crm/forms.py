@@ -442,8 +442,7 @@ class ProjectTagSelectForm(forms.Form):
     )
     key = forms.ChoiceField(
         choices=[
-            ("any", "Любое совпадение"),
-            ("exact", "Точное совпадение"),
-            ("not_like", "Исключить"),
+            ("any", "По выбраным"),
+            ("not_like", "Без выбраных"),
         ],
     )

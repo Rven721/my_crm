@@ -73,18 +73,19 @@ def parce_request(request):
     return [tags, key]
 
 
+def has_include_tags(project, search_tags):
+    """Will return True if project has all required tags"""
+    proj_tags = {tag.id for tag in project.tags.all()}
+    result = [tag in proj_tags for tag in search_tags]
+    return result
+
+
 def filter_by_tags(request):
     """Will retrun a list of projects with required tags"""
     tags, key = parce_request(request)
     if key == "not_like":
-        projects = list(Project.objects.exclude(tags__in=tags))
-    elif key == "exact":
-        projects = []
-        fit_projects = [project for project in Project.objects.all() if project.tags.count() == len(tags)]
-        for project in fit_projects:
-            if {tag.id for tag in project.tags.all()} == set(tags):
-                projects.append(project)
+        projects = [project for project in Project.objects.all() if not any(has_include_tags(project, tags))]
     else:
-        projects = list(Project.objects.filter(tags__in=tags).distinct())
+        projects = [project for project in Project.objects.all() if len(tags) == has_include_tags(project, tags).count(True)]
     result = create_final_result(projects)
     return result
