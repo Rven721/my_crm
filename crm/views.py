@@ -29,6 +29,7 @@ from crm.forms import ContactAddForm,\
     DoerChooseForm, \
     RoadMapForm, \
     TagForm,\
+    ProjectTagSelectForm, \
     TagSearchForm
 from crm.busines_logic import data_update
 from crm.busines_logic.company_data_dadata import get_company_data
@@ -188,6 +189,7 @@ def project_list_view(request):
     order_by = request.GET.get('order_by', 'name')
     project_list = fitrer_engine.project_list_filter(order_by, project_status="progress")
     form = FilterByCompanyAndSource()
+    tag_form = ProjectTagSelectForm()
     company = None
     project_deliver = None
     project_status = ''
@@ -200,11 +202,15 @@ def project_list_view(request):
             project_deliver = form.cleaned_data['project_deliver']
             project_status = form.cleaned_data['project_status']
             project_list = fitrer_engine.project_list_filter(order_by, company, project_deliver, project_status)
+    if 'tags' in request.GET:
+        project_list = fitrer_engine.filter_by_tags(request)
+        tag_form = ProjectTagSelectForm(request.GET)
     paginator = Paginator(project_list, os.environ.get('STRINGS_ON_PAGE', 5))
     page_number = request.GET.get('page')
     page_object = paginator.get_page(page_number)
     ctx = {
         'form': form,
+        'tags_form': tag_form,
         'company': company,
         'project_deliver': project_deliver,
         'project_status': project_status,

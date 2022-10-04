@@ -4,7 +4,7 @@ from django import forms
 from django.utils import timezone
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Row, Column, Submit, HTML
-from crispy_forms.bootstrap import FieldWithButtons, StrictButton
+from crispy_forms.bootstrap import FieldWithButtons
 from .models import Contact, Company, Project, Status, Event, ProjectDeliver, Task, TaskStatus, RoadMap, Tag
 from .busines_logic.phone_standartizator import get_standart_phone
 
@@ -432,3 +432,18 @@ class EventTaskAddForm(forms.ModelForm):
             'description',
             BUTTON_BLOCK,
         )
+
+
+class ProjectTagSelectForm(forms.Form):
+    """Form for filter project by tags"""
+    tags = forms.ModelMultipleChoiceField(
+        queryset=Tag.objects.all().order_by('name'),
+        widget=forms.CheckboxSelectMultiple,
+    )
+    key = forms.ChoiceField(
+        choices=[
+            ("any", "Любое совпадение"),
+            ("exact", "Точное совпадение"),
+            ("not_like", "Исключить"),
+        ],
+    )

@@ -8,25 +8,9 @@ ORDERING = {
 }
 
 
-def project_list_filter(order_by='name', company=None, project_deliver=None, project_status=None):
-    """will return a list of projects based on given data"""
-    ordering = ORDERING[order_by]
-    result = Project.objects.all()
-    if project_deliver:
-        result = result.filter(project_deliver=project_deliver)
-    if company:
-        result = result.filter(company=company)
-    if project_status:
-        result = list(result)
-        check_list = result.copy()
-        for project in check_list:
-            try:
-                if project.statuses.last().status != project_status:
-                    result.remove(project)
-            except AttributeError:
-                result.remove(project)
+def create_final_result(result_list):
     res = []
-    for project in result:
+    for project in result_list:
         try:
             company_name = project.company.short_name
         except AttributeError:
@@ -47,7 +31,28 @@ def project_list_filter(order_by='name', company=None, project_deliver=None, pro
                 'summary': project.summary,
                 'last_event_date': None,
             })
-    return sorted(res, key=lambda element: (element[ordering] is None, element[ordering]))
+    return res
+
+
+def project_list_filter(order_by='name', company=None, project_deliver=None, project_status=None):
+    """will return a list of projects based on given data"""
+    ordering = ORDERING[order_by]
+    result = Project.objects.all()
+    if project_deliver:
+        result = result.filter(project_deliver=project_deliver)
+    if company:
+        result = result.filter(company=company)
+    if project_status:
+        result = list(result)
+        check_list = result.copy()
+        for project in check_list:
+            try:
+                if project.statuses.last().status != project_status:
+                    result.remove(project)
+            except AttributeError:
+                result.remove(project)
+    result = create_final_result(result)
+    return sorted(result, key=lambda element: (element[ordering] is None, element[ordering]))
 
 
 def get_incomplete_events(events):
@@ -59,3 +64,27 @@ def get_incomplete_events(events):
                 incomplete_events.append(event)
                 break
     return incomplete_events
+
+
+def parce_request(request):
+    """Will parce request with tags"""
+    tags = [int(tag_id) for tag_id in request.GET.getlist('tags')]
+    key = request.GET.get('key')
+    return [tags, key]
+
+
+def filter_by_tags(request):
+    """Will retrun a list of projects with required tags"""
+    tags, key = parce_request(request)
+    if key == "not_like":
+        projects = list(Project.objects.exclude(tags__in=tags))
+    elif key == "exact":
+        projects = []
+        fit_projects = [project for project in Project.objects.all() if project.tags.count() == len(tags)]
+        for project in fit_projects:
+            if {tag.id for tag in project.tags.all()} == set(tags):
+                projects.append(project)
+    else:
+        projects = list(Project.objects.filter(tags__in=tags).distinct())
+    result = create_final_result(projects)
+    return result
