@@ -52,16 +52,17 @@
       </table>
     <!--{% include 'crm/pagination_block.html' %}-->      
     </div>
-    <div class="position-relative">
+    <div class="d-none d-xl-block">
+    <div class="dposition-relative">
         <form class="mt-4" method="get">
           {{tags_form|crispy}}
           <div class="d-flex justify-content-start">
-            <input class="btn btn-outline-success mt-3" type="submit" value="Подобрать">
-            <a class="btn btn-outline-dark mt-3 ms-3 " href="{% url 'projects' %}">Сбросить</a>
+            <input class="btn btn-success mt-2 me-3" type="submit" value="Подобрать">
+            <a class="btn btn-outline-dark mt-2" href="{% url 'projects' %}">Сбросить</a>
           </div>
         </form>
+        <a class="btn d-block btn-outline-primary mt-3 fs-5" href="{% url 'project_add' %}">Добавить проект</a>
       <div class="d-flex flex-column">
-        <a class="btn btn-primary mt-5 fs-5" href="{% url 'project_add' %}">Добавить проект</a>
         <!-- <a class="btn btn-outline-secondary mt-3 fs-5" href={% url 'event_add' %}>Общее событие</a>
         {% if project_status == "" and company.id is None and project_deliver.id is None %}
         <a class="btn btn-outline-success mt-3 fs-5" href="{% url 'project_list_report' %}">Скачать отчет</a>
@@ -91,7 +92,30 @@
           </div>
         </form>
       </div> -->
+      </div>
     </div>
   </div>
+  <div class="d-flex justify-content-end">
+    <button class="d-xl-none d-block mt-3 btn btn-primary fs-5 me-3" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">Меню</button>
+    <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
+      <div class="offcanvas-header">
+        <h5 id="offcanvasRightLabel">Выберите теги</h5>
+        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+      </div>
+      <div class="offcanvas-body">
+        <form class="mt-4" method="get">
+          {{tags_form|crispy}}
+          <div class="d-flex justify-content-start">
+            <input class="btn btn-success mt-2 me-3" type="submit" value="Подобрать">
+            <a class="btn btn-outline-dark mt-2" href="{% url 'projects' %}">Сбросить</a>
+          </div>
+        </form>
+        <a class="btn btn-outline-primary mt-3 fs-5" href="{% url 'project_add' %}">Добавить проект</a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
 </div>
 {% endblock %}
