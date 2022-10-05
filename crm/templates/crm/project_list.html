@@ -10,7 +10,8 @@
 {% block content %}
 <div class="container mt-3">
   <h2 class="text-center mt-3">Список проектов</h2>
-  <div class="d-flex d-xl-none justify-content-end form-check form-switch form-control-xs">
+  <p class="text-center">Выбрано проектов: {{project_list|length}} из {{active_projects_count}}</p>
+  <div class="d-flex d-xl-none justify-content-end">
       <button class="btn bnt-rounded btn-outline-info btn-sm" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">menu</button>
   </div>
   <div class="container d-flex flex-column flex-xl-row mt-3">

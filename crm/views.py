@@ -217,6 +217,7 @@ def project_list_view(request):
         'project_list': project_list,
         'page_object': page_object,
         'cur_date': datetime.now().date(),
+        'active_projects_count': len([project for project in Project.objects.all() if project.statuses.last().status == 'progress']),
     }
     return render(request, 'crm/project_list.html', ctx)
 
