@@ -10,7 +10,10 @@
 {% block content %}
 <div class="container mt-3">
   <h2 class="text-center mt-3">Список проектов</h2>
-  <div class="container d-flex flex-column flex-xl-row mt-5">
+  <div class="d-flex d-xl-none justify-content-end form-check form-switch form-control-xs">
+      <button class="btn bnt-rounded btn-outline-info btn-sm" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">menu</button>
+  </div>
+  <div class="container d-flex flex-column flex-xl-row mt-3">
     <div class="container me-5 ">
       <table class="table">
         <thead>
@@ -96,7 +99,6 @@
     </div>
   </div>
   <div class="d-flex justify-content-end">
-    <button class="d-xl-none d-block mt-3 btn btn-primary fs-5 me-3" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">Меню</button>
     <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
       <div class="offcanvas-header">
         <h5 id="offcanvasRightLabel">Выберите теги</h5>
