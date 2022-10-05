@@ -11,7 +11,7 @@
 <div class="container d-flex flex-column">
   {% if project_id %}
     <h4 class="mb-3">Используемые теги </h4>
-      <div class="d-flex flex-row mb-5">
+      <div class="d-flex flex-row flex-wrap mb-5">
         {% for tag in current_tags %}
           {% if forloop.counter == current_tags|length %}
           <span class="fs-5">{{tag.name}} </span><a href="{% url 'project_tag_remove' project_id tag.id %}"><i class="text-danger ms-1 bi bi-eraser"></i></a>
@@ -24,7 +24,7 @@
         {% endfor %}
       </div>
     <h4 class="mb-3">Неиспользуемые теги </h4>
-      <div class="d-flex flex-row">
+      <div class="d-flex flex-row flex-wrap">
         {% for tag in unused_tags %}
           <a class="link-dark me-3 mb-3 fs-4" href="{% url 'project_tag_add' project_id tag.id %}">{{tag.name}}</a>
         {% empty %}
@@ -36,7 +36,7 @@
       <a href="{% url 'project_details' project_id %}" class="mt-4 col-3 btn btn-outline-secondary">К проекту</a>
   {% else %}
     <h4 class="mb-3">Список тегов</h4>
-      <div class="d-flex flex-row">
+      <div class="d-flex flex-row flex-wrap">
         {% for tag in unused_tags %}
         <a class="link-dark me-3 mb-3 fs-4" href="#">{{tag.name}}</a>
         {% empty %}
