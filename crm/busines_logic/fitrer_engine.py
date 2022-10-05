@@ -67,25 +67,31 @@ def get_incomplete_events(events):
 
 
 def parce_request(request):
-    """Will parce request with tags"""
+    """Tag proceed logic. Will parce request and return tags and key"""
     tags = [int(tag_id) for tag_id in request.GET.getlist('tags')]
     key = request.GET.get('key')
     return [tags, key]
 
 
 def has_include_tags(project, search_tags):
-    """Will return True if project has all required tags"""
+    """Will return a list of True/False statuses behalf the serching tags"""
     proj_tags = {tag.id for tag in project.tags.all()}
     result = [tag in proj_tags for tag in search_tags]
     return result
+
+
+def get_projects_in_work():
+    """Will retrun a list of active projects"""
+    projects = [project for project in Project.objects.all() if project.statuses.last().status == 'progress']
+    return projects
 
 
 def filter_by_tags(request):
     """Will retrun a list of projects with required tags"""
     tags, key = parce_request(request)
     if key == "not_like":
-        projects = [project for project in Project.objects.all() if not any(has_include_tags(project, tags))]
+        projects = [project for project in get_projects_in_work() if not any(has_include_tags(project, tags))]
     else:
-        projects = [project for project in Project.objects.all() if len(tags) == has_include_tags(project, tags).count(True)]
+        projects = [project for project in get_projects_in_work() if len(tags) == has_include_tags(project, tags).count(True)]
     result = create_final_result(projects)
     return result
