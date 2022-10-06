@@ -188,6 +188,7 @@ def company_contacts_update_view(request, company_id):
 def project_list_view(request):
     order_by = request.GET.get('order_by', 'name')
     project_list = fitrer_engine.project_list_filter(order_by, project_status="progress")
+    status_projects_count = len(project_list)
     form = FilterByCompanyAndSource()
     tag_form = ProjectTagSelectForm()
     company = None
@@ -202,8 +203,8 @@ def project_list_view(request):
             project_deliver = form.cleaned_data['project_deliver']
             project_status = form.cleaned_data['project_status']
             project_list = fitrer_engine.project_list_filter(order_by, company, project_deliver, project_status)
-    if 'tags' in request.GET:
-        project_list = fitrer_engine.filter_by_tags(request)
+    if 'key' in request.GET:
+        project_list, status_projects_count = fitrer_engine.filter_by_tags(request)
         tag_form = ProjectTagSelectForm(request.GET)
     paginator = Paginator(project_list, os.environ.get('STRINGS_ON_PAGE', 5))
     page_number = request.GET.get('page')
@@ -217,7 +218,7 @@ def project_list_view(request):
         'project_list': project_list,
         'page_object': page_object,
         'cur_date': datetime.now().date(),
-        'active_projects_count': len([project for project in Project.objects.all() if project.statuses.last().status == 'progress']),
+        'status_projects_count': status_projects_count,
     }
     return render(request, 'crm/project_list.html', ctx)
 

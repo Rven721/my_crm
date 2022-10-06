@@ -13,6 +13,11 @@ BUTTON_BLOCK = Row(
     Column(HTML("""<a class="btn btn-secondary mt-3 fs-5" href="{{request.META.HTTP_REFERER}}">Выйти без сохранения</a>""")),
     css_class="d-flex flex-row mb-5")
 
+SEARCH_BUTTON_BLOCK = Row(
+    Column(Submit('submit', 'Подобрать', css_class="btn btn-success mt-3"), css_class="col-auto"),
+    Column(HTML("""<a class="btn btn-outline-dark mt-3" href="{% url 'projects' %}">Сбросить</a>""")),
+    css_class="d-flex flex-row")
+
 
 class ContactAddForm(forms.ModelForm):
     """A form for adding a contact"""
@@ -439,10 +444,42 @@ class ProjectTagSelectForm(forms.Form):
     tags = forms.ModelMultipleChoiceField(
         queryset=Tag.objects.all().order_by('name'),
         widget=forms.CheckboxSelectMultiple,
+        label="Теги",
+        required=False,
     )
     key = forms.ChoiceField(
+        label="Ключ",
         choices=[
             ("any", "По выбраным"),
             ("not_like", "Без выбраных"),
         ],
     )
+    grant_min = forms.DecimalField(
+        max_digits=11,
+        decimal_places=2,
+        label="Грант от",
+        required=False,
+        localize=False,
+    )
+    grant_max = forms.DecimalField(max_digits=11, decimal_places=2, label="Грант до", required=False)
+    status = forms.ChoiceField(
+        choices=[("", '------')] + Status.status_list,
+        label="Статус проекта",
+        required=False,
+    )
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_method = "GET"
+        self.helper.layout = Layout(
+            'tags',
+            'key',
+            'choices',
+            Row(
+                Column('grant_min'),
+                Column('grant_max'),
+            ),
+            'status',
+            SEARCH_BUTTON_BLOCK,
+        )

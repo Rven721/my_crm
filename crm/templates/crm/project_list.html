@@ -10,7 +10,7 @@
 {% block content %}
 <div class="container mt-3">
   <h2 class="text-center mt-3">Список проектов</h2>
-  <p class="text-center">Выбрано проектов: {{project_list|length}} из {{active_projects_count}}</p>
+  <p class="text-center">Выбрано проектов: {{project_list|length}} из {{status_projects_count}}</p>
   <div class="d-flex d-xl-none justify-content-end">
       <button class="btn bnt-rounded btn-outline-info btn-sm" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">menu</button>
   </div>
@@ -58,6 +58,7 @@
     </div>
     <div class="d-none d-xl-block">
     <div class="dposition-relative">
+        <!-- {% crispy tags_form %} -->
         <form class="mt-4" method="get">
           {{tags_form|crispy}}
           <div class="d-flex justify-content-start">
@@ -106,13 +107,7 @@
         <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
       </div>
       <div class="offcanvas-body">
-        <form class="mt-4" method="get">
-          {{tags_form|crispy}}
-          <div class="d-flex justify-content-start">
-            <input class="btn btn-success mt-2 me-3" type="submit" value="Подобрать">
-            <a class="btn btn-outline-dark mt-2" href="{% url 'projects' %}">Сбросить</a>
-          </div>
-        </form>
+        {% crispy tags_form %}
         <a class="btn btn-outline-primary mt-3 fs-5" href="{% url 'project_add' %}">Добавить проект</a>
           </div>
         </form>

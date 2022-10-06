@@ -70,7 +70,26 @@ def parce_request(request):
     """Tag proceed logic. Will parce request and return tags and key"""
     tags = [int(tag_id) for tag_id in request.GET.getlist('tags')]
     key = request.GET.get('key')
-    return [tags, key]
+    grant_min = request.GET.get('grant_min')
+    grant_max = request.GET.get('grant_max')
+    status = request.GET.get('status')
+    request_parms = [tags, key, grant_min, grant_max, status]
+    result = []
+    for param in request_parms:
+        if not param or len(param) == 0:
+            result.append(None)
+        else:
+            result.append(param)
+    return result
+
+
+def get_projects_count(status=None):
+    """Will return a total cout of projects in current.status"""
+    if status:
+        res = ([project for project in Project.objects.all() if project.statuses.last().status == status])
+    else:
+        res = len([project for project in Project.objects.all() if project.statuses.last().status == "progress"])
+    return res
 
 
 def has_include_tags(project, search_tags):
@@ -80,18 +99,35 @@ def has_include_tags(project, search_tags):
     return result
 
 
-def get_projects_in_work():
+def get_projects_by_status(projects, status=None):
     """Will retrun a list of active projects"""
-    projects = [project for project in Project.objects.all() if project.statuses.last().status == 'progress']
+    if status:
+        projects = [project for project in projects if project.statuses.last().status == status]
+    else:
+        projects = [project for project in projects if project.statuses.last().status == "progress"]
+    return projects
+
+
+def get_projects_by_grant(grant_min=None, grant_max=None):
+    """Will return projects query set in given grant limints"""
+    projects = Project.objects.all()
+    if grant_min:
+        projects = projects.filter(grant__gte=grant_min)
+    if grant_max:
+        projects = projects.filter(grant__lte=grant_max)
     return projects
 
 
 def filter_by_tags(request):
     """Will retrun a list of projects with required tags"""
-    tags, key = parce_request(request)
-    if key == "not_like":
-        projects = [project for project in get_projects_in_work() if not any(has_include_tags(project, tags))]
-    else:
-        projects = [project for project in get_projects_in_work() if len(tags) == has_include_tags(project, tags).count(True)]
+    tags, key, grant_min, grant_max, status = parce_request(request)
+    projects = get_projects_by_grant(grant_min, grant_max)
+    projects = get_projects_by_status(projects, status)
+    if tags:
+        if key == "not_like":
+            projects = [project for project in projects if not any(has_include_tags(project, tags))]
+        else:
+            projects = [project for project in projects if len(tags) == has_include_tags(project, tags).count(True)]
     result = create_final_result(projects)
-    return result
+    projects_count = get_projects_count(status)
+    return [result, projects_count]
