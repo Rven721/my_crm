@@ -86,7 +86,7 @@ def parce_request(request):
 def get_projects_count(status=None):
     """Will return a total cout of projects in current.status"""
     if status:
-        res = ([project for project in Project.objects.all() if project.statuses.last().status == status])
+        res = len([project for project in Project.objects.all() if project.statuses.last().status == status])
     else:
         res = len([project for project in Project.objects.all() if project.statuses.last().status == "progress"])
     return res
