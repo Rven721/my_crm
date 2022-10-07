@@ -23,4 +23,5 @@ urlpatterns = [
     path('calendar/', include('cal.urls')),
     path('smeta/', include('smeta.urls')),
     path('debts/', include('debts.urls')),
+    path('contracts/', include('cont.urls')),
 ]
