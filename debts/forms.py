@@ -1,4 +1,5 @@
 """Here will be forms for debts app"""
+import decimal
 from django import forms
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Row, Column, Submit, HTML
@@ -26,6 +27,8 @@ class ExpenseForm(forms.ModelForm):
 
 class TranshForm(forms.ModelForm):
     """Form to add new transh"""
+    charge = forms.CharField(required=True, max_length=50, label="Сумма", help_text="Суммы через пробел")
+
     class Meta:
         model = Transh
         fields = ('payer', 'receiver', 'expense', 'date', 'charge', 'return_required')
@@ -54,6 +57,15 @@ class TranshForm(forms.ModelForm):
         if receiver == payer:
             raise forms.ValidationError("Получатель совпадает с плательщиком")
         return receiver
+
+    def clean_charge(self):
+        """Will return a summ of decimals or error"""
+        charge = self.cleaned_data['charge'].replace(',', '.')
+        try:
+            charge = round(sum(map(decimal.Decimal, charge.split())), 2)
+        except decimal.InvalidOperation:
+            raise forms.ValidationError("Не могу обработать введенные цифры")
+        return charge
 
 
 class DebtForm(forms.ModelForm):

@@ -483,3 +483,13 @@ class ProjectTagSelectForm(forms.Form):
             'status',
             SEARCH_BUTTON_BLOCK,
         )
+
+
+class ReportFieldsPeackerForm(forms.Form):
+    """Form to piack tables for Excel reprort"""
+    proj_name = forms.BooleanField(label="Проект", required=False)
+    description = forms.BooleanField(label="Описание", required=False)
+    dates = forms.BooleanField(label="Сроки", required=False)
+    grant = forms.BooleanField(label="Грант", required=False)
+    full_cost = forms.BooleanField(label="Бюджет", required=False)
+    company = forms.BooleanField(label="Компания", required=False)
