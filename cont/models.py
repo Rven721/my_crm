@@ -43,11 +43,12 @@ class Contract(models.Model):
         ('second_pay_receive', 'Платеж 2 получен'),
         ('success_fee_wait', 'Финальный платеж ожидание'),
         ('success_fee_receive', 'Финальный платеж получен'),
+        ('special_terms', 'Особые условия'),
     ]
 
-    number = models.CharField(max_length=20, verbose_name='')
+    number = models.CharField(max_length=20, verbose_name='Номер')
     date = models.DateField(verbose_name='Дата')
-    projct = models.ForeignKey(Project, on_delete=models.CASCADE, verbose_name='Проект')
+    project = models.ForeignKey(Project, on_delete=models.CASCADE, verbose_name='Проект')
     agent = models.ForeignKey(Agent, on_delete=models.CASCADE, verbose_name='Агент')
     terms = models.ForeignKey(Terms, on_delete=models.CASCADE, verbose_name='Условия')
     payment_stauts = models.CharField(max_length=25, verbose_name='Статус оплаты', default='first_pay', choices=PAYMENT_STATUS_CHOICES)
@@ -57,16 +58,20 @@ class Contract(models.Model):
         return f'Контракт по проекту {self.project}'
 
     def get_revenue_fix_pt1(self):
+        '''Wll return first fix part of fee on contract'''
         return self.terms.first_pay
 
     def get_revenue_fix_pt2(self):
+        '''Wll return second fix part of fee on contract'''
         return self.terms.second_pay
 
     def get_revenue_fix(self):
+        '''Wll return fix part of fee on contract'''
         rev = self.terms.first_pay + self.terms.second_pay
         return rev
 
     def get_success_fee(self):
+        '''Wll return success fee acording to the terms of the contract'''
         if self.terms.success_fee_base == 'grant':
             fee = self.project.grant * self.terms.success_fee
         else:
@@ -74,10 +79,15 @@ class Contract(models.Model):
         return fee
 
     def get_team_revenue(self):
+        '''Wll return team fee acording to the terms of the contract'''
         fix_fee = self.get_revenue_fix()
         success_fee = self.get_success_fee()
         team_fee = (fix_fee + success_fee) * self.terms.team_fee
         return team_fee
+
+    class Meta:
+        verbose_name = 'Контракт'
+        verbose_name_plural = 'Контракты'
 
 
 class StatusChangeLog(models.Model):
@@ -87,4 +97,8 @@ class StatusChangeLog(models.Model):
     status = models.CharField(max_length=50, verbose_name='status')
 
     def __str__(self):
-        return f'{self.contact} {self.status} {self.date}'
+        return f'{self.contract} {self.status} {self.date}'
+
+    class Meta:
+        verbose_name = 'Смена статусов'
+        verbose_name_plural = 'Смены статусов'
