@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block title %} 
+    Список долгов
+{% endblock %}
+{% block content %}
+<div class="container w-75">
+  <h3 class="text-center">Список контрактов</h3>
+  <div class="container text-center mt-3">
+    {% for contract in contracts %}
+    {{ contract }}
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

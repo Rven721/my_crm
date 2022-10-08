@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block title %} 
+    Список тарифов
+{% endblock %}
+{% block content %}
+<div class="container w-75">
+  <h3 class="text-center">Список тарифов</h3>
+  <div class="container text-center mt-3">
+    {% for term in terms %}
+    {{ term.id }}
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

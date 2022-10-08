@@ -7,7 +7,7 @@ class AgentForm(forms.ModelForm):
     '''Form to crate new or update existing agent'''
     class Meta:
         model = Agent
-        fields = ('name', 'date')
+        fields = ('name', 'data')
 
 
 class TermsForm(forms.ModelForm):
@@ -17,7 +17,7 @@ class TermsForm(forms.ModelForm):
         fields = ('name', 'first_pay', 'second_pay', 'success_fee', 'success_fee_base', 'team_fee')
 
 
-class CaotractForm(forms.ModelForm):
+class ContractForm(forms.ModelForm):
     '''Form allows to create or update a contract record'''
     class Meta:
         model = Contract
