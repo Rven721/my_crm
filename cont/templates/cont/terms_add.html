@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load crispy_forms_tags %}
 {% block title %} 
     Новые условия
 {% endblock %}
@@ -6,7 +7,7 @@
 <div class="container w-75">
   <h3 class="text-center">Новые условия</h3>
   <div class="container text-center mt-3">
-    {{form}}
+    {% crispy form %}
   </div>
 </div>
 {% endblock %}
