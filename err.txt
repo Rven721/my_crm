@@ -1,0 +1,28 @@
+Did you rename contract.payment_stauts to contract.payment_status (a CharField)? [y/N] Traceback (most recent call last):
+  File "/home/alex/Projects/my_crm/manage.py", line 21, in <module>
+    main()
+  File "/home/alex/Projects/my_crm/manage.py", line 17, in main
+    execute_from_command_line(sys.argv)
+  File "/home/alex/Projects/my_crm/env/lib/python3.10/site-packages/django/core/management/__init__.py", line 401, in execute_from_command_line
+    utility.execute()
+  File "/home/alex/Projects/my_crm/env/lib/python3.10/site-packages/django/core/management/__init__.py", line 395, in execute
+    self.fetch_command(subcommand).run_from_argv(self.argv)
+  File "/home/alex/Projects/my_crm/env/lib/python3.10/site-packages/django/core/management/base.py", line 328, in run_from_argv
+    self.execute(*args, **cmd_options)
+  File "/home/alex/Projects/my_crm/env/lib/python3.10/site-packages/django/core/management/base.py", line 369, in execute
+    output = self.handle(*args, **options)
+  File "/home/alex/Projects/my_crm/env/lib/python3.10/site-packages/django/core/management/base.py", line 83, in wrapped
+    res = handle_func(*args, **kwargs)
+  File "/home/alex/Projects/my_crm/env/lib/python3.10/site-packages/django/core/management/commands/makemigrations.py", line 164, in handle
+    changes = autodetector.changes(
+  File "/home/alex/Projects/my_crm/env/lib/python3.10/site-packages/django/db/migrations/autodetector.py", line 43, in changes
+    changes = self._detect_changes(convert_apps, graph)
+  File "/home/alex/Projects/my_crm/env/lib/python3.10/site-packages/django/db/migrations/autodetector.py", line 183, in _detect_changes
+    self.generate_renamed_fields()
+  File "/home/alex/Projects/my_crm/env/lib/python3.10/site-packages/django/db/migrations/autodetector.py", line 833, in generate_renamed_fields
+    if self.questioner.ask_rename(model_name, rem_field_name, field_name, field):
+  File "/home/alex/Projects/my_crm/env/lib/python3.10/site-packages/django/db/migrations/questioner.py", line 190, in ask_rename
+    return self._boolean_input(msg % (model_name, old_name, model_name, new_name,
+  File "/home/alex/Projects/my_crm/env/lib/python3.10/site-packages/django/db/migrations/questioner.py", line 87, in _boolean_input
+    result = input("%s " % question)
+KeyboardInterrupt

@@ -5,7 +5,7 @@ from crm.models import Project
 
 class Agent(models.Model):
     '''Form to describe agent'''
-    name = models.CharField(max_length=100, verbose_name='Наименование')
+    name = models.CharField(max_length=100, verbose_name='Наименование', unique=True)
     data = models.TextField(verbose_name='Свдения о контрагенте')
 
     def __str__(self):
@@ -18,7 +18,7 @@ class Agent(models.Model):
 
 class Terms(models.Model):
     '''Form for describtion of contract terms'''
-    name = models.CharField(max_length=100, verbose_name='Наименование')
+    name = models.CharField(max_length=100, verbose_name='Наименование', unique=True)
     first_pay = models.FloatField(verbose_name='Первый платеж')
     second_pay = models.FloatField(verbose_name='Второй платеж')
     success_fee = models.FloatField(verbose_name='Плата за успех')
@@ -46,12 +46,12 @@ class Contract(models.Model):
         ('special_terms', 'Особые условия'),
     ]
 
-    number = models.CharField(max_length=20, verbose_name='Номер')
+    number = models.CharField(max_length=20, verbose_name='Номер', unique=True)
     date = models.DateField(verbose_name='Дата')
     project = models.ForeignKey(Project, on_delete=models.CASCADE, verbose_name='Проект')
     agent = models.ForeignKey(Agent, on_delete=models.CASCADE, verbose_name='Агент')
     terms = models.ForeignKey(Terms, on_delete=models.CASCADE, verbose_name='Условия')
-    payment_stauts = models.CharField(max_length=25, verbose_name='Статус оплаты', default='first_pay', choices=PAYMENT_STATUS_CHOICES)
+    payment_status = models.CharField(max_length=25, verbose_name='Статус оплаты', default='first_pay', choices=PAYMENT_STATUS_CHOICES)
     comment = models.TextField(verbose_name='Комментарий')
 
     def __str__(self):

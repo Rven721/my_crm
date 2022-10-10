@@ -1,6 +1,6 @@
 """Views for contracts app"""
 
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from .models import Agent, Terms, Contract
 from .forms import AgentForm, TermsForm, ContractForm
 
@@ -8,6 +8,11 @@ from .forms import AgentForm, TermsForm, ContractForm
 def agent_add_view(request):
     '''Will render a page to create new agent'''
     form = AgentForm()
+    if request.method == "POST":
+        form = AgentForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('agents')
     ctx = {'form': form}
     return render(request, 'cont/agent_add.html', ctx)
 
@@ -33,6 +38,11 @@ def agent_list_view(request):
 def terms_add_view(request):
     '''Will render a page to create new terms'''
     form = TermsForm()
+    if request.method == "POST":
+        form = TermsForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('terms')
     ctx = {'form': form}
     return render(request, 'cont/terms_add.html', ctx)
 
@@ -58,9 +68,12 @@ def terms_list_view(request):
 def contract_add_view(request):
     '''Will render a page to create new contract'''
     form = ContractForm()
-    ctx = {
-        'form': form,
-    }
+    if request.method == "POST":
+        form = ContractForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('contracts')
+    ctx = {'form': form}
     return render(request, 'cont/contract_add.html', ctx)
 
 

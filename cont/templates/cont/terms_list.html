@@ -3,12 +3,17 @@
     Список тарифов
 {% endblock %}
 {% block content %}
-<div class="container w-75">
+<div class="container">
   <h3 class="text-center">Список тарифов</h3>
-  <div class="container text-center mt-3">
-    {% for term in terms %}
-    {{ term.id }}
-    {% endfor %}
-  </div>
+    <div class="d-flex">
+     <div class="flex-grow-1 m-2 text-center">
+      {% for term in terms %}
+      <p>{{ term }}</p>
+      {% empty %}
+      <h5>Нет тарифов</h5>
+      {% endfor %}
+    </div>
+      <a class="btn btn-outline-primary align-self-start" href="{% url 'terms_add' %}">Добавить</a>
+    </div>
 </div>
 {% endblock %}

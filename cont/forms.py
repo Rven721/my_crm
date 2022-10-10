@@ -1,7 +1,7 @@
 '''Here will be a a list of forms'''
 from django import forms
 from crispy_forms.helper import FormHelper
-from crispy_forms.bootstrap import FieldWithButtons, FormActions
+from crispy_forms.bootstrap import FieldWithButtons, FormActions, Modal
 from crispy_forms.layout import Layout, Row, Column, Submit, HTML
 from .models import Agent, Terms, Contract
 
@@ -54,7 +54,7 @@ class ContractForm(forms.ModelForm):
     '''Form allows to create or update a contract record'''
     class Meta:
         model = Contract
-        fields = ('number', 'date', 'project', 'agent', 'terms', 'payment_stauts', 'comment')
+        fields = ('number', 'date', 'project', 'agent', 'terms', 'payment_status', 'comment')
         widgets = {'date': forms.DateInput(attrs={'class': 'datepicker'})}
 
     def __init__(self, *args, **kwargs):
@@ -72,16 +72,17 @@ class ContractForm(forms.ModelForm):
                 Column(
                     FieldWithButtons(
                         'terms',
-                        HTML("""<a class="align-self-center ms-2 text-success fs-5" href="{% url 'terms_add' %}"><i class="bi bi-plus-lg"></i></a>"""),
+                        HTML("""<a class="align-self-center ms-2 text-success fs-5" href="{% url 'terms_add' %}?from_cont=True"><i class="bi bi-plus-lg"></i></a>"""),
                     ),
                 ),
                 Column(
                     FieldWithButtons(
                         'agent',
-                        HTML("""<a class="align-self-center ms-2 text-success fs-5" href="{% url 'agent_add' %}"><i class="bi bi-plus-lg"></i></a>"""),
+                        HTML("""<a class="align-self-center ms-2 text-success fs-5" href="{% url 'agent_add' %}?from_cont=Ture"><i class="bi bi-plus-lg"></i></a>"""),
                     ),
                 ),
             ),
+            'payment_status',
             Row(
                 Column('comment'),
             ),
