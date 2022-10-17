@@ -3,10 +3,16 @@
     Карточка контракта
 {% endblock %}
 {% block content %}
-<div class="container w-75">
+<div class="container">
   <h3 class="text-center">Карточка контракта</h3>
-  <div class="container text-center mt-3">
-    {{contract}}
+  <div class="container ms-5 mt-5">
+   <p class="fs-5">Договор №{{contract.number}} от {{contract.date}}</p>
+   <p>Проект: <a class="text-decoration-none text-dark" href="{% url 'project_details' contract.project.id %}">{{contract.project.name}}</a></p>
+   <p><a class="text-decoration-none text-dark" href="{% url 'agent_card' contract.agent.id %}">Агент: {{contract.agent.name}}</a></p>
+   <p>Тариф: <a class="text-decoration-none text-dark" href="{% url 'terms_card' contract.terms.id %}">{{contract.terms}}</a></p>
+   <p>Статус: {{contract.get_payment_status_display}}</p>
+   <p>Комментари: {{contract.comment}}</p>
+   <a href="#" class="btn btn-outline-success">Обновить</a>
   </div>
 </div>
 {% endblock %}

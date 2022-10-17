@@ -1,19 +1,58 @@
 {% extends 'base.html' %}
+{% load crispy_forms_tags %}
 {% block title %} 
     Список долгов
 {% endblock %}
 {% block content %}
 <div class="container">
   <h3 class="text-center">Список контрактов</h3>
-    <div class="d-flex">
-     <div class="flex-grow-1 m-2 text-center">
-      {% for contract in contracts %}
-      {{ contract }}
-      {% empty %}
-      <h5>Нет контрактов</h5>
-      {% endfor %}
+  <div class="d-flex">
+    <div class="container ms-4 flex-grow-1 m-2">
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th scope='col'>#</th>
+            <th scope='col'>Компания</th>
+            <th scope='col'>Проект</th>
+            <th scope='col'>Агент</th>
+            <th scope='col'>Условия</th>
+            <th scope='col'>Статус</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for contract in contracts %}
+            <tr>
+              <td scope='row'><a href="{% url 'contract_card' contract.id %}">{{forloop.counter}}</a></td>
+              <td>{{contract.project.company.short_name}}</td>
+              <td>{{contract.project.name}}</td>
+              <td><a class="text-decoration-none text-black" href="?agent={{contract.agent.id}}">{{contract.agent.name}}</a></td>
+              <td><a class="text-decoration-none text-black" href="?terms={{contract.terms.id}}">{{contract.terms.name}}</a></td>
+              <td><a class="text-decoration-none text-black" href="?status={{contract.payment_status}}">{{contract.get_payment_status_display}}</a></td>
+            </tr>
+          {% empty %}
+          <h5>Нет контрактов</h5>
+          {% endfor %}
+        </tbody>
+      </table>
     </div>
-      <a class="btn btn-outline-primary align-self-start" href="{% url 'contract_add' %}">Добавить</a>
+    <div class="d-flex flex-column">
+        {% crispy search_form %}
+      <a class="btn btn-outline-primary align-self-start mt-2" href="{% url 'contract_add' %}">Добавить</a>
+      <button type="button" class="btn btn-outline-success align-self-start mt-2" data-bs-toggle="modal" data-bs-target="#reportForm">Отчет</button>
     </div>
+    <div class="modal fade" id="reportForm" tabindex="-1" aria-labelledby="reportLabel" aria-hidden="true">
+      <div class ="modal-dialog modal-dialog-scrollable">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="reportLabel">Поля отчета</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+              {% crispy form %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 {% endblock %}

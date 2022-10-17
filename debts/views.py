@@ -55,11 +55,11 @@ def expense_add_view(request):
 @login_required
 def transh_list_view(request, day=None, month=None, year=None):
     """Will render a list of transhes"""
-    transh_list = Transh.objects.all().order_by('date').reverse()
+    transh_list = Transh.objects.all().order_by('date', 'pk').reverse()
     if day and month and year:
         target_date = date(day=day, month=month, year=year)
         transh_list = transh_list.filter(date=target_date)
-    paginator = Paginator(transh_list, 7)
+    paginator = Paginator(transh_list, 10)
     page_number = request.GET.get('page')
     page_object = paginator.get_page(page_number)
     return render(request, 'debts/transh_list.html', {'page_object': page_object})

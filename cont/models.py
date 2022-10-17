@@ -38,7 +38,7 @@ class Contract(models.Model):
 
     PAYMENT_STATUS_CHOICES = [
         ('first_pay_wait', 'Платеж 1 ожидание'),
-        ('second_pay_receive', 'Платеж 1 пулучен'),
+        ('first_pay_receive', 'Платеж 1 получен'),
         ('second_pay_wait', 'Платеж 2 ожидание'),
         ('second_pay_receive', 'Платеж 2 получен'),
         ('success_fee_wait', 'Финальный платеж ожидание'),
@@ -57,19 +57,23 @@ class Contract(models.Model):
     def __str__(self):
         return f'Контракт по проекту {self.project}'
 
+    @property
     def get_revenue_fix_pt1(self):
         '''Wll return first fix part of fee on contract'''
         return self.terms.first_pay
 
+    @property
     def get_revenue_fix_pt2(self):
         '''Wll return second fix part of fee on contract'''
         return self.terms.second_pay
 
+    @property
     def get_revenue_fix(self):
         '''Wll return fix part of fee on contract'''
         rev = self.terms.first_pay + self.terms.second_pay
         return rev
 
+    @property
     def get_success_fee(self):
         '''Wll return success fee acording to the terms of the contract'''
         if self.terms.success_fee_base == 'grant':
@@ -78,10 +82,11 @@ class Contract(models.Model):
             fee = self.project.full_cost * self.terms.success_fee
         return fee
 
+    @property
     def get_team_revenue(self):
         '''Wll return team fee acording to the terms of the contract'''
-        fix_fee = self.get_revenue_fix()
-        success_fee = self.get_success_fee()
+        fix_fee = self.get_revenue_fix
+        success_fee = self.get_success_fee
         team_fee = (fix_fee + success_fee) * self.terms.team_fee
         return team_fee
 

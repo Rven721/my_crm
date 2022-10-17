@@ -1,12 +1,18 @@
 {% extends 'base.html' %}
+{% load my_thousand_separator percents_display%}
 {% block title %} 
    Карточка тарифа
 {% endblock %}
 {% block content %}
-<div class="container w-75">
+<div class="container">
   <h3 class="text-center">Карточка тарифа</h3>
-  <div class="container text-center mt-3">
-    {{terms}}
+  <div class="container ms-5 mt-5">
+    <p>Тариф: {{terms.name}}</p>
+    <p>Платеж 1: {{terms.first_pay|my_thousand_separator}}</p>
+    <p>Платеж 2: {{terms.second_pay|my_thousand_separator}}</p>
+    <p>Плата за успех: {{terms.success_fee|percents_display}} от суммы {{terms.get_success_fee_base_display}}а</p>
+    <p>Процент команды: {{terms.team_fee|percents_display}}</p>
+    <a href="#" class="btn btn-outline-success">Обновить</a>
   </div>
 </div>
 {% endblock %}

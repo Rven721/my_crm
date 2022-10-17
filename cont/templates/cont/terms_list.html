@@ -1,19 +1,39 @@
 {% extends 'base.html' %}
+{% load my_thousand_separator percents_display%}
 {% block title %} 
     Список тарифов
 {% endblock %}
 {% block content %}
 <div class="container">
   <h3 class="text-center">Список тарифов</h3>
-    <div class="d-flex">
-     <div class="flex-grow-1 m-2 text-center">
-      {% for term in terms %}
-      <p>{{ term }}</p>
-      {% empty %}
-      <h5>Нет тарифов</h5>
-      {% endfor %}
-    </div>
-      <a class="btn btn-outline-primary align-self-start" href="{% url 'terms_add' %}">Добавить</a>
+    <div class="container ms-4 mt-5 d-flex">
+      <div class="flex-grow-1 m-2">
+        <table class="table">
+          <thead>
+            <th scope="col">#</th>
+            <th scope="col">Название</th>
+            <th scope="col">Платеж_1</th>
+            <th scope="col">Платеж_2</th>
+            <th scope="col">Плата за успех</th>
+            <th scope="col">База для расчета</th>
+            <th scope="col">Процент команды</th>
+          </thead>
+            <tbody>
+              {% for term in terms %}
+              <tr>
+                <th scope="row">{{ forloop.counter }}</th>
+                <td>{{term.name}}</td>
+                <td>{{term.first_pay|my_thousand_separator}}</td>
+                <td>{{term.second_pay|my_thousand_separator}}</td>
+                <td>{{term.success_fee|percents_display}}</td>
+                <td>{{term.get_success_fee_base_display}}</td>
+                <td>{{term.team_fee|percents_display}}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+      </div>
+      <a class="btn btn-outline-primary align-self-start mt-4 ms-2" href="{% url 'terms_add' %}">Добавить</a>
     </div>
 </div>
 {% endblock %}

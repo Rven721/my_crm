@@ -4,12 +4,18 @@
     Список агентов
 {% endblock %}
 {% block content %}
-<div class="container w-75">
+<div class="container">
   <h3 class="text-center">Список агентов</h3>
-  <div class="container text-center mt-3">
-    {% for agent in agents %}
-        {{agent}}
-    {% endfor %}    
+  <div class="d-flex ms-4 mt-4" style="height: 550px">
+    <div class="h-100 d-flex flex-column flex-wrap flex-grow-1 m-2">
+      {% for agent in agents %}
+        <p><a class="fs-5" href="{% url 'agent_card' agent.id %}">{{agent.name}}</a></p>
+      {% empty %}
+        <h5>Нет агентов</h5>
+      {% endfor %}    
+    </div>
+      <a class="btn btn-outline-primary align-self-start mt-2" href="{% url 'agent_add' %}">Добавить</a>
+    </div>
   </div>
 </div>
 {% endblock %}

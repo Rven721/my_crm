@@ -2,7 +2,8 @@
 
 from django.shortcuts import render, redirect
 from .models import Agent, Terms, Contract
-from .forms import AgentForm, TermsForm, ContractForm
+from .forms import AgentForm, TermsForm, ContractForm, ContractReportForm, ContractSearchForm
+from .busines_logic import filter_engine
 
 
 def agent_add_view(request):
@@ -88,8 +89,14 @@ def contract_details_view(request, contract_id):
 
 def contract_list_view(request):
     '''Will return a list of contracts'''
-    contracts = Contract.objects.all()
+    contracts = filter_engine.create_contract_list_old(request)
+    form = ContractReportForm()
+    search_form = ContractSearchForm(request.GET)
+    if 'search' in request.GET:
+        contracts = filter_engine.create_contract_list(request)
     ctx = {
         'contracts': contracts,
+        'form': form,
+        'search_form': search_form,
     }
     return render(request, 'cont/contract_list.html', ctx)
