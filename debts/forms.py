@@ -4,6 +4,7 @@ from django import forms
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Row, Column, Submit, HTML
 from debts.models import Person, Expense, Transh, Debt
+from debts.busines_logic import calculator
 
 BUTTON_BLOCK = Row(
     Column(Submit('submit', 'Сохранить', css_class="btn btn-primary mt-3 fs-5"), css_class="col-auto"),
@@ -27,7 +28,7 @@ class ExpenseForm(forms.ModelForm):
 
 class TranshForm(forms.ModelForm):
     """Form to add new transh"""
-    charge = forms.CharField(required=True, max_length=50, label="Сумма", help_text="Суммы через пробел")
+    charge = forms.CharField(required=True, max_length=50, label="Сумма", help_text="Учусь понимать формулы")
 
     class Meta:
         model = Transh
@@ -62,9 +63,9 @@ class TranshForm(forms.ModelForm):
         """Will return a summ of decimals or error"""
         charge = self.cleaned_data['charge'].replace(',', '.')
         try:
-            charge = round(sum(map(decimal.Decimal, charge.split())), 2)
-        except decimal.InvalidOperation:
-            raise forms.ValidationError("Не могу обработать введенные цифры")
+            charge = round(decimal.Decimal(calculator.make_calculations(charge)[0]), 2)
+        except (decimal.InvalidOperation, TypeError):
+            raise forms.ValidationError("Не могу обработать введенные цифры. Проверь корректность.")
         return charge
 
 
