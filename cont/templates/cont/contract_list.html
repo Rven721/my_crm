@@ -29,13 +29,11 @@
               <td><a class="text-decoration-none text-black" href="?terms={{contract.terms.id}}">{{contract.terms.name}}</a></td>
               <td><a class="text-decoration-none text-black" href="?status={{contract.payment_status}}">{{contract.get_payment_status_display}}</a></td>
             </tr>
-          {% empty %}
-          <h5>Нет контрактов</h5>
           {% endfor %}
         </tbody>
       </table>
     </div>
-    <div class="d-flex flex-column">
+    <div class="d-none d-lg-flex flex-column" style="width:35%;">
         {% crispy search_form %}
       <a class="btn btn-outline-primary align-self-start mt-2" href="{% url 'contract_add' %}">Добавить</a>
       <button type="button" class="btn btn-outline-success align-self-start mt-2" data-bs-toggle="modal" data-bs-target="#reportForm">Отчет</button>
