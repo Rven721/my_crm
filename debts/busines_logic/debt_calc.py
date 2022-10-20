@@ -53,7 +53,7 @@ def get_opt_debts_payers(debts_data):
     """Will return the dict of optimyzed payments"""
     debts = make_debt_calculateon(debts_data)
     result_dict = {debtor: {} for debtor in debts['debtors']}
-    while debts['creditors'] and max(debts['creditors']) > 0:
+    while debts['creditors'] and debts['debtors']:
         cur_creditor = max(debts['creditors'])
         cur_credit = debts['creditors'].pop(cur_creditor)
         cur_debtor = max(debts['debtors'])
