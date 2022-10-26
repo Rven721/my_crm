@@ -536,13 +536,18 @@ def task_details_view(request, task_id):
 @login_required
 def task_status_change_view(request, task_id):
     task = Task.objects.get(id=task_id)
-    form = TaskStatusChangeForm(instance=task.statuses.last())
+    event = task.event
+    cur_status = task.statuses.last().status
+    cur_result = task.event.result
+    form = TaskStatusChangeForm(initial={'status': cur_status, 'result': cur_result})
     if request.method == "POST":
         form = TaskStatusChangeForm(request.POST)
         if form.is_valid():
             status = form.save(commit=False)
             status.task = task
             status.changer = request.user
+            event.result = form.cleaned_data['result']
+            event.save()
             status.save()
             return HttpResponseRedirect(reverse('event_details', kwargs={'event_id': task.event.id}))
         return render(request, 'crm/task_status_change.html', {'form': form})

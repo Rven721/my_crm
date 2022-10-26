@@ -407,7 +407,7 @@ class TaskStatusChangeForm(forms.ModelForm):
     """Form to change a status of a task"""
     class Meta:
         model = TaskStatus
-        fields = ('status', )
+        fields = ('status', 'result')
 
 
 class DoerChooseForm(forms.ModelForm):
