@@ -69,12 +69,14 @@ def terms_list_view(request):
 def contract_add_view(request):
     '''Will render a page to create new contract'''
     form = ContractForm()
+    terms_form = TermsForm()
     if request.method == "POST":
+        print(request.POST)
         form = ContractForm(request.POST)
         if form.is_valid():
             form.save()
             return redirect('contracts')
-    ctx = {'form': form}
+    ctx = {'form': form, 'terms_form': terms_form}
     return render(request, 'cont/contract_add.html', ctx)
 
 

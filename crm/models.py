@@ -194,6 +194,7 @@ class TaskStatus(models.Model):
     status = models.CharField(max_length=10, choices=STATUS_LIST, verbose_name='Статус')
     date = models.DateField(default=timezone.localtime, verbose_name='Дата')
     task = models.ForeignKey(Task, on_delete=models.CASCADE, related_name='statuses', verbose_name='Задача')
+    result = models.TextField(blank=True, null=True, verbose_name='Результат события')
     changer = models.ForeignKey(
         User,
         blank=True,

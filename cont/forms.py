@@ -62,6 +62,9 @@ class TermsForm(forms.ModelForm):
 
 class ContractForm(forms.ModelForm):
     '''Form allows to create or update a contract record'''
+    
+    agent = forms.ModelMultipleChoiceField(queryset=Agent.objects.all())
+    
     class Meta:
         model = Contract
         fields = ('number', 'date', 'project', 'agent', 'terms', 'payment_status', 'comment')
@@ -69,6 +72,8 @@ class ContractForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        rel = ManyToOneRel(self.instance.agnnt.model, 'id')
+        self.fields['agent'].widget = RelatedFieldWidgetWrapper(self.field['agent'].widget, rel, self.admin_site)
         self.helper = FormHelper()
         self.helper.layout = Layout(
             Row(
