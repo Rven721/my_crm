@@ -408,6 +408,16 @@ class TaskStatusChangeForm(forms.ModelForm):
     class Meta:
         model = TaskStatus
         fields = ('status', 'result')
+        labels = {'result': 'Изменить/обновить результат события'}
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.layout = Layout(
+            'status',
+            'result',
+            BUTTON_BLOCK,
+        )
 
 
 class DoerChooseForm(forms.ModelForm):
