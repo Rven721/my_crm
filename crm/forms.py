@@ -485,7 +485,6 @@ class ProjectTagSelectForm(forms.Form):
         self.helper.layout = Layout(
             'tags',
             'key',
-            'choices',
             Row(
                 Column('grant_min'),
                 Column('grant_max'),
