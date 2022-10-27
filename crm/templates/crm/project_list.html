@@ -10,6 +10,11 @@
 {% block content %}
 <div class="container mt-3">
   <h2 class="text-center mt-3">Список проектов</h2>
+  {% if user.id|user_has_undone_tasks %}
+    <div class='text-center'>
+      <a href="{% url 'tasks_for_doer' user.id %}" class="mt-1 mb-3 btn btn-outline-danger">У вас имеются активные задачи</a>
+  {% endif %}
+    </div>
   <p class="text-center">Выбрано проектов: {{project_list|length}} из {{status_projects_count}}</p>
   <div class="d-flex d-xl-none justify-content-end">
       <button class="btn bnt-rounded btn-outline-info btn-sm" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">menu</button>
