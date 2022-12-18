@@ -1,4 +1,5 @@
 .idea/
+set_env.sh
 venv/
 env/
 credentials.json
